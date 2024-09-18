@@ -8,9 +8,8 @@ using static System.Math;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D body;
-    [SerializeField] private bool isMoving, canInput;
+    private bool isMoving;
     private Vector2 currentTile, nextTile;
-    int speed;
     static float t = 0.0f;
 
     // Start is called before the first frame update
@@ -19,8 +18,6 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         currentTile = body.position;
         isMoving = false;
-        canInput = true;
-        speed = 100;
     }
 
     // Update is called once per frame
@@ -28,8 +25,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
-        if((Math.Abs(vertical) > .2f || Math.Abs(horizontal) > .2f) && !isMoving && canInput){
-            canInput = false;
+        if((Math.Abs(vertical) > .2f || Math.Abs(horizontal) > .2f) && !isMoving){
             isMoving = true;
             currentTile.x = body.position.x;
             currentTile.y = body.position.y;
@@ -42,18 +38,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if(isMoving){
-            body.position = new Vector2(Mathf.Lerp(currentTile.x, nextTile.x, t), Mathf.Lerp(currentTile.y, nextTile.y, t));
-            t += 0.1f * Time.deltaTime * speed;
-        }
-
-        if(body.position == nextTile){
-            isMoving = false;
-            t = 0.0f;
-            if(Math.Abs(vertical) <= .2f && Math.Abs(horizontal) <= .2f){
-                canInput = true;
-            }
-            Debug.Log(horizontal);
-        }
+        body.position = new Vector2(Mathf.Lerp(currentTile.x, nextTile.x, t), Mathf.Lerp(currentTile.y, nextTile.y, t));
+        t += 0.5f * Time.deltaTime;
     }
 }
