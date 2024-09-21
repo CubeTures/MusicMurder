@@ -8,6 +8,8 @@ using static System.Math;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D body;
+    const string wallTag = "Walls";
+
     [SerializeField] private bool isMoving;
     private Vector2 currentTile, nextTile, input;
     int speed = 100;
@@ -96,6 +98,14 @@ public class PlayerMovement : MonoBehaviour
         {
             isMoving = false;
             t = 0.0f;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag(wallTag))
+        {
+            nextTile = currentTile;
         }
     }
 }

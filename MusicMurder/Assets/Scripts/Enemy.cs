@@ -16,11 +16,7 @@ public class Enemy : MonoBehaviour
 
     void DestroyEnemy()
     {
-        Destroy(gameObject);
-    }
-
-    private void OnDestroy()
-    {
         Debug.Log("Enemy Died");
+        Destroy(gameObject);
     }
 }
