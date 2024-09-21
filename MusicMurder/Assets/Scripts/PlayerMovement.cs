@@ -9,9 +9,9 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D body;
     [SerializeField] private bool isMoving;
-    private Vector2 currentTile, nextTile;
-    int speed;
-    static float t = 0.0f;
+    private Vector2 currentTile, nextTile, input;
+    int speed = 100;
+    static float t = 0.0f; // Evan, why is t static?
 
     // Start is called before the first frame update
     void Start()
@@ -19,45 +19,81 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         currentTile = body.position;
         isMoving = false;
-        speed = 100;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float vertical = 0;
-        float horizontal = 0;
-        if(Input.GetKeyDown(KeyCode.W)){
-            vertical = 1;
+        GetInput();
+    }
+
+    void GetInput()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            input.y = 1;
         }
-        if(Input.GetKeyDown(KeyCode.S)){
-            vertical = -1;
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            input.y = -1;
         }
-        if(Input.GetKeyDown(KeyCode.A)){
-            horizontal = -1;
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            input.x = -1;
         }
-        if(Input.GetKeyDown(KeyCode.D)){
-            horizontal = 1;
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            input.x = 1;
         }
-        if((Math.Abs(vertical) > .2f || Math.Abs(horizontal) > .2f) && !isMoving){
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    void Move()
+    {
+        SetNextTile();
+        MoveToNextTile();
+        CheckEndMove();
+    }
+
+    void SetNextTile()
+    {
+        if ((Abs(input.y) > .2f || Abs(input.x) > .2f) && !isMoving)
+        {
             isMoving = true;
-            currentTile.x = body.position.x;
-            currentTile.y = body.position.y;
-            if(Math.Abs(vertical) >= Math.Abs(horizontal)){
+            currentTile = body.position;
+
+            if (Abs(input.y) >= Abs(input.x))
+            {
                 nextTile.x = body.position.x;
-                nextTile.y = body.position.y + (vertical > 0 ? 1 : -1);
-            }else{
-                nextTile.x = body.position.x + (horizontal > 0 ? 1 : -1);
+                nextTile.y = body.position.y + (input.y > 0 ? 1 : -1);
+            }
+            else
+            {
+                nextTile.x = body.position.x + (input.x > 0 ? 1 : -1);
                 nextTile.y = body.position.y;
             }
-        }
 
-        if(isMoving){
-            body.position = new Vector2(Mathf.Lerp(currentTile.x, nextTile.x, t), Mathf.Lerp(currentTile.y, nextTile.y, t));
-            t += 0.1f * Time.deltaTime * speed;
+            input = Vector2.zero;
         }
+    }
 
-        if(body.position == nextTile){
+    void MoveToNextTile()
+    {
+        if (isMoving)
+        {
+            body.position = Vector2.Lerp(currentTile, nextTile, t);
+            t += 0.1f * Time.fixedDeltaTime * speed;
+        }
+    }
+
+    void CheckEndMove()
+    {
+        if (Equals(body.position, nextTile))
+        {
             isMoving = false;
             t = 0.0f;
         }

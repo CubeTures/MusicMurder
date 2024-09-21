@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     void DestroyEnemy()
     {
-        Destroy(this);
+        Destroy(gameObject);
     }
 
     private void OnDestroy()
