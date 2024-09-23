@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerTempo : MonoBehaviour
 {
@@ -10,13 +9,13 @@ public class PlayerTempo : MonoBehaviour
     PlayerMovement player;
 
     float lastBeat = 0, nextBeat = 0;
-    float perfectMargin, passMargin;
+    float perfectInterval, passInterval;
     float prevInterval = 0;
-    const float perfectInterval = .1f;
-    const float passInterval = .2f;
+    const float perfectMargin = .1f;
+    const float passMargin = .2f;
 
-    int numActionsInInterval = 0;
-    bool hasMovedSinceTempoChange = false;
+    bool movedSinceTempoChange = false;
+    bool movedThisBeat = false, movedNextBeat = false;
 
     TMP_Text text;
 
@@ -27,19 +26,19 @@ public class PlayerTempo : MonoBehaviour
         text = GetComponent<TMP_Text>();
 
         SetListenStatus(true);
-        SetMargins();
+        SetIntervals();
     }
 
-    void SetMargins()
+    void SetIntervals()
     {
         if (metronome.Interval != prevInterval)
         {
             prevInterval = metronome.Interval;
-            perfectMargin = prevInterval * perfectInterval;
-            passMargin = prevInterval * passInterval;
+            perfectInterval = prevInterval * perfectMargin;
+            passInterval = prevInterval * passMargin;
+            movedSinceTempoChange = false;
 
-            Debug.Log("Perfect Margin: " +  perfectMargin + ", Pass Margin: " + passMargin);
-            hasMovedSinceTempoChange = false;
+            Debug.Log("Perfect Interval: " +  perfectInterval + "s, Pass Interval: " + passInterval + "s");
         }
     }
 
@@ -47,51 +46,60 @@ public class PlayerTempo : MonoBehaviour
     {
         lastBeat = timestamp;
         nextBeat = nextBeatTimestamp;
+        movedThisBeat = movedNextBeat;
+        movedNextBeat = false;
 
-        /* TODO: Punish player for standing still
-         *      (with the leeway of being able to stand still to adjust to the new tempo,
-         *      or on first spawn / respawn, etc.)
-         * 
-         * This code doesn't work, and here's why:
-         *      The player can either press before or after the main beat
-         *      I'm only keeping track of the number of times a player pressing in an interval
-         *      Meaning, if the player matches one beat AFTER the beat, 
-         *          but still succeeds, they are in the new interval
-         *      However, if they miss the next beat, the "numActionsInInterval" var is > 0, 
-         *          since they acted on the later half of the previous beat, meaning they don't get punished
-         *      Fixing this bug will also fix the bug where they can spam while in the margin
-         */
+        StartCoroutine(PenalizeNoAction());
+    }
 
-        /*if(hasMovedSinceTempoChange && numActionsInInterval == 0)
+    IEnumerator PenalizeNoAction()
+    {
+        yield return new WaitForSeconds(passInterval);
+        if (movedSinceTempoChange && !movedThisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
-        }*/
-
-        numActionsInInterval = 0;
+        }
     }
 
     void OnPlayerAction(PlayerActionType actionType, float timestamp)
     {
-        numActionsInInterval++;
-        hasMovedSinceTempoChange = true;
+        movedSinceTempoChange = true;
 
-        float delatLast = Mathf.Abs(lastBeat - timestamp);
-        float delatNext = Mathf.Abs(nextBeat - timestamp);
-        float delta = Mathf.Min(delatLast, delatNext);
+        float deltaLast = Mathf.Abs(lastBeat - timestamp);
+        float deltaNext = Mathf.Abs(nextBeat - timestamp);
+        float delta = Mathf.Min(deltaLast, deltaNext);
+        bool thisBeat = deltaLast < deltaNext;
 
-        // TODO: Fix accuracy so you can't spam while in margin
-        if (delta < perfectMargin)
-        {
-            SetAccuracy(Accuracy.PERFECT);
-        }
-        else if (delta < passMargin)
-        {
-            SetAccuracy(Accuracy.PASS);
-        }
-        else if (numActionsInInterval > 1)
+        /* Fail Conditions:
+         *      User moves outside of the pass interval
+         *      User moves more than once on beat (this beat)
+         *      User moves more than once on beat (next beat)
+         */
+
+        if(delta >= passInterval)
         {
             SetAccuracy(Accuracy.FAIL);
         }
+        else if(movedThisBeat && thisBeat)
+        {
+            SetAccuracy(Accuracy.FAIL);
+        }
+        else if(movedNextBeat && !thisBeat)
+        {
+            SetAccuracy(Accuracy.FAIL);
+        }
+
+        else if (delta < perfectInterval)
+        {
+            SetAccuracy(Accuracy.PERFECT);
+        }
+        else if (delta < passInterval)
+        {
+            SetAccuracy(Accuracy.PASS);
+        }
+
+        movedThisBeat = thisBeat || movedThisBeat;
+        movedNextBeat = !thisBeat || movedNextBeat;
     }
 
     void SetAccuracy(Accuracy acc)
