@@ -5,17 +5,37 @@ using UnityEngine.UI;
 
 public class Metronome : MonoBehaviour
 {
-    /* How to code player listener for metronome:
-     * 0. Understand observer design pattern
-     * 1. Create a new script and have it subscribe to this one
-     * 2. Create an observer for the player and clicking to move
-     * 3. Subscribe the new script to that new observer on the player
-     * 4. Add rewards for when the player moves close to when the beat occurs
-     */
 
-    float bpm = 100;
+    public static Metronome Instance { get; private set; }
+
+    public const float SECONDS_PER_MINUTE = 60;
+    public float BPM { get; private set; } = 100;
+    public float Interval {  get; private set; } 
+    // Interval is the time between beats
+    
     Image image;
-    Color a = Color.red, b = Color.white;
+    Color a = Color.black, b = Color.white;
+
+    public delegate void MetronomeBeat(float timestamp, float nextBeatTimestamp);
+    MetronomeBeat onMetronomeBeat;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+            SetInterval();
+        } 
+        else
+        {
+            Debug.LogError("Metronome Instance not Null");
+        }
+    }
+
+    void SetInterval()
+    {
+        Interval = SECONDS_PER_MINUTE / BPM;
+    }
 
     void Start()
     {
@@ -26,7 +46,8 @@ public class Metronome : MonoBehaviour
     IEnumerator Pulse()
     {
         ChangeDisplay();
-        yield return new WaitForSecondsRealtime(60 / bpm);
+        NotifyOnMetronomeBeat();
+        yield return new WaitForSecondsRealtime(Interval);
         StartCoroutine(Pulse());
     }
 
@@ -39,5 +60,27 @@ public class Metronome : MonoBehaviour
         {
             image.color = a;
         }
+    }
+
+    public void ListenOnMetronomeBeat(MetronomeBeat m)
+    {
+        onMetronomeBeat += m;
+    }
+
+    public void UnlistenOnMetronomeBeat(MetronomeBeat m)
+    {
+        onMetronomeBeat -= m;
+    }
+
+    private void NotifyOnMetronomeBeat()
+    {
+        float timestamp = Time.time;
+        float nextBeatTimestamp = Time.time + (Interval);
+
+        foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
+        {
+            m.Invoke(timestamp, nextBeatTimestamp);
+        }
+
     }
 }

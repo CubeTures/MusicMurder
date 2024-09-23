@@ -7,13 +7,31 @@ using static System.Math;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance { get; private set; }
+
     private Rigidbody2D body;
     const string wallTag = "Walls";
 
     [SerializeField] private bool isMoving;
     private Vector2 currentTile, nextTile, input;
     int speed = 100;
-    static float t = 0.0f; // Evan, why is t static?
+    float t = 0.0f;
+    // Evan, why is t static? I'm going to assume that was not intentional and make it not static...
+
+    public delegate void PlayerAction(PlayerActionType actionType, float timestamp);
+    PlayerAction onPlayerAction;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogError("Player Instance not Null");
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +83,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if ((Abs(input.y) > .2f || Abs(input.x) > .2f) && !isMoving)
         {
+            NotifyOnPlayerAction(PlayerActionType.MOVE);
+
             isMoving = true;
             currentTile = body.position;
 
@@ -103,9 +123,39 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag(wallTag))
+        CheckWallCollision(collision);
+    }
+
+    void CheckWallCollision(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(wallTag))
         {
             nextTile = currentTile;
         }
     }
+
+    public void ListenOnPlayerAction(PlayerAction p)
+    {
+        onPlayerAction += p;
+    }
+
+    public void UnlistenOnPlayerAction(PlayerAction p)
+    {
+        onPlayerAction -= p;
+    }
+
+    void NotifyOnPlayerAction(PlayerActionType actionType)
+    {
+        float timestamp = Time.time;
+        foreach(PlayerAction p in onPlayerAction.GetInvocationList())
+        {
+            p.Invoke(actionType, timestamp);
+        }
+    }
+}
+
+public enum PlayerActionType
+{
+    MOVE,
+    ATTACK,
 }
