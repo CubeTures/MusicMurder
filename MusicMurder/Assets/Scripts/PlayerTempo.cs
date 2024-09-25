@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static Metronome;
 
 public class PlayerTempo : MonoBehaviour
 {
+    public static PlayerTempo Instance { get; private set; }
+
     Metronome metronome;
     PlayerMovement player;
 
@@ -18,6 +21,21 @@ public class PlayerTempo : MonoBehaviour
     bool movedThisBeat = false, movedNextBeat = false;
 
     TMP_Text text;
+
+    public delegate void PlayerAccuracy(Accuracy accuracy);
+    PlayerAccuracy onPlayerAccuracy;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        } 
+        else
+        {
+            Debug.LogError("Player Tempo Instance no Null");
+        }
+    }
 
     void Start()
     {
@@ -106,6 +124,7 @@ public class PlayerTempo : MonoBehaviour
     {
         string s = GetAccuracyString(acc);
         text.text = GetAccuracyString(acc);
+        NotifyOnPlayerAccuracy(acc);
     }
 
     string GetAccuracyString(Accuracy acc)
@@ -121,6 +140,26 @@ public class PlayerTempo : MonoBehaviour
             default:
                 return "NULL";
         }
+    }
+
+    public void ListenOnPlayerAccuracy(PlayerAccuracy m)
+    {
+        onPlayerAccuracy += m;
+    }
+
+    public void UnlistenOnPlayerAccuracy(PlayerAccuracy m)
+    {
+        onPlayerAccuracy -= m;
+    }
+
+    private void NotifyOnPlayerAccuracy(Accuracy accuracy)
+    {
+
+        foreach (PlayerAccuracy m in onPlayerAccuracy.GetInvocationList())
+        {
+            m.Invoke(accuracy);
+        }
+
     }
 
     private void OnEnable()

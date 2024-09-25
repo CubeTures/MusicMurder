@@ -7,8 +7,6 @@ using static System.Math;
 
 public class Movement : MonoBehaviour
 {
-    
-
     private Rigidbody2D rb;
     const string wallTag = "Walls";
 
