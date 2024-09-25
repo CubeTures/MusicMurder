@@ -22,6 +22,11 @@ public class PlayerMovement : Movement
         }
     }
 
+    private void Start(){
+        base.Start();
+        health = 3;
+    }
+
     void Update()
     {
         GetInput();

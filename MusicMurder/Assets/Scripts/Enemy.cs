@@ -7,6 +7,7 @@ public abstract class Enemy : Movement
     Metronome metronome;
     const string playerTag = "Player";
     protected int beatsBetweenActions = 0;
+    PlayerMovement player;
     int beatsSinceAction = 0;
 
     protected new void Start()
@@ -14,6 +15,8 @@ public abstract class Enemy : Movement
         metronome = Metronome.Instance;
         SetListenStatus(true);
         base.Start();
+        player = PlayerMovement.Instance;
+        health = 1;
     }
 
     void BaseMove(float timestamp, float nextBeatTimestamp)
@@ -41,7 +44,20 @@ public abstract class Enemy : Movement
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
-            DestroyEnemy();
+            if(!isMoving){
+                health--;
+                player.CancelMove();
+            }else{
+                player.takeDamage(1);
+                CancelMove();
+                player.CancelMove();
+            }
+            if(health <= 0){
+                DestroyEnemy();
+            }
+            if(player.getHealth() <= 0){
+                Debug.Log("Player died");
+            }
         }
 
         base.OnCollisionEnter2D(collision);

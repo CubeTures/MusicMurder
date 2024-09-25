@@ -11,6 +11,7 @@ public class Metronome : MonoBehaviour
     public const float SECONDS_PER_MINUTE = 60;
     public float BPM { get; private set; } = 100;
     public float Interval {  get; private set; } 
+    AudioSource metro;
     // Interval is the time between beats
     
     Image image;
@@ -41,6 +42,7 @@ public class Metronome : MonoBehaviour
     {
         image = GetComponent<Image>();
         StartCoroutine(Pulse());
+        metro = GetComponent<AudioSource>();
     }
 
     IEnumerator Pulse()
@@ -48,6 +50,7 @@ public class Metronome : MonoBehaviour
         ChangeDisplay();
         NotifyOnMetronomeBeat();
         yield return new WaitForSecondsRealtime(Interval);
+        metro.Play();
         StartCoroutine(Pulse());
     }
 
