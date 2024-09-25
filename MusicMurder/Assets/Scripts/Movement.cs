@@ -7,6 +7,8 @@ using static System.Math;
 
 public class Movement : MonoBehaviour
 {
+    
+
     private Rigidbody2D rb;
     const string wallTag = "Walls";
 
@@ -79,6 +81,11 @@ public class Movement : MonoBehaviour
         }
     }
 
+    void CancelMove()
+    {
+        nextTile = currentTile;
+    }
+
     protected void OnCollisionEnter2D(Collision2D collision)
     {
         CheckWallCollision(collision);
@@ -88,7 +95,7 @@ public class Movement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(wallTag))
         {
-            nextTile = currentTile;
+            CancelMove();
         }
     }
 }

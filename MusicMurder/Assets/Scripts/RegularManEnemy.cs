@@ -9,6 +9,7 @@ public class RegularManEnemy : Enemy
         beatsBetweenActions = 1;
         base.Start();
     }
+
     protected override void Move()
     {
         direction = GetRandomDirection();
