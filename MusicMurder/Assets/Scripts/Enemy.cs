@@ -44,7 +44,7 @@ public abstract class Enemy : Movement
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
-            if(!isMoving){
+            if(!isMoving && player.acc != Accuracy.FAIL){
                 health--;
                 player.CancelMove();
             }else{

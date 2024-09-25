@@ -9,6 +9,8 @@ public class PlayerMovement : Movement
 
     public delegate void PlayerAction(PlayerActionType actionType, float timestamp);
     PlayerAction onPlayerAction;
+    PlayerTempo tempo;
+    public Accuracy acc{get; private set;}
 
     private void Awake()
     {
@@ -22,9 +24,11 @@ public class PlayerMovement : Movement
         }
     }
 
-    private void Start(){
+    private new void Start(){
         base.Start();
         health = 3;
+        tempo = PlayerTempo.Instance;
+        tempo.ListenOnPlayerAccuracy(GetAccuracy);
     }
 
     void Update()
@@ -74,6 +78,10 @@ public class PlayerMovement : Movement
         {
             p.Invoke(actionType, timestamp);
         }
+    }
+
+    void GetAccuracy(Accuracy accuracy){
+        acc = accuracy;
     }
 }
 

@@ -195,7 +195,7 @@ public class PlayerTempo : MonoBehaviour
     }
 }
 
-enum Accuracy { 
+public enum Accuracy { 
     PERFECT,
     PASS,
     FAIL
