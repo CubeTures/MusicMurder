@@ -49,17 +49,17 @@ public class PlayerTempo : MonoBehaviour
         movedThisBeat = movedNextBeat;
         movedNextBeat = false;
 
-        StartCoroutine(PenalizeNoAction());
+        //StartCoroutine(PenalizeNoAction());
     }
 
-    IEnumerator PenalizeNoAction()
-    {
-        yield return new WaitForSeconds(passInterval);
-        if (movedSinceTempoChange && !movedThisBeat)
-        {
-            SetAccuracy(Accuracy.FAIL);
-        }
-    }
+    // IEnumerator PenalizeNoAction()
+    // {
+        // yield return new WaitForSeconds(passInterval);
+        // if (movedSinceTempoChange && !movedThisBeat)
+        // {
+        //     SetAccuracy(Accuracy.FAIL);
+        // }
+    // }
 
     void OnPlayerAction(PlayerActionType actionType, float timestamp)
     {

@@ -12,9 +12,10 @@ public class Movement : MonoBehaviour
     private Rigidbody2D rb;
     const string wallTag = "Walls";
 
-    [SerializeField] private bool isMoving;
+    [SerializeField] protected bool isMoving;
     private Vector2 currentTile, nextTile;
     float t = 0.0f;
+    [SerializeField]protected int health;
 
     protected Vector2 direction;
     protected int speed = 100;
@@ -81,7 +82,15 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void CancelMove()
+    public void takeDamage(int damage){
+        health-=damage;
+    }
+
+    public int getHealth(){
+        return health;
+    }
+
+    public void CancelMove()
     {
         nextTile = currentTile;
     }
