@@ -14,8 +14,8 @@ public class PlayerTempo : MonoBehaviour
     float lastBeat = 0, nextBeat = 0;
     float perfectInterval, passInterval;
     float prevInterval = 0;
-    const float perfectMargin = .1f;
-    const float passMargin = .2f;
+    const float perfectMargin = .12f;
+    const float passMargin = .24f;
 
     //bool movedSinceTempoChange = false;
     bool movedThisBeat = false, movedNextBeat = false;
