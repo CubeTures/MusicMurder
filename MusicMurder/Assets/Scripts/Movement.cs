@@ -51,11 +51,11 @@ public class Movement : MonoBehaviour
         if (Abs(direction.y) >= Abs(direction.x))
         {
             nextTile.x = rb.position.x;
-            nextTile.y = rb.position.y + (direction.y > 0 ? 1 : -1);
+            nextTile.y = (float)Round((rb.position.y + (direction.y > 0 ? 1 : -1))*2)/2;
         }
         else
         {
-            nextTile.x = rb.position.x + (direction.x > 0 ? 1 : -1);
+            nextTile.x = (float)Round((rb.position.x + (direction.x > 0 ? 1 : -1))*2)/2;
             nextTile.y = rb.position.y;
         }
 
