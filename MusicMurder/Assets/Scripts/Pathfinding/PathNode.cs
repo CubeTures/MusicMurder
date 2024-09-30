@@ -22,7 +22,7 @@ public class PathNode
         ResetNode();
     }
 
-    void SetWalkable()
+    public void SetWalkable()
     {
         isWalkable = true;
 

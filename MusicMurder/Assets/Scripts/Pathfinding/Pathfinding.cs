@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,32 +6,93 @@ using UnityEngine;
 public class Pathfinding
 {
     const int MOVE_COST = 1;
-    const int WIDTH = 50, HEIGHT = 50;
-    const float SIZE = 1;
     readonly Vector2Int[] directions = new Vector2Int[] 
         { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
 
+    PlayerMovement player;
     Grid grid;
+    Transform self;
     List<PathNode> open;
     HashSet<PathNode> closed;
 
-    public Pathfinding(Vector2 origin)
+    static HashSet<PathNode> walkableChecked = new HashSet<PathNode>();
+    // clear the set every time the player walks
+    // when encountering a new node in the pathfinding, add it to the set
+
+    public Pathfinding(Transform self)
     {
-        grid = new Grid(WIDTH, HEIGHT, SIZE, 
-            FloorVector(origin) - new Vector2Int(WIDTH / 2, HEIGHT / 2));
+        grid = PlayerGrid.Instance.Grid;
+        this.self = self;
+        grid.DrawNode(grid.CreateNode(self));
+        grid.DrawNode(new PathNode(grid, grid.GetTrueOrigin()));
+        player = PlayerMovement.Instance;
+        SetListenStatus(true);
+        //grid.DrawNode(new PathNode(grid, grid.GetOrigin()));
+    }
+
+    void ClearCheckedNodes(PlayerActionType type, float timestamp)
+    {
+        walkableChecked.Clear();
+    }
+
+    bool GetWalkableStatus(PathNode p)
+    {
+        if (walkableChecked.Contains(p))
+        {
+            return p.isWalkable;
+        }
+        else
+        {
+            p.SetWalkable();
+            walkableChecked.Add(p);
+            return p.isWalkable;
+        }
+    }
+
+    public Vector2Int GetNextMove()
+    {
+        List<PathNode> path = FindPath(self.position, grid.GetTrueOrigin());
+        if (path != null && path.Count > 1)
+        {
+            //grid.DrawList(path);
+            Vector2Int next = path[1].pos - grid.GetGridPosition(self.position);
+            //Debug.Log("Next move: " +  next);
+            return next;
+        }
+
+        //Debug.Log("There is no path from " + self.gameObject.name + " to player");
+        return Vector2Int.zero;
+    }
+
+    public int GetDistanceToOrigin()
+    {
+        PathNode nSelf = grid.CreateNode(self);
+        PathNode nOrigin = new PathNode(grid, grid.GetTrueOrigin());
+        return CalculateDistanceCost(nSelf, nOrigin) / MOVE_COST;
     }
 
     public List<PathNode> FindPath(Vector2 startPos, Vector2 endPos)
     {
         Vector2Int s = grid.GetGridPosition(startPos);
-        Vector2Int e = grid.GetGridPosition(endPos);
-        return FindPath(s, e);
-    }
+        Vector2Int e = grid.GetTrueOrigin();
 
-    public Vector2Int FloorVector(Vector2 vec)
-    {
-        return new Vector2Int(Mathf.FloorToInt(vec.x), Mathf.FloorToInt(vec.y));
+        if (grid.Contains(s) && grid.Contains(e))
+        {
+            return FindPath(s, e);
+        }
+        
+        if(!grid.Contains(s))
+        {
+            //Debug.LogWarning(self.gameObject.name + " not in grid");
+        }
+        if(!grid.Contains(e))
+        {
+            Debug.LogWarning("Player not in grid");
+        }
+
+        return null;
     }
+    
 
     public List<PathNode> FindPath(Vector2Int startPos, Vector2Int endPos)
     {
@@ -56,6 +118,7 @@ public class Pathfinding
 
             open.Remove(current);
             closed.Add(current);
+            //grid.DrawNode(current);
 
             foreach(PathNode neighbor in GetNeighborList(current))
             {
@@ -63,9 +126,10 @@ public class Pathfinding
                 {
                     continue;
                 }
-                if(!neighbor.isWalkable)
+                if(!GetWalkableStatus(neighbor))
                 {
                     closed.Add(neighbor);
+                    //grid.DrawNode(neighbor);
                     continue;
                 }
 
@@ -154,8 +218,33 @@ public class Pathfinding
         return lowest;
     }
 
-    public Grid GetGrid()
+    void OnEnable()
     {
-        return grid;
+        SetListenStatus(true);
+    }
+
+    void OnDisable()
+    {
+        SetListenStatus(false);
+    }
+
+    void OnDestroy()
+    {
+        SetListenStatus(false);
+    }
+
+    void SetListenStatus(bool status)
+    {
+        if (player)
+        {
+            if (status)
+            {
+                player.ListenOnPlayerAction(ClearCheckedNodes);
+            }
+            else
+            {
+                player.UnlistenOnPlayerAction(ClearCheckedNodes);
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Grid
@@ -9,11 +8,11 @@ public class Grid
     public int width { get; private set; }
     public int height { get; private set; }
     float size;
-    Vector2Int origin;
+    Transform origin;
 
     PathNode[,] gridArray;
 
-    public Grid(int width, int height, float size, Vector2Int origin) 
+    public Grid(int width, int height, float size, Transform origin) 
     {
         this.width = width;
         this.height = height;
@@ -35,20 +34,25 @@ public class Grid
         }
     }
 
-    PathNode createNode(Vector2Int pos)
+    PathNode CreateNode(Vector2Int pos)
     {
         return new PathNode(this, pos);
     }
 
+    public PathNode CreateNode(Transform transform)
+    {
+        return new PathNode(this, GetGridPosition(transform.position));
+    }
+
     public Vector2 GetWorldPosition(Vector2 pos)
     {
-        return pos * size + origin;
+        return pos * size + GetOrigin();
     }
 
     public Vector2Int GetGridPosition(Vector2 worldPosition)
     {
-        int x = Mathf.FloorToInt(worldPosition.x / size) - origin.x;
-        int y = Mathf.FloorToInt(worldPosition.y / size) - origin.y;
+        int x = Mathf.FloorToInt(worldPosition.x / size) - GetOrigin().x;
+        int y = Mathf.FloorToInt(worldPosition.y / size) - GetOrigin().y;
         return new Vector2Int(x, y);
     }
 
@@ -82,6 +86,34 @@ public class Grid
         }
     }
 
+    public Vector2Int GetOrigin()
+    {
+        return new
+            Vector2Int(
+            Mathf.FloorToInt(origin.position.x) - width / 2,
+            Mathf.FloorToInt(origin.position.y) - height / 2
+            );
+    }
+
+    public Vector2Int GetTrueOrigin()
+    {
+        return new
+            Vector2Int(
+            Mathf.FloorToInt(width / 2),
+            Mathf.FloorToInt(height / 2)
+            );
+    }
+
+    public Vector2Int GetOriginRaw()
+    {
+        return FloorVector(origin.position);
+    }
+
+    public static Vector2Int FloorVector(Vector2 vec)
+    {
+        return new Vector2Int(Mathf.FloorToInt(vec.x), Mathf.FloorToInt(vec.y));
+    }
+
     public void DrawGrid()
     {
         DrawBox(new Vector2Int(0, 0), new Vector2Int(width, height));
@@ -113,9 +145,9 @@ public class Grid
         Vector2 c2 = GetWorldPosition(new Vector2Int(end.x, start.y));
         Vector2 limit = GetWorldPosition(end);
 
-        Debug.DrawLine(begin, c1, Color.red, float.PositiveInfinity);
-        Debug.DrawLine(begin, c2, Color.red, float.PositiveInfinity);
-        Debug.DrawLine(c1, limit, Color.red, float.PositiveInfinity);
-        Debug.DrawLine(c2, limit, Color.red, float.PositiveInfinity);
+        Debug.DrawLine(begin, c1, Color.red, 1);
+        Debug.DrawLine(begin, c2, Color.red, 1);
+        Debug.DrawLine(c1, limit, Color.red, 1);
+        Debug.DrawLine(c2, limit, Color.red, 1);
     }
 }

@@ -59,7 +59,16 @@ public class Movement : MonoBehaviour
             nextTile.y = rb.position.y;
         }
 
+        nextTile = SnapTile(nextTile);
         direction = Vector2.zero;
+    }
+
+    Vector2 SnapTile(Vector2 tile)
+    {
+        return new Vector2(
+                Mathf.Floor(tile.x) + 0.5f,
+                Mathf.Floor(tile.y) + 0.5f
+            );
     }
 
     void MoveToNextTile()

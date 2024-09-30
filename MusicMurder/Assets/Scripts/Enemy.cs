@@ -8,6 +8,7 @@ public abstract class Enemy : Movement
     const string playerTag = "Player";
     protected int beatsBetweenActions = 0;
     PlayerMovement player;
+    protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
 
     protected new void Start()
@@ -17,6 +18,7 @@ public abstract class Enemy : Movement
         base.Start();
         player = PlayerMovement.Instance;
         health = 1;
+        pathfinding = new Pathfinding(transform);
     }
 
     void BaseMove(float timestamp, float nextBeatTimestamp)

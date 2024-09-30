@@ -17,7 +17,7 @@ public class PlayerTempo : MonoBehaviour
     const float perfectMargin = .1f;
     const float passMargin = .2f;
 
-    bool movedSinceTempoChange = false;
+    //bool movedSinceTempoChange = false;
     bool movedThisBeat = false, movedNextBeat = false;
 
     TMP_Text text;
@@ -54,7 +54,7 @@ public class PlayerTempo : MonoBehaviour
             prevInterval = metronome.Interval;
             perfectInterval = prevInterval * perfectMargin;
             passInterval = prevInterval * passMargin;
-            movedSinceTempoChange = false;
+            //movedSinceTempoChange = false;
 
             Debug.Log("Perfect Interval: " +  perfectInterval + "s, Pass Interval: " + passInterval + "s");
         }
@@ -81,7 +81,7 @@ public class PlayerTempo : MonoBehaviour
 
     void OnPlayerAction(PlayerActionType actionType, float timestamp)
     {
-        movedSinceTempoChange = true;
+        //movedSinceTempoChange = true;
 
         float deltaLast = Mathf.Abs(lastBeat - timestamp);
         float deltaNext = Mathf.Abs(nextBeat - timestamp);

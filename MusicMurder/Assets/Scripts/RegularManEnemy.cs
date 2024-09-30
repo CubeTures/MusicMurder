@@ -12,7 +12,8 @@ public class RegularManEnemy : Enemy
 
     protected override void Move()
     {
-        direction = GetRandomDirection();
+        direction = pathfinding.GetNextMove();
+        //direction = GetRandomDirection();
     }
 
     Vector2 GetRandomDirection()
