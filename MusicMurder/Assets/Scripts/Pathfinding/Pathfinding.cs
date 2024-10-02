@@ -6,8 +6,9 @@ using UnityEngine;
 public class Pathfinding
 {
     const int MOVE_COST = 1;
-    readonly Vector2Int[] directions = new Vector2Int[] 
-        { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
+    readonly Vector2Int[][] directions = new Vector2Int[][]
+        { new Vector2Int[]{ Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left },
+        new Vector2Int[]{ Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down } };
 
     PlayerMovement player;
     Grid grid;
@@ -16,8 +17,6 @@ public class Pathfinding
     HashSet<PathNode> closed;
 
     static HashSet<PathNode> walkableChecked = new HashSet<PathNode>();
-    // clear the set every time the player walks
-    // when encountering a new node in the pathfinding, add it to the set
 
     public Pathfinding(Transform self)
     {
@@ -120,7 +119,7 @@ public class Pathfinding
             closed.Add(current);
             //grid.DrawNode(current);
 
-            foreach(PathNode neighbor in GetNeighborList(current))
+            foreach(PathNode neighbor in GetNeighborList(current, end))
             {
                 if(closed.Contains(neighbor))
                 {
@@ -152,11 +151,12 @@ public class Pathfinding
         return null;
     }
 
-    List<PathNode> GetNeighborList(PathNode current)
+    List<PathNode> GetNeighborList(PathNode current, PathNode end)
     {
         List<PathNode> list = new List<PathNode>();
+        int priority = GetDirectionPriority(current, end);
 
-        foreach (Vector2Int direction in directions)
+        foreach (Vector2Int direction in directions[priority])
         {
             PathNode n = GetNeighbor(current, direction);
 
@@ -201,6 +201,25 @@ public class Pathfinding
         int x = Mathf.Abs(a.pos.x - b.pos.x);
         int y = Mathf.Abs(a.pos.y - b.pos.y);
         return MOVE_COST * (x + y);
+    }
+
+    int GetDirectionPriority(PathNode a, PathNode b)
+    {
+        int x = Mathf.Abs(a.pos.x - b.pos.x);
+        int y = Mathf.Abs(a.pos.y - b.pos.y);
+
+        if (x > y)
+        {
+            return 1;
+        }
+        else if (x < y)
+        {
+            return 0;
+        }
+        else
+        {
+            return UnityEngine.Random.Range(0, 2);
+        }
     }
 
     PathNode GetLowestFCostNode(List<PathNode> list)
