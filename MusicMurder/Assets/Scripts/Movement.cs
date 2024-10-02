@@ -11,7 +11,8 @@ public class Movement : MonoBehaviour
     const string wallTag = "Walls";
 
     [SerializeField] protected bool isMoving;
-    private Vector2 currentTile, nextTile;
+    public Vector2 currentTile {get; private set;}
+    private Vector2 nextTile;
     float t = 0.0f;
     [SerializeField]protected int health;
 

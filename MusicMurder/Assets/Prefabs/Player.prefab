@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3890271217358071063}
   - component: {fileID: 2552310216722627851}
   - component: {fileID: -2602545943922611350}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMoving: 0
+  health: 0
 --- !u!50 &2552310216722627851
 Rigidbody2D:
   serializedVersion: 4
@@ -185,7 +186,7 @@ GameObject:
   - component: {fileID: 5710295629726493683}
   - component: {fileID: 3059155542951341091}
   - component: {fileID: 3250674307189051116}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +275,7 @@ GameObject:
   - component: {fileID: 8093944326715355288}
   - component: {fileID: 6970505936805038883}
   - component: {fileID: 3965234166595030527}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Virtual Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +378,7 @@ GameObject:
   - component: {fileID: 4777330649553025111}
   - component: {fileID: 3850857557752842948}
   - component: {fileID: 3225414680073188750}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}

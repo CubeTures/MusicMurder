@@ -7,7 +7,7 @@ public abstract class Enemy : Movement
     Metronome metronome;
     const string playerTag = "Player";
     protected int beatsBetweenActions = 0;
-    PlayerMovement player;
+    protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
 
