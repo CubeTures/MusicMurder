@@ -87,6 +87,7 @@ public class Movement : MonoBehaviour
         {
             isMoving = false;
             t = 0.0f;
+            currentTile = nextTile;
         }
     }
 
