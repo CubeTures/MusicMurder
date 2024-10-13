@@ -1,0 +1,9 @@
+{
+	"lines": [
+		{
+			"name": "Agent",
+			"focus": "Player",
+			"text": "This is a test for the dialogue system"
+		}
+	]
+}

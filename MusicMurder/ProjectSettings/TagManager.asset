@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Bounds
   - Metronome
+  - VirtualCamera
   layers:
   - Default
   - TransparentFX

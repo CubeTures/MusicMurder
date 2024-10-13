@@ -12,6 +12,8 @@ public class PlayerMovement : Movement
     PlayerTempo tempo;
     public Accuracy acc{get; private set;}
 
+    GameState gameState;
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,6 +30,7 @@ public class PlayerMovement : Movement
         base.Start();
         health = 3;
         tempo = PlayerTempo.Instance;
+        gameState = GameState.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
     }
 
@@ -38,6 +41,8 @@ public class PlayerMovement : Movement
 
     void GetInput()
     {
+        if(gameState.Paused) return;
+
         if (Input.GetKeyDown(KeyCode.W))
         {
             direction.y = 1;

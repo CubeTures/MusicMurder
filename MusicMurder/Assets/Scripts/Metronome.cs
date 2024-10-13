@@ -10,9 +10,8 @@ public class Metronome : MonoBehaviour
 
     public const float SECONDS_PER_MINUTE = 60;
     public float BPM { get; private set; } = 100;
-    public float Interval {  get; private set; } 
+    public float Interval {  get; private set; } // time between beats
     AudioSource metro;
-    // Interval is the time between beats
     
     Image image;
     Color a = Color.black, b = Color.white;

@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Enemy : Movement
 {
     Metronome metronome;
+    GameState gameState;
     const string playerTag = "Player";
     protected int beatsBetweenActions = 0;
     protected PlayerMovement player;
@@ -14,15 +15,20 @@ public abstract class Enemy : Movement
     protected new void Start()
     {
         metronome = Metronome.Instance;
+        gameState = GameState.Instance;
+        player = PlayerMovement.Instance;
+
         SetListenStatus(true);
         base.Start();
-        player = PlayerMovement.Instance;
+        
         health = 1;
         pathfinding = new Pathfinding(transform);
     }
 
     void BaseMove(float timestamp, float nextBeatTimestamp)
     {
+        if (gameState.Paused) return;
+
         Increment(ref beatsSinceAction, beatsBetweenActions);
 
         if(beatsSinceAction == beatsBetweenActions)
