@@ -40,16 +40,16 @@ public class Metronome : MonoBehaviour
     void Start()
     {
         image = GetComponent<Image>();
-        StartCoroutine(Pulse());
         metro = GetComponent<AudioSource>();
+        StartCoroutine(Pulse());
     }
 
     IEnumerator Pulse()
     {
-        ChangeDisplay();
         NotifyOnMetronomeBeat();
-        yield return new WaitForSecondsRealtime(Interval);
+        ChangeDisplay();
         metro.Play();
+        yield return new WaitForSecondsRealtime(Interval);
         StartCoroutine(Pulse());
     }
 
@@ -82,7 +82,6 @@ public class Metronome : MonoBehaviour
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
         {
             m.Invoke(timestamp, nextBeatTimestamp);
-        }
-
+        }        
     }
 }

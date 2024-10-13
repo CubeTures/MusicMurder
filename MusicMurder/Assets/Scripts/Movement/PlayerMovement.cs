@@ -13,6 +13,7 @@ public class PlayerMovement : Movement
     public Accuracy acc{get; private set;}
 
     GameState gameState;
+    public Health Health { get; private set; }
 
     private void Awake()
     {
@@ -28,7 +29,7 @@ public class PlayerMovement : Movement
 
     private new void Start(){
         base.Start();
-        health = 3;
+        Health = new Health(3);
         tempo = PlayerTempo.Instance;
         gameState = GameState.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);

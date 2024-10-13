@@ -10,8 +10,8 @@ public class Pathfinding
         { new Vector2Int[]{ Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left },
         new Vector2Int[]{ Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down } };
 
-    Grid grid;
-    Transform self;
+    readonly Grid grid;
+    readonly Transform self;
     List<PathNode> open;
     HashSet<PathNode> closed;
 
@@ -44,6 +44,13 @@ public class Pathfinding
         PathNode nSelf = grid.CreateNode(self);
         PathNode nOrigin = new PathNode(grid, grid.GetTrueOrigin());
         return CalculateDistanceCost(nSelf, nOrigin) / MOVE_COST;
+    }
+
+    public Vector2 GetVectorToOrigin()
+    {
+        PathNode nSelf = grid.CreateNode(self);
+        PathNode nOrigin = new PathNode(grid, grid.GetTrueOrigin());
+        return GetVectorDistance(nSelf, nOrigin);
     }
 
     public List<PathNode> FindPath(Vector2 startPos, Vector2 endPos)
@@ -177,6 +184,13 @@ public class Pathfinding
         int x = Mathf.Abs(a.pos.x - b.pos.x);
         int y = Mathf.Abs(a.pos.y - b.pos.y);
         return MOVE_COST * (x + y);
+    }
+
+    Vector2 GetVectorDistance(PathNode a, PathNode b)
+    {
+        int x = b.pos.x - a.pos.x;
+        int y = b.pos.y - a.pos.y;
+        return new Vector2(x, y);
     }
 
     int GetDirectionPriority(PathNode a, PathNode b)

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 using static System.Math;
@@ -14,7 +11,6 @@ public class Movement : MonoBehaviour
     public Vector2 currentTile {get; private set;}
     private Vector2 nextTile;
     float t = 0.0f;
-    [SerializeField]protected int health;
 
     protected Vector2 direction;
     protected int speed = 100;
@@ -89,14 +85,6 @@ public class Movement : MonoBehaviour
             t = 0.0f;
             currentTile = nextTile;
         }
-    }
-
-    public void TakeDamage(int damage){
-        health-=damage;
-    }
-
-    public int GetHealth(){
-        return health;
     }
 
     public void CancelMove()

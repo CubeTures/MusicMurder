@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Grid
 {
-    public int width { get; private set; }
-    public int height { get; private set; }
-    float size;
-    Transform origin;
+    readonly int width;
+    readonly int height;
+    readonly float size;
+    readonly Transform origin;
 
-    PathNode[,] gridArray;
-    HashSet<PathNode> walkableChecked = new HashSet<PathNode>();
+    readonly PathNode[,] gridArray;
+    readonly HashSet<PathNode> walkableChecked = new HashSet<PathNode>();
 
     public Grid(int width, int height, float size, Transform origin) 
     {

@@ -13,6 +13,7 @@ public abstract class Enemy : Movement
     int beatsSinceAction = 0;
 
     readonly int layerMask = ~(1 << 2);
+    public Health Health { get; protected set; }
 
     protected new void Start()
     {
@@ -22,8 +23,8 @@ public abstract class Enemy : Movement
 
         SetListenStatus(true);
         base.Start();
-        
-        health = 1;
+
+        Health = new Health(1);
         pathfinding = new Pathfinding(transform);
     }
 
@@ -78,6 +79,73 @@ public abstract class Enemy : Movement
         return new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
     }
 
+    /// <summary>
+    /// Returns the direction to the player when the player is in the given line and not blocked by walls, otherwise returns null
+    /// </summary>
+    /// <param name="distance">The max distance from the enemy the player can be and still be detected</param>
+    /// <param name="spread">The distance perpendicular to the line the player can be and still be detected</param>
+    protected Vector2? PlayerIsInLine(int distance, int spread)
+    {
+        if(!PlayerInLineOfSight()) return null;
+
+        Vector2 v = GetDistanceFromPlayer();
+
+        float x = Mathf.Abs(v.x);
+        float y = Mathf.Abs(v.y);
+        float line = Mathf.Max(x, y);
+        float offset = Mathf.Min(x, y);
+
+        if(line <= distance && offset <= spread)
+        {   
+            return GetUnitDirection(v);
+        }
+
+        return null;
+    }
+
+    protected Quaternion GetQuaternionFromDirection(Vector2 direction)
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float clamped = Mathf.Round(angle / 90f) * 90f;
+        return Quaternion.Euler(0, 0, clamped);
+    }
+
+    Vector2 GetUnitDirection(Vector2 direction)
+    {
+        if(direction == Vector2.zero) return Vector2.zero;
+
+        float a = Mathf.Abs(direction.x);
+        float b = Mathf.Abs(direction.y);
+
+        if (a > b)
+        {
+            if (direction.x < 0)
+            {
+                return Vector2.left;
+            }
+            else
+            {
+                return Vector2.right;
+            }
+        }
+        else
+        {
+            if (direction.y < 0)
+            {
+                return Vector2.down;
+            }
+            else
+            {
+                return Vector2.up;
+            }
+        }
+    }
+
+    protected Vector2 GetDistanceFromPlayer()
+    {
+        return pathfinding.GetVectorToOrigin();
+    }
+
     void Increment(ref int val, int max)
     {
         val++;
@@ -92,17 +160,17 @@ public abstract class Enemy : Movement
         if (collision.gameObject.CompareTag(playerTag))
         {
             if(!isMoving && player.acc != Accuracy.FAIL){
-                health--;
+                Health.TakeDamage(1);
                 player.CancelMove();
             }else{
-                player.TakeDamage(1);
+                player.Health.TakeDamage(1);
                 CancelMove();
                 player.CancelMove();
             }
-            if(health <= 0){
+            if(Health.GetHealth() <= 0){
                 DestroyEnemy();
             }
-            if(player.GetHealth() <= 0){
+            if(player.Health.GetHealth() <= 0){
                 Debug.Log("Player died");
             }
         }

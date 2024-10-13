@@ -9,6 +9,7 @@ TagManager:
   - Bounds
   - Metronome
   - VirtualCamera
+  - Projectile
   layers:
   - Default
   - TransparentFX
