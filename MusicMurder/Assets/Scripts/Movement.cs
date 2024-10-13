@@ -91,11 +91,11 @@ public class Movement : MonoBehaviour
         }
     }
 
-    public void takeDamage(int damage){
+    public void TakeDamage(int damage){
         health-=damage;
     }
 
-    public int getHealth(){
+    public int GetHealth(){
         return health;
     }
 

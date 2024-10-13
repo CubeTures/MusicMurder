@@ -12,6 +12,8 @@ public abstract class Enemy : Movement
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
 
+    readonly int layerMask = ~(1 << 2);
+
     protected new void Start()
     {
         metronome = Metronome.Instance;
@@ -39,6 +41,43 @@ public abstract class Enemy : Movement
 
     protected abstract void Move();
 
+    protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
+    {
+        if(PlayerInLineOfSight())
+        {
+            direction = pathfinding.GetNextMove();
+        }
+        else if(fallback == PathfindingFallback.RANDOM_MOVEMENT)
+        {
+            direction = GetRandomDirection();
+        }
+        else if(fallback == PathfindingFallback.FOLLOW_WAYPOINTS)
+        {
+            // follow pretedermined path
+        }
+        else if(fallback == PathfindingFallback.PATROL)
+        {
+            // patrol a predermined spot
+        }
+    }
+
+    protected bool PlayerInLineOfSight()
+    {
+        return GetPlayerRaycast().transform == null;
+    }
+
+    protected RaycastHit2D GetPlayerRaycast()
+    {
+        Vector2 direction = player.currentTile - new Vector2(transform.position.x, transform.position.y);
+        float distance = Mathf.Min(10f, Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y)));
+        return Physics2D.Raycast(transform.position, direction, distance, layerMask);
+    }
+
+    protected Vector2 GetRandomDirection()
+    {
+        return new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
+    }
+
     void Increment(ref int val, int max)
     {
         val++;
@@ -56,14 +95,14 @@ public abstract class Enemy : Movement
                 health--;
                 player.CancelMove();
             }else{
-                player.takeDamage(1);
+                player.TakeDamage(1);
                 CancelMove();
                 player.CancelMove();
             }
             if(health <= 0){
                 DestroyEnemy();
             }
-            if(player.getHealth() <= 0){
+            if(player.GetHealth() <= 0){
                 Debug.Log("Player died");
             }
         }
@@ -106,4 +145,12 @@ public abstract class Enemy : Movement
             }
         }
     }
+}
+
+public enum PathfindingFallback
+{
+    DO_NOTHING,
+    RANDOM_MOVEMENT,
+    FOLLOW_WAYPOINTS,
+    PATROL
 }

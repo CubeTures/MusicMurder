@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DialogueEvent : MonoBehaviour
 {
@@ -9,9 +10,17 @@ public class DialogueEvent : MonoBehaviour
     [SerializeField] bool retriggerable;
     const string playerTag = "Player";
 
+    [Tooltip("Will retrigger if retriggerable is enabled.")]
+    [SerializeField] UnityEvent sideEffect;
+
     public void Trigger()
     {
         DialogueManager.Instance.SetScript(script);
+        
+        if(sideEffect != null)
+        {
+            sideEffect.Invoke();
+        }
 
         if(!retriggerable)
         {

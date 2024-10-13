@@ -217,6 +217,9 @@ MonoBehaviour:
   script: {fileID: 4900000, guid: 9e98eebaa94d33f4482546057c008dac, type: 3}
   useTriggerEnter2D: 1
   retriggerable: 0
+  sideEffect:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &104174432
 BoxCollider2D:
   m_ObjectHideFlags: 0
