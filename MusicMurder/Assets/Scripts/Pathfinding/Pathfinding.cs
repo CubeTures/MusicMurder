@@ -10,13 +10,10 @@ public class Pathfinding
         { new Vector2Int[]{ Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left },
         new Vector2Int[]{ Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down } };
 
-    PlayerMovement player;
     Grid grid;
     Transform self;
     List<PathNode> open;
     HashSet<PathNode> closed;
-
-    static HashSet<PathNode> walkableChecked = new HashSet<PathNode>();
 
     public Pathfinding(Transform self)
     {
@@ -24,28 +21,7 @@ public class Pathfinding
         this.self = self;
         grid.DrawNode(grid.CreateNode(self));
         grid.DrawNode(new PathNode(grid, grid.GetTrueOrigin()));
-        player = PlayerMovement.Instance;
-        SetListenStatus(true);
         //grid.DrawNode(new PathNode(grid, grid.GetOrigin()));
-    }
-
-    void ClearCheckedNodes(PlayerActionType type, float timestamp)
-    {
-        walkableChecked.Clear();
-    }
-
-    bool GetWalkableStatus(PathNode p)
-    {
-        if (walkableChecked.Contains(p))
-        {
-            return p.isWalkable;
-        }
-        else
-        {
-            p.SetWalkable();
-            walkableChecked.Add(p);
-            return p.isWalkable;
-        }
     }
 
     public Vector2Int GetNextMove()
@@ -125,7 +101,7 @@ public class Pathfinding
                 {
                     continue;
                 }
-                if(!GetWalkableStatus(neighbor))
+                if(!grid.GetWalkableStatus(neighbor))
                 {
                     closed.Add(neighbor);
                     //grid.DrawNode(neighbor);
@@ -235,35 +211,5 @@ public class Pathfinding
         }
 
         return lowest;
-    }
-
-    void OnEnable()
-    {
-        SetListenStatus(true);
-    }
-
-    void OnDisable()
-    {
-        SetListenStatus(false);
-    }
-
-    void OnDestroy()
-    {
-        SetListenStatus(false);
-    }
-
-    void SetListenStatus(bool status)
-    {
-        if (player)
-        {
-            if (status)
-            {
-                player.ListenOnPlayerAction(ClearCheckedNodes);
-            }
-            else
-            {
-                player.UnlistenOnPlayerAction(ClearCheckedNodes);
-            }
-        }
     }
 }

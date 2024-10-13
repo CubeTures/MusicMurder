@@ -11,6 +11,7 @@ public class Grid
     Transform origin;
 
     PathNode[,] gridArray;
+    HashSet<PathNode> walkableChecked = new HashSet<PathNode>();
 
     public Grid(int width, int height, float size, Transform origin) 
     {
@@ -112,6 +113,25 @@ public class Grid
     public static Vector2Int FloorVector(Vector2 vec)
     {
         return new Vector2Int(Mathf.FloorToInt(vec.x), Mathf.FloorToInt(vec.y));
+    }
+
+    public void ClearCheckedNodes()
+    {
+        walkableChecked.Clear();
+    }
+
+    public bool GetWalkableStatus(PathNode p)
+    {
+        if (walkableChecked.Contains(p))
+        {
+            return p.isWalkable;
+        }
+        else
+        {
+            p.SetWalkable();
+            walkableChecked.Add(p);
+            return p.isWalkable;
+        }
     }
 
     public void DrawGrid()
