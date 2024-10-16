@@ -13,4 +13,8 @@ public class Projectile : Movement
     {
         Destroy(gameObject);
     }
+
+    protected override void OnMove(){
+        return;
+    }
 }

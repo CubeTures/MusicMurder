@@ -23,12 +23,9 @@ public abstract class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
-<<<<<<< HEAD
         colliding = false;
-=======
         metronome = Metronome.Instance;
         SetListenStatus(true);
->>>>>>> 72c0af7a44732544033efa5d5b6eecefd18f05cc
     }
 
     private void FixedUpdate()
@@ -47,7 +44,7 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
-    virtual protected void OnMove() { }
+    protected abstract void OnMove();
 
     void SetNextTile()
     {
@@ -125,7 +122,6 @@ public abstract class Movement : MonoBehaviour
             CancelMove();
         }
     }
-<<<<<<< HEAD
 
     public Vector2 getNext(){
         return new Vector2(currentTile.x + direction.x, currentTile.y + direction.y);
@@ -133,7 +129,8 @@ public abstract class Movement : MonoBehaviour
 
     public Vector2 getNextPrime(){
         return new Vector2(nextTile.x, nextTile.y);
-=======
+    }
+
     protected abstract void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup);
 
     private void OnEnable()
@@ -164,6 +161,5 @@ public abstract class Movement : MonoBehaviour
                 metronome.UnlistenOnMetronomeBeat(OnMetronomeBeat);
             }
         }
->>>>>>> 72c0af7a44732544033efa5d5b6eecefd18f05cc
     }
 }

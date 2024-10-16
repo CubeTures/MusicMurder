@@ -29,4 +29,8 @@ public class RangedEnemy : Enemy
     {
         Instantiate(projectile, (Vector2) transform.position + direction, GetQuaternionFromDirection(direction), transform);
     }
+
+    protected override void OnMove(){
+        return;
+    }
 }
