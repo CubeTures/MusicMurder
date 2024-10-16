@@ -2,7 +2,6 @@ using UnityEngine;
 
 using static System.Math;
 
-public class Movement : MonoBehaviour
 public abstract class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
