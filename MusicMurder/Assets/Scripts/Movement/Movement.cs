@@ -3,6 +3,7 @@ using UnityEngine;
 using static System.Math;
 
 public class Movement : MonoBehaviour
+public abstract class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
     const string wallTag = "Walls";
@@ -16,12 +17,19 @@ public class Movement : MonoBehaviour
     protected Vector2 direction;
     protected int speed = 100;
 
+    Metronome metronome;
+
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
+<<<<<<< HEAD
         colliding = false;
+=======
+        metronome = Metronome.Instance;
+        SetListenStatus(true);
+>>>>>>> 72c0af7a44732544033efa5d5b6eecefd18f05cc
     }
 
     private void FixedUpdate()
@@ -118,6 +126,7 @@ public class Movement : MonoBehaviour
             CancelMove();
         }
     }
+<<<<<<< HEAD
 
     public Vector2 getNext(){
         return new Vector2(currentTile.x + direction.x, currentTile.y + direction.y);
@@ -125,5 +134,37 @@ public class Movement : MonoBehaviour
 
     public Vector2 getNextPrime(){
         return new Vector2(nextTile.x, nextTile.y);
+=======
+    protected abstract void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup);
+
+    private void OnEnable()
+    {
+        SetListenStatus(true);
+    }
+
+    private void OnDisable()
+    {
+        SetListenStatus(false);
+    }
+
+    private void OnDestroy()
+    {
+        SetListenStatus(false);
+    }
+
+    void SetListenStatus(bool status)
+    {
+        if (metronome != null)
+        {
+            if (status)
+            {
+                metronome.ListenOnMetronomeBeat(OnMetronomeBeat);
+            }
+            else
+            {
+                metronome.UnlistenOnMetronomeBeat(OnMetronomeBeat);
+            }
+        }
+>>>>>>> 72c0af7a44732544033efa5d5b6eecefd18f05cc
     }
 }
