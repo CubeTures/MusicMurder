@@ -2,7 +2,7 @@ using UnityEngine;
 
 using static System.Math;
 
-public class Movement : MonoBehaviour
+public abstract class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
     const string wallTag = "Walls";
@@ -15,11 +15,15 @@ public class Movement : MonoBehaviour
     protected Vector2 direction;
     protected int speed = 100;
 
+    Metronome metronome;
+
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
+        metronome = Metronome.Instance;
+        SetListenStatus(true);
     }
 
     private void FixedUpdate()
@@ -102,6 +106,37 @@ public class Movement : MonoBehaviour
         if (collision.gameObject.CompareTag(wallTag))
         {
             CancelMove();
+        }
+    }
+    protected abstract void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup);
+
+    private void OnEnable()
+    {
+        SetListenStatus(true);
+    }
+
+    private void OnDisable()
+    {
+        SetListenStatus(false);
+    }
+
+    private void OnDestroy()
+    {
+        SetListenStatus(false);
+    }
+
+    void SetListenStatus(bool status)
+    {
+        if (metronome != null)
+        {
+            if (status)
+            {
+                metronome.ListenOnMetronomeBeat(OnMetronomeBeat);
+            }
+            else
+            {
+                metronome.UnlistenOnMetronomeBeat(OnMetronomeBeat);
+            }
         }
     }
 }

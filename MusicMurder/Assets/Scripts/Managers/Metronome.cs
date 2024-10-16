@@ -16,8 +16,13 @@ public class Metronome : MonoBehaviour
     Image image;
     Color a = Color.black, b = Color.white;
 
-    public delegate void MetronomeBeat(float timestamp, float nextBeatTimestamp);
+    public delegate void MetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup);
     MetronomeBeat onMetronomeBeat;
+
+    GameState gameState;
+    public static readonly int startupBeats = 4;
+    int currentStartupBeats = 0;
+    bool previouslyPaused = false;
 
     private void Awake()
     {
@@ -39,6 +44,7 @@ public class Metronome : MonoBehaviour
 
     void Start()
     {
+        gameState = GameState.Instance;
         image = GetComponent<Image>();
         metro = GetComponent<AudioSource>();
         StartCoroutine(Pulse());
@@ -49,6 +55,13 @@ public class Metronome : MonoBehaviour
         NotifyOnMetronomeBeat();
         ChangeDisplay();
         metro.Play();
+
+        if (previouslyPaused && !gameState.Paused)
+        {
+            currentStartupBeats = startupBeats;
+        }
+        previouslyPaused = gameState.Paused;
+        
         yield return new WaitForSecondsRealtime(Interval);
         StartCoroutine(Pulse());
     }
@@ -81,7 +94,10 @@ public class Metronome : MonoBehaviour
 
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
         {
-            m.Invoke(timestamp, nextBeatTimestamp);
+            bool startup = currentStartupBeats-- > 0;
+            currentStartupBeats = Mathf.Max(0, currentStartupBeats);
+
+            m.Invoke(timestamp, nextBeatTimestamp, startup);
         }        
     }
 }

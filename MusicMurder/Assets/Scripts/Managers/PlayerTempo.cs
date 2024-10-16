@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static Metronome;
 
 public class PlayerTempo : MonoBehaviour
 {
@@ -60,7 +59,7 @@ public class PlayerTempo : MonoBehaviour
         }
     }
 
-    void OnMetronomeBeat(float timestamp, float nextBeatTimestamp)
+    void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
     {
         lastBeat = timestamp;
         nextBeat = nextBeatTimestamp;

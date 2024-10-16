@@ -13,6 +13,7 @@ public class PlayerMovement : Movement
     public Accuracy acc{get; private set;}
 
     GameState gameState;
+    bool startup = false;
     public Health Health { get; private set; }
 
     private void Awake()
@@ -35,6 +36,11 @@ public class PlayerMovement : Movement
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
     }
 
+    protected override void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
+    {
+        this.startup = startup;
+    }
+
     void Update()
     {
         GetInput();
@@ -42,7 +48,7 @@ public class PlayerMovement : Movement
 
     void GetInput()
     {
-        if(gameState.Paused) return;
+        if(gameState.Paused || startup) return;
 
         if (Input.GetKeyDown(KeyCode.W))
         {
