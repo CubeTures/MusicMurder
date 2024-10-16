@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
     public Vector2 currentTile {get; private set;}
     private Vector2 nextTile;
     float t = 0.0f;
+    public bool colliding;
 
     protected Vector2 direction;
     protected int speed = 100;
@@ -20,6 +21,7 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
+        colliding = false;
     }
 
     private void FixedUpdate()
@@ -60,6 +62,10 @@ public class Movement : MonoBehaviour
         direction = Vector2.zero;
     }
 
+    protected virtual void RemoveFromMap(){
+
+    }
+
     Vector2 SnapTile(Vector2 tile)
     {
         return new Vector2(
@@ -70,6 +76,10 @@ public class Movement : MonoBehaviour
 
     void MoveToNextTile()
     {
+        if(colliding){
+            CancelMove();
+            colliding = false;
+        }
         if (isMoving)
         {
             rb.position = Vector2.Lerp(currentTile, nextTile, t);
@@ -81,6 +91,9 @@ public class Movement : MonoBehaviour
     {
         if (Equals(rb.position, nextTile))
         {
+            if(isMoving){
+                RemoveFromMap();
+            }
             isMoving = false;
             t = 0.0f;
             currentTile = nextTile;
@@ -89,6 +102,7 @@ public class Movement : MonoBehaviour
 
     public void CancelMove()
     {
+        isMoving = true;
         nextTile = currentTile;
     }
 
@@ -103,5 +117,13 @@ public class Movement : MonoBehaviour
         {
             CancelMove();
         }
+    }
+
+    public Vector2 getNext(){
+        return new Vector2(currentTile.x + direction.x, currentTile.y + direction.y);
+    }
+
+    public Vector2 getNextPrime(){
+        return new Vector2(nextTile.x, nextTile.y);
     }
 }

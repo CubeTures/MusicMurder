@@ -40,6 +40,11 @@ public class PlayerMovement : Movement
         GetInput();
     }
 
+    protected override void RemoveFromMap()
+    {
+        return;
+    }
+
     void GetInput()
     {
         if(gameState.Paused) return;

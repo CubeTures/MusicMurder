@@ -15,6 +15,8 @@ public abstract class Enemy : Movement
     readonly int layerMask = ~(1 << 2);
     public Health Health { get; protected set; }
 
+    static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
+
     protected new void Start()
     {
         metronome = Metronome.Instance;
@@ -37,7 +39,20 @@ public abstract class Enemy : Movement
         if(beatsSinceAction == beatsBetweenActions)
         {
             Move();
+            Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
+            if (!enemyMap.ContainsKey(temp)){
+                enemyMap.Add(temp, this);
+
+            }
+            else{
+                colliding = true;
+            }
         }
+    }
+
+    protected override void RemoveFromMap()
+    {
+        enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
     }
 
     protected abstract void Move();
@@ -164,7 +179,7 @@ public abstract class Enemy : Movement
                 player.CancelMove();
             }else{
                 player.Health.TakeDamage(1);
-                CancelMove();
+                ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
                 player.CancelMove();
             }
             if(Health.GetHealth() <= 0){
@@ -176,6 +191,14 @@ public abstract class Enemy : Movement
         }
 
         base.OnCollisionEnter2D(collision);
+    }
+
+    void ChainCancel(Vector2Int v){
+        Vector2Int chain = new Vector2Int(Mathf.CeilToInt(enemyMap[v].currentTile.x), Mathf.CeilToInt(enemyMap[v].currentTile.y));
+        enemyMap[v].CancelMove();
+        enemyMap.Remove(v);
+        if(enemyMap.ContainsKey(chain))
+            ChainCancel(chain);
     }
 
     void DestroyEnemy()
