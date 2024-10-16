@@ -42,7 +42,6 @@ public abstract class Enemy : Movement
             Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
             if (!enemyMap.ContainsKey(temp)){
                 enemyMap.Add(temp, this);
-
             }
             else{
                 colliding = true;
