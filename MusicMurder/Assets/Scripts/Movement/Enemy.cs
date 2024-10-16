@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class Enemy : Movement
 {
-    Metronome metronome;
     GameState gameState;
     const string playerTag = "Player";
     protected int beatsBetweenActions = 0;
@@ -19,20 +18,18 @@ public abstract class Enemy : Movement
 
     protected new void Start()
     {
-        metronome = Metronome.Instance;
         gameState = GameState.Instance;
         player = PlayerMovement.Instance;
 
-        SetListenStatus(true);
         base.Start();
 
         Health = new Health(1);
         pathfinding = new Pathfinding(transform);
     }
 
-    void BaseMove(float timestamp, float nextBeatTimestamp)
+    protected override void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
     {
-        if (gameState.Paused) return;
+        if (gameState.Paused || startup) return;
 
         Increment(ref beatsSinceAction, beatsBetweenActions);
 
@@ -204,36 +201,6 @@ public abstract class Enemy : Movement
     {
         Debug.Log("Enemy Died");
         Destroy(gameObject);
-    }
-
-    private void OnEnable()
-    {
-        SetListenStatus(true);
-    }
-
-    private void OnDisable()
-    {
-        SetListenStatus(false);
-    }
-
-    private void OnDestroy()
-    {
-        SetListenStatus(false);
-    }
-
-    void SetListenStatus(bool status)
-    {
-        if (metronome != null)
-        {
-            if (status)
-            {
-                metronome.ListenOnMetronomeBeat(BaseMove);
-            }
-            else
-            {
-                metronome.UnlistenOnMetronomeBeat(BaseMove);
-            }
-        }
     }
 }
 
