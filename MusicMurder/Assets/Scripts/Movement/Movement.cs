@@ -8,8 +8,8 @@ public abstract class Movement : MonoBehaviour
     const string wallTag = "Walls";
 
     [SerializeField] protected bool isMoving;
-    public Vector2 currentTile {get; private set;}
-    private Vector2 nextTile;
+    [SerializeField] public Vector2 currentTile {get; private set;}
+    [SerializeField] private Vector2 nextTile;
     float t = 0.0f;
     public bool colliding;
 
@@ -81,7 +81,7 @@ public abstract class Movement : MonoBehaviour
     void MoveToNextTile()
     {
         if(colliding){
-            CancelMove();
+            CancelMoveCollide();
             colliding = false;
         }
         if (isMoving)
@@ -95,9 +95,9 @@ public abstract class Movement : MonoBehaviour
     {
         if (Equals(rb.position, nextTile))
         {
-            if(isMoving){
+            //if(isMoving){
                 RemoveFromMap();
-            }
+            //}
             isMoving = false;
             t = 0.0f;
             currentTile = nextTile;
@@ -106,8 +106,18 @@ public abstract class Movement : MonoBehaviour
 
     public void CancelMove()
     {
+        RemoveFromMap();
         isMoving = true;
         nextTile = currentTile;
+        direction = Vector2.zero;
+    }
+
+    public void CancelMoveCollide(){
+        Debug.Log(this + " current is " + currentTile + " next is " + nextTile);
+        isMoving = true;
+        nextTile = currentTile;
+        direction = Vector2.zero;
+        Debug.Log(this + " current is " + currentTile + " next is " + nextTile);
     }
 
     protected void OnCollisionEnter2D(Collision2D collision)

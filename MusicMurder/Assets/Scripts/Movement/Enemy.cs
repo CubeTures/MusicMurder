@@ -32,7 +32,6 @@ public abstract class Enemy : Movement
         if (gameState.Paused || startup) return;
 
         Increment(ref beatsSinceAction, beatsBetweenActions);
-
         if(beatsSinceAction == beatsBetweenActions)
         {
             Move();
@@ -43,12 +42,16 @@ public abstract class Enemy : Movement
             else{
                 colliding = true;
             }
+        }else{
+            Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
+            if (!enemyMap.ContainsKey(temp)){
+                enemyMap.Add(temp, this);
+            }
+            else{
+                ChainCancel(temp);
+                // enemyMap.Add(temp, this);
+            }
         }
-    }
-
-    protected override void RemoveFromMap()
-    {
-        enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
     }
 
     protected abstract void Move();
@@ -172,11 +175,12 @@ public abstract class Enemy : Movement
         {
             if(!isMoving && player.acc != Accuracy.FAIL){
                 Health.TakeDamage(1);
-                player.CancelMove();
+                player.CancelMoveCollide();
             }else{
                 player.Health.TakeDamage(1);
-                ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
-                player.CancelMove();
+                player.CancelMoveCollide();
+                if(isMoving)
+                    ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
             }
             if(Health.GetHealth() <= 0){
                 DestroyEnemy();
@@ -190,11 +194,24 @@ public abstract class Enemy : Movement
     }
 
     void ChainCancel(Vector2Int v){
+        Debug.Log("One " + v);
         Vector2Int chain = new Vector2Int(Mathf.CeilToInt(enemyMap[v].currentTile.x), Mathf.CeilToInt(enemyMap[v].currentTile.y));
-        enemyMap[v].CancelMove();
+        Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
+        Enemy tempEnemy = enemyMap[v];
+        tempEnemy.CancelMoveCollide();
         enemyMap.Remove(v);
-        if(enemyMap.ContainsKey(chain))
+        if(enemyMap.ContainsKey(chain)){
             ChainCancel(chain);
+            enemyMap.Add(chain, tempEnemy);
+        }else{
+            enemyMap.Add(chain, tempEnemy);
+        }
+    }
+
+    protected override void RemoveFromMap()
+    {
+        enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
+        //enemyMap.Clear();
     }
 
     void DestroyEnemy()
