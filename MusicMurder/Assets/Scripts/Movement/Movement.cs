@@ -113,11 +113,9 @@ public abstract class Movement : MonoBehaviour
     }
 
     public void CancelMoveCollide(){
-        Debug.Log(this + " current is " + currentTile + " next is " + nextTile);
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
-        Debug.Log(this + " current is " + currentTile + " next is " + nextTile);
     }
 
     protected void OnCollisionEnter2D(Collision2D collision)

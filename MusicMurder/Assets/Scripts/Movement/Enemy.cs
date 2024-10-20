@@ -202,7 +202,8 @@ public abstract class Enemy : Movement
         enemyMap.Remove(v);
         if(enemyMap.ContainsKey(chain)){
             ChainCancel(chain);
-            enemyMap.Add(chain, tempEnemy);
+            if(!enemyMap.ContainsKey(chain))
+                enemyMap.Add(chain, tempEnemy);
         }else{
             enemyMap.Add(chain, tempEnemy);
         }
