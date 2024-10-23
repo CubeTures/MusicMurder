@@ -212,7 +212,11 @@ public abstract class Enemy : Movement
     protected override void RemoveFromMap()
     {
         enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
-        //enemyMap.Clear();
+    }
+
+    protected override void RemoveFromMapPrime() //Yes I know the names are swapped don't touch it
+    {
+        enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y)));
     }
 
     void DestroyEnemy()

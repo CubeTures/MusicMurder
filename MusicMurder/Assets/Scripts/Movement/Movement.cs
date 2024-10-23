@@ -8,7 +8,7 @@ public abstract class Movement : MonoBehaviour
     const string wallTag = "Walls";
 
     [SerializeField] protected bool isMoving;
-    [SerializeField] public Vector2 currentTile {get; private set;}
+    [SerializeField] public Vector2 currentTile { get; private set; }
     [SerializeField] private Vector2 nextTile;
     float t = 0.0f;
     public bool colliding;
@@ -40,7 +40,7 @@ public abstract class Movement : MonoBehaviour
         if ((Abs(direction.y) > .2f || Abs(direction.x) > .2f) && !isMoving)
         {
             OnMove();
-            SetNextTile();            
+            SetNextTile();
         }
     }
 
@@ -54,11 +54,11 @@ public abstract class Movement : MonoBehaviour
         if (Abs(direction.y) >= Abs(direction.x))
         {
             nextTile.x = rb.position.x;
-            nextTile.y = (float)Round((rb.position.y + (direction.y > 0 ? 1 : -1))*2)/2;
+            nextTile.y = (float)Round((rb.position.y + (direction.y > 0 ? 1 : -1)) * 2) / 2;
         }
         else
         {
-            nextTile.x = (float)Round((rb.position.x + (direction.x > 0 ? 1 : -1))*2)/2;
+            nextTile.x = (float)Round((rb.position.x + (direction.x > 0 ? 1 : -1)) * 2) / 2;
             nextTile.y = rb.position.y;
         }
 
@@ -66,7 +66,13 @@ public abstract class Movement : MonoBehaviour
         direction = Vector2.zero;
     }
 
-    protected virtual void RemoveFromMap(){
+    protected virtual void RemoveFromMap()
+    {
+
+    }
+
+    protected virtual void RemoveFromMapPrime()
+    {
 
     }
 
@@ -80,7 +86,8 @@ public abstract class Movement : MonoBehaviour
 
     void MoveToNextTile()
     {
-        if(colliding){
+        if (colliding)
+        {
             CancelMoveCollide();
             colliding = false;
         }
@@ -96,23 +103,28 @@ public abstract class Movement : MonoBehaviour
         if (Equals(rb.position, nextTile))
         {
             //if(isMoving){
-                RemoveFromMap();
+            RemoveFromMap();
             //}
             isMoving = false;
             t = 0.0f;
             currentTile = nextTile;
+            direction = Vector2.zero;
         }
     }
 
     public void CancelMove()
     {
-        RemoveFromMap();
+        if(direction != Vector2.zero)
+            RemoveFromMapPrime();
+        else
+            RemoveFromMap();
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
     }
 
-    public void CancelMoveCollide(){
+    public void CancelMoveCollide()
+    {
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
@@ -131,11 +143,13 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
-    public Vector2 getNext(){
+    public Vector2 getNext()
+    {
         return new Vector2(currentTile.x + direction.x, currentTile.y + direction.y);
     }
 
-    public Vector2 getNextPrime(){
+    public Vector2 getNextPrime()
+    {
         return new Vector2(nextTile.x, nextTile.y);
     }
 
