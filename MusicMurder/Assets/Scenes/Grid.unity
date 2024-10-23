@@ -4129,6 +4129,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMoving: 0
+  nextTile: {x: 0, y: 0}
+  colliding: 0
+  particles: {fileID: 0}
   projectile: {fileID: 4235201837720306575, guid: 529804a00d029be4cb4bc28d6f667996, type: 3}
 --- !u!212 &1138816170
 SpriteRenderer:

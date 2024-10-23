@@ -16,6 +16,12 @@ public abstract class Enemy : Movement
 
     static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
 
+    SpriteRenderer sr;
+    GameObject particles;
+    const float flashDuration = .3f;
+    readonly Color flashColor = Color.red;
+
+
     protected new void Start()
     {
         gameState = GameState.Instance;
@@ -23,7 +29,9 @@ public abstract class Enemy : Movement
 
         base.Start();
 
-        Health = new Health(1);
+        sr = GetComponent<SpriteRenderer>();
+        particles = Resources.Load<GameObject>("DamageParticles");
+        Health = new Health(3);
         pathfinding = new Pathfinding(transform);
     }
 
@@ -39,7 +47,7 @@ public abstract class Enemy : Movement
             if (!enemyMap.ContainsKey(temp)){
                 enemyMap.Add(temp, this);
             }
-            else{
+            else {
                 colliding = true;
             }
         }else{
@@ -175,6 +183,7 @@ public abstract class Enemy : Movement
         {
             if(!isMoving && player.acc != Accuracy.FAIL){
                 Health.TakeDamage(1);
+                Hurt();
                 player.CancelMoveCollide();
             }else{
                 player.Health.TakeDamage(1);
@@ -193,13 +202,36 @@ public abstract class Enemy : Movement
         base.OnCollisionEnter2D(collision);
     }
 
-    void ChainCancel(Vector2Int v){
+    void Hurt()
+    {
+        print("Ouch");
+        StopAllCoroutines();
+        Instantiate(particles, transform.position, Quaternion.identity, transform);
+        StartCoroutine(FlashRed());
+    }
+
+    IEnumerator FlashRed()
+    {
+        float t = flashDuration;
+        float mult = 1 / t;
+        Color initial = sr.color;
+
+        while(t > 0)
+        {
+            sr.color = Color.Lerp(initial, flashColor, t * mult);
+            t -= Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    void ChainCancel(Vector2Int v) {
         Debug.Log("One " + v);
         Vector2Int chain = new Vector2Int(Mathf.CeilToInt(enemyMap[v].currentTile.x), Mathf.CeilToInt(enemyMap[v].currentTile.y));
         Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
         Enemy tempEnemy = enemyMap[v];
         tempEnemy.CancelMoveCollide();
         enemyMap.Remove(v);
+
         if(enemyMap.ContainsKey(chain)){
             ChainCancel(chain);
             if(!enemyMap.ContainsKey(chain))
