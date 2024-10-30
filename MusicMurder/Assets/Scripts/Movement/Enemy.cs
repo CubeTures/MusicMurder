@@ -10,6 +10,8 @@ public abstract class Enemy : Movement
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
+    [SerializeField] int playerSighted = 8;
+    PlayerTempo playerTempo;
 
     readonly int layerMask = ~(1 << 2);
     public Health Health { get; protected set; }
@@ -26,6 +28,8 @@ public abstract class Enemy : Movement
     {
         gameState = GameState.Instance;
         player = PlayerMovement.Instance;
+        playerTempo = GameObject.Find("Canvas/Accuracy").GetComponent<PlayerTempo>();
+
 
         base.Start();
 
@@ -86,13 +90,28 @@ public abstract class Enemy : Movement
 
     protected bool PlayerInLineOfSight()
     {
-        return GetPlayerRaycast().transform == null;
+        if(GetPlayerRaycast()){
+            Debug.Log("True");
+            return true;
+        }
+        Debug.Log("False");
+        return false;
     }
 
     protected RaycastHit2D GetPlayerRaycast()
     {
+        float unitDistance = Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y));
         Vector2 direction = player.currentTile - new Vector2(transform.position.x, transform.position.y);
-        float distance = Mathf.Min(10f, Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y)));
+        direction.x /= unitDistance;
+        direction.y /= unitDistance;
+        float grossDistance = 3f;
+        if(playerTempo.getStealth() == 8){
+            grossDistance = 2f;
+        }else if(playerTempo.getStealth() <= 2){
+            grossDistance = 4f;
+        }
+        float distance = Mathf.Min(grossDistance, unitDistance);
+        Debug.DrawRay(transform.position, direction * distance, Color.green);
         return Physics2D.Raycast(transform.position, direction, distance, layerMask);
     }
 
