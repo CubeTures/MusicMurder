@@ -10,11 +10,6 @@ public abstract class Enemy : Movement
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
-<<<<<<< Updated upstream
-=======
-    [SerializeField] int playerSighted = 0;
-    PlayerTempo playerTempo;
->>>>>>> Stashed changes
 
     readonly int layerMask = ~(1 << 2);
     public Health Health { get; protected set; }
@@ -56,6 +51,7 @@ public abstract class Enemy : Movement
             }
             else{
                 ChainCancel(temp);
+                // enemyMap.Add(temp, this);
             }
         }
     }
@@ -64,7 +60,7 @@ public abstract class Enemy : Movement
 
     protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
     {
-        if(PlayerInLineOfSight() || playerSighted > 0)
+        if(PlayerInLineOfSight())
         {
             direction = pathfinding.GetNextMove();
         }
@@ -84,40 +80,14 @@ public abstract class Enemy : Movement
 
     protected bool PlayerInLineOfSight()
     {
-<<<<<<< Updated upstream
         return GetPlayerRaycast().transform == null;
-=======
-        if(GetPlayerRaycast().collider != null && GetPlayerRaycast().collider.name == "Player"){
-                playerSighted = 4;
-                return true;
-        }else{
-            playerSighted = Mathf.Max(0, playerSighted - 1);
-            return false;
-        }
->>>>>>> Stashed changes
     }
 
     protected RaycastHit2D GetPlayerRaycast()
     {
-<<<<<<< Updated upstream
         Vector2 direction = player.currentTile - new Vector2(transform.position.x, transform.position.y);
         float distance = Mathf.Min(10f, Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y)));
         return Physics2D.Raycast(transform.position, direction, distance, layerMask);
-=======
-        float unitDistance = Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y));
-        Vector2 raydirection = player.currentTile - new Vector2(transform.position.x, transform.position.y);
-        raydirection.x /= unitDistance;
-        raydirection.y /= unitDistance;
-        float grossDistance = 3f;
-        if(playerTempo.getStealth() == 8){
-            grossDistance = 2f;
-        }else if(playerTempo.getStealth() <= 2){
-            grossDistance = 4f;
-        }
-        float distance = Mathf.Min(grossDistance, unitDistance);
-        Debug.DrawRay(transform.position, raydirection * distance, Color.green);
-        return Physics2D.Raycast(transform.position, raydirection, distance, layerMask);
->>>>>>> Stashed changes
     }
 
     protected Vector2 GetRandomDirection()

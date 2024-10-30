@@ -344,10 +344,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2143634403154536730, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6067266981041218834, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4310,10 +4306,6 @@ MonoBehaviour:
   isMoving: 0
   nextTile: {x: 0, y: 0}
   colliding: 0
-<<<<<<< Updated upstream
-=======
-  playerSighted: 0
->>>>>>> Stashed changes
   projectile: {fileID: 4235201837720306575, guid: 529804a00d029be4cb4bc28d6f667996, type: 3}
 --- !u!212 &1138816170
 SpriteRenderer:
