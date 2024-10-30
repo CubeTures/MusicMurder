@@ -11,7 +11,7 @@ public class PlayerTempo : MonoBehaviour
     PlayerMovement player;
 
     float lastBeat = 0, nextBeat = 0;
-    float perfectInterval, passInterval;
+    public float perfectInterval, passInterval;
     float prevInterval = 0;
     const float perfectMargin = .12f;
     const float passMargin = .24f;
@@ -59,7 +59,7 @@ public class PlayerTempo : MonoBehaviour
         }
     }
 
-    void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
+    void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         lastBeat = timestamp;
         nextBeat = nextBeatTimestamp;

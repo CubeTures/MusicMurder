@@ -14,8 +14,4 @@ public class RegularManEnemy : Enemy
     {
         SetDirectionFromPathfinding(PathfindingFallback.RANDOM_MOVEMENT);
     }
-
-    protected override void OnMove(){
-        return;
-    }
 }

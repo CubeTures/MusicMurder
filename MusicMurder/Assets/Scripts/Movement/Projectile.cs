@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : Movement
 {
-    protected override void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
+    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         direction = transform.right;
     }
@@ -12,9 +12,5 @@ public class Projectile : Movement
     private new void OnCollisionEnter2D(Collision2D collision)
     {
         Destroy(gameObject);
-    }
-
-    protected override void OnMove(){
-        return;
     }
 }

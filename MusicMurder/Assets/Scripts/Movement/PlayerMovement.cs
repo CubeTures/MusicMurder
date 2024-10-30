@@ -36,7 +36,7 @@ public class PlayerMovement : Movement
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
     }
 
-    protected override void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
+    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         this.startup = startup;
     }
@@ -44,11 +44,6 @@ public class PlayerMovement : Movement
     void Update()
     {
         GetInput();
-    }
-
-    protected override void RemoveFromMap()
-    {
-        return;
     }
 
     void GetInput()

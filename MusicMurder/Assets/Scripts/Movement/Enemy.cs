@@ -16,11 +16,6 @@ public abstract class Enemy : Movement
 
     static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
 
-    SpriteRenderer sr;
-    GameObject particles;
-    const float flashDuration = .3f;
-    readonly Color flashColor = Color.red;
-
 
     protected new void Start()
     {
@@ -29,18 +24,16 @@ public abstract class Enemy : Movement
 
         base.Start();
 
-        sr = GetComponent<SpriteRenderer>();
-        particles = Resources.Load<GameObject>("DamageParticles");
         Health = new Health(3);
         pathfinding = new Pathfinding(transform);
     }
 
-    protected override void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup)
+    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         if (gameState.Paused || startup) return;
 
         Increment(ref beatsSinceAction, beatsBetweenActions);
-        if(beatsSinceAction == beatsBetweenActions)
+        if (beatsSinceAction == beatsBetweenActions)
         {
             Move();
             Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
@@ -50,7 +43,8 @@ public abstract class Enemy : Movement
             else {
                 colliding = true;
             }
-        }else{
+        }
+        else {
             Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
             if (!enemyMap.ContainsKey(temp)){
                 enemyMap.Add(temp, this);
@@ -187,6 +181,7 @@ public abstract class Enemy : Movement
                 player.CancelMoveCollide();
             }else{
                 player.Health.TakeDamage(1);
+                player.Hurt();
                 player.CancelMoveCollide();
                 if(isMoving)
                     ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
@@ -200,28 +195,6 @@ public abstract class Enemy : Movement
         }
 
         base.OnCollisionEnter2D(collision);
-    }
-
-    void Hurt()
-    {
-        print("Ouch");
-        StopAllCoroutines();
-        Instantiate(particles, transform.position, Quaternion.identity, transform);
-        StartCoroutine(FlashRed());
-    }
-
-    IEnumerator FlashRed()
-    {
-        float t = flashDuration;
-        float mult = 1 / t;
-        Color initial = sr.color;
-
-        while(t > 0)
-        {
-            sr.color = Color.Lerp(initial, flashColor, t * mult);
-            t -= Time.deltaTime;
-            yield return null;
-        }
     }
 
     void ChainCancel(Vector2Int v) {

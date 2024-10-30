@@ -12,11 +12,12 @@ public class Metronome : MonoBehaviour
     public float BPM { get; private set; } = 100;
     public float Interval {  get; private set; } // time between beats
     AudioSource metro;
+    PlayerTempo tempo;
     
     Image image;
     Color a = Color.black, b = Color.white;
 
-    public delegate void MetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup);
+    public delegate void MetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup);
     MetronomeBeat onMetronomeBeat;
 
     GameState gameState;
@@ -47,6 +48,7 @@ public class Metronome : MonoBehaviour
         gameState = GameState.Instance;
         image = GetComponent<Image>();
         metro = GetComponent<AudioSource>();
+        tempo = PlayerTempo.Instance;
         StartCoroutine(Pulse());
     }
 
@@ -90,14 +92,15 @@ public class Metronome : MonoBehaviour
     private void NotifyOnMetronomeBeat()
     {
         float timestamp = Time.time;
-        float nextBeatTimestamp = Time.time + (Interval);
+        float failTimestamp = timestamp + tempo.passInterval;
+        float nextBeatTimestamp = timestamp + (Interval);
 
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
         {
             bool startup = currentStartupBeats-- > 0;
             currentStartupBeats = Mathf.Max(0, currentStartupBeats);
 
-            m.Invoke(timestamp, nextBeatTimestamp, startup);
+            m.Invoke(timestamp, failTimestamp, nextBeatTimestamp, startup);
         }        
     }
 }

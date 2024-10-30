@@ -1,8 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 using static System.Math;
+using static UnityEngine.ParticleSystem;
 
-public abstract class Movement : MonoBehaviour
+public abstract class Movement : OnMetronome
 {
     private Rigidbody2D rb;
     const string wallTag = "Walls";
@@ -16,16 +18,22 @@ public abstract class Movement : MonoBehaviour
     protected Vector2 direction;
     protected int speed = 100;
 
-    Metronome metronome;
+    SpriteRenderer sr;
+    GameObject particles;
+    const float flashDuration = .3f;
+    readonly Color flashColor = Color.red;
 
-    protected void Start()
+    protected new void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
         colliding = false;
-        metronome = Metronome.Instance;
-        SetListenStatus(true);
+
+        sr = GetComponent<SpriteRenderer>();
+        particles = Resources.Load<GameObject>("DamageParticles");
+
+        base.Start();
     }
 
     private void FixedUpdate()
@@ -44,7 +52,7 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
-    protected abstract void OnMove();
+    protected virtual void OnMove() { }
 
     void SetNextTile()
     {
@@ -143,6 +151,27 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
+    public void Hurt()
+    {
+        StopAllCoroutines();
+        Instantiate(particles, transform.position, Quaternion.identity, transform);
+        StartCoroutine(FlashRed());
+    }
+
+    IEnumerator FlashRed()
+    {
+        float t = flashDuration;
+        float mult = 1 / t;
+        Color initial = sr.color;
+
+        while (t > 0)
+        {
+            sr.color = Color.Lerp(initial, flashColor, t * mult);
+            t -= Time.deltaTime;
+            yield return null;
+        }
+    }
+
     public Vector2 getNext()
     {
         return new Vector2(currentTile.x + direction.x, currentTile.y + direction.y);
@@ -151,37 +180,5 @@ public abstract class Movement : MonoBehaviour
     public Vector2 getNextPrime()
     {
         return new Vector2(nextTile.x, nextTile.y);
-    }
-
-    protected abstract void OnMetronomeBeat(float timestamp, float nextBeatTimestamp, bool startup);
-
-    private void OnEnable()
-    {
-        SetListenStatus(true);
-    }
-
-    private void OnDisable()
-    {
-        SetListenStatus(false);
-    }
-
-    private void OnDestroy()
-    {
-        SetListenStatus(false);
-    }
-
-    void SetListenStatus(bool status)
-    {
-        if (metronome != null)
-        {
-            if (status)
-            {
-                metronome.ListenOnMetronomeBeat(OnMetronomeBeat);
-            }
-            else
-            {
-                metronome.UnlistenOnMetronomeBeat(OnMetronomeBeat);
-            }
-        }
     }
 }

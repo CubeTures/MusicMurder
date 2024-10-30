@@ -5,6 +5,7 @@ using UnityEngine;
 public class RangedEnemy : Enemy
 {
     protected int attackCooldown;
+    protected int sightRange = 4;
     [SerializeField] GameObject projectile;
 
     new void Start()
@@ -15,7 +16,7 @@ public class RangedEnemy : Enemy
 
     protected override void Move()
     {
-        if(PlayerIsInLine(4, 0) is Vector2 direction)
+        if(PlayerIsInLine(sightRange, 0) is Vector2 direction)
         {
             Attack(direction);
         }
@@ -28,9 +29,5 @@ public class RangedEnemy : Enemy
     protected virtual void Attack(Vector2 direction)
     {
         Instantiate(projectile, (Vector2) transform.position + direction, GetQuaternionFromDirection(direction), transform);
-    }
-
-    protected override void OnMove(){
-        return;
     }
 }
