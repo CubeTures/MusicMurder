@@ -10,6 +10,8 @@ public class PlayerTempo : MonoBehaviour
     Metronome metronome;
     PlayerMovement player;
 
+    [SerializeField] private int stealth = 8;
+
     float lastBeat = 0, nextBeat = 0;
     public float perfectInterval, passInterval;
     float prevInterval = 0;
@@ -96,19 +98,23 @@ public class PlayerTempo : MonoBehaviour
         if(delta >= passInterval)
         {
             SetAccuracy(Accuracy.FAIL);
+            stealth = Mathf.Max(0, stealth - 2);
         }
         else if(movedThisBeat && thisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
+            stealth = Mathf.Max(0, stealth - 2);
         }
         else if(movedNextBeat && !thisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
+            stealth = Mathf.Max(0, stealth - 2);
         }
 
         else if (delta < perfectInterval)
         {
             SetAccuracy(Accuracy.PERFECT);
+            stealth = Mathf.Min(8, stealth + 2);
         }
         else if (delta < passInterval)
         {
@@ -174,6 +180,10 @@ public class PlayerTempo : MonoBehaviour
     private void OnDestroy()
     {
         SetListenStatus(false);
+    }
+
+    public int getStealth(){
+        return stealth;
     }
 
     void SetListenStatus(bool status)
