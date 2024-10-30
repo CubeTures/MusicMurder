@@ -10,7 +10,7 @@ public abstract class Enemy : Movement
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
-    [SerializeField] int playerSighted = 8;
+    [SerializeField] int playerSighted = 0;
     PlayerTempo playerTempo;
 
     readonly int layerMask = ~(1 << 2);
@@ -23,8 +23,7 @@ public abstract class Enemy : Movement
     {
         gameState = GameState.Instance;
         player = PlayerMovement.Instance;
-        playerTempo = GameObject.Find("Canvas/Accuracy").GetComponent<PlayerTempo>();
-
+        playerTempo = PlayerTempo.Instance;
 
         base.Start();
 
@@ -55,7 +54,6 @@ public abstract class Enemy : Movement
             }
             else{
                 ChainCancel(temp);
-                // enemyMap.Add(temp, this);
             }
         }
     }
@@ -64,7 +62,7 @@ public abstract class Enemy : Movement
 
     protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
     {
-        if(PlayerInLineOfSight())
+        if(PlayerInLineOfSight() || playerSighted > 0)
         {
             direction = pathfinding.GetNextMove();
         }
@@ -84,20 +82,21 @@ public abstract class Enemy : Movement
 
     protected bool PlayerInLineOfSight()
     {
-        if(GetPlayerRaycast()){
-            Debug.Log("True");
-            return true;
+        if(GetPlayerRaycast().collider != null && GetPlayerRaycast().collider.name == "Player"){
+                playerSighted = 4;
+                return true;
+        }else{
+            playerSighted = Mathf.Max(0, playerSighted - 1);
+            return false;
         }
-        Debug.Log("False");
-        return false;
     }
 
     protected RaycastHit2D GetPlayerRaycast()
     {
         float unitDistance = Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y));
-        Vector2 direction = player.currentTile - new Vector2(transform.position.x, transform.position.y);
-        direction.x /= unitDistance;
-        direction.y /= unitDistance;
+        Vector2 raydirection = player.currentTile - new Vector2(transform.position.x, transform.position.y);
+        raydirection.x /= unitDistance;
+        raydirection.y /= unitDistance;
         float grossDistance = 3f;
         if(playerTempo.getStealth() == 8){
             grossDistance = 2f;
@@ -105,8 +104,8 @@ public abstract class Enemy : Movement
             grossDistance = 4f;
         }
         float distance = Mathf.Min(grossDistance, unitDistance);
-        Debug.DrawRay(transform.position, direction * distance, Color.green);
-        return Physics2D.Raycast(transform.position, direction, distance, layerMask);
+        Debug.DrawRay(transform.position, raydirection * distance, Color.green);
+        return Physics2D.Raycast(transform.position, raydirection, distance, layerMask);
     }
 
     protected Vector2 GetRandomDirection()
