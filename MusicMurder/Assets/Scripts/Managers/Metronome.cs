@@ -21,7 +21,7 @@ public class Metronome : MonoBehaviour
     MetronomeBeat onMetronomeBeat;
 
     GameState gameState;
-    public static readonly int startupBeats = 4;
+    public static readonly int STARTUP_BEATS = 4;
     int currentStartupBeats = 0;
     bool previouslyPaused = false;
 
@@ -60,7 +60,7 @@ public class Metronome : MonoBehaviour
 
         if (previouslyPaused && !gameState.Paused)
         {
-            currentStartupBeats = startupBeats;
+            currentStartupBeats = STARTUP_BEATS;
         }
         previouslyPaused = gameState.Paused;
         

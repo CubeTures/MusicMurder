@@ -14,17 +14,17 @@ public abstract class OnMetronome : MonoBehaviour
 
     protected abstract void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup);
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         SetListenStatus(true);
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         SetListenStatus(false);
     }
 
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         SetListenStatus(false);
     }
