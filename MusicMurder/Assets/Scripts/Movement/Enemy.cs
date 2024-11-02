@@ -17,7 +17,7 @@ public abstract class Enemy : Movement
     public Health Health { get; protected set; }
 
     static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
-
+    Vector2 startingPoint;
 
     protected new void Start()
     {
@@ -29,6 +29,7 @@ public abstract class Enemy : Movement
 
         Health = new Health(3);
         pathfinding = new Pathfinding(transform);
+        startingPoint = transform.position;
     }
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
@@ -62,7 +63,10 @@ public abstract class Enemy : Movement
 
     protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
     {
-        if(PlayerInLineOfSight() || playerSighted > 0)
+        direction = GetWeightedDirection();
+        return;
+
+        if (PlayerInLineOfSight() || playerSighted > 0)
         {
             direction = pathfinding.GetNextMove();
         }
@@ -72,7 +76,7 @@ public abstract class Enemy : Movement
         }
         else if(fallback == PathfindingFallback.FOLLOW_WAYPOINTS)
         {
-            // follow pretedermined path
+            direction = GetWeightedDirection();
         }
         else if(fallback == PathfindingFallback.PATROL)
         {
@@ -110,7 +114,49 @@ public abstract class Enemy : Movement
 
     protected Vector2 GetRandomDirection()
     {
-        return new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
+        float rand = Random.Range(0, 4);
+
+        return rand switch
+        {
+            0 => Vector2.left,
+            1 => Vector2.right,
+            2 => Vector2.up,
+            3 => Vector2.down,
+            _ => Vector2.zero,
+        };
+    }
+
+    private Vector2 GetWeightedDirection()
+    {
+        // n spots away: 1/(2^n) chance to go in random direction; otherwise go towards startingPoint
+        float distance = Mathf.Round(Vector2.Distance(transform.position, startingPoint));
+        float weight = 1f / Mathf.Pow(2, distance);
+
+        if(Random.Range(0f, 1f) <= weight)
+        {
+            return GetRandomDirection();
+        }
+        else
+        {
+            return GetDirectionToStart();
+        }
+    }
+
+    private Vector2 GetDirectionToStart()
+    {
+        float x = transform.position.x - startingPoint.x;
+        float y = transform.position.y - startingPoint.y;
+        float dx = Mathf.Abs(x);
+        float dy = Mathf.Abs(y);
+
+        if(dx > dy)
+        {
+            return x < 0 ? Vector2.right : Vector2.left;
+        }
+        else
+        {
+            return y < 0 ? Vector2.up : Vector2.down;
+        }
     }
 
     /// <summary>
