@@ -18,20 +18,12 @@ public abstract class Movement : OnMetronome
     protected Vector2 direction;
     protected int speed = 100;
 
-    SpriteRenderer sr;
-    GameObject particles;
-    const float flashDuration = .3f;
-    readonly Color flashColor = Color.red;
-
     protected new void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
         colliding = false;
-
-        sr = GetComponent<SpriteRenderer>();
-        particles = Resources.Load<GameObject>("DamageParticles");
 
         base.Start();
     }
@@ -148,27 +140,6 @@ public abstract class Movement : OnMetronome
         if (collision.gameObject.CompareTag(wallTag))
         {
             CancelMove();
-        }
-    }
-
-    public void Hurt()
-    {
-        StopAllCoroutines();
-        Instantiate(particles, transform.position, Quaternion.identity, transform);
-        StartCoroutine(FlashRed());
-    }
-
-    IEnumerator FlashRed()
-    {
-        float t = flashDuration;
-        float mult = 1 / t;
-        Color initial = sr.color;
-
-        while (t > 0)
-        {
-            sr.color = Color.Lerp(initial, flashColor, t * mult);
-            t -= Time.deltaTime;
-            yield return null;
         }
     }
 

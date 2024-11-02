@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy : Movement
+public abstract class Enemy : Living
 {
     GameState gameState;
     const string playerTag = "Player";
@@ -14,7 +14,6 @@ public abstract class Enemy : Movement
     PlayerTempo playerTempo;
 
     readonly int layerMask = ~(1 << 2);
-    public Health Health { get; protected set; }
 
     static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
     Vector2 startingPoint;
@@ -27,7 +26,7 @@ public abstract class Enemy : Movement
 
         base.Start();
 
-        Health = new Health(3);
+        Health = 3;
         pathfinding = new Pathfinding(transform);
         startingPoint = transform.position;
     }
@@ -63,9 +62,6 @@ public abstract class Enemy : Movement
 
     protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
     {
-        direction = GetWeightedDirection();
-        return;
-
         if (PlayerInLineOfSight() || playerSighted > 0)
         {
             direction = pathfinding.GetNextMove();
@@ -240,20 +236,18 @@ public abstract class Enemy : Movement
         if (collision.gameObject.CompareTag(playerTag))
         {
             if(!isMoving && player.acc != Accuracy.FAIL){
-                Health.TakeDamage(1);
-                Hurt();
+                TakeDamage(1);
                 player.CancelMoveCollide();
             }else{
-                player.Health.TakeDamage(1);
-                player.Hurt();
+                player.TakeDamage(1);
                 player.CancelMoveCollide();
                 if(isMoving)
                     ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
             }
-            if(Health.GetHealth() <= 0){
+            if(Health <= 0) {
                 DestroyEnemy();
             }
-            if(player.Health.GetHealth() <= 0){
+            if(player.Health <= 0){
                 Debug.Log("Player died");
             }
         }

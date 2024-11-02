@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class breaks if the tempo changes in the middle of action. 
+/// We shouldn't need to do this, but it's something to keep in mind.
+/// </summary>
 public class MetronomeDisplay : OnMetronome
 {
     [SerializeField] Transform left, right, center;
@@ -9,13 +13,15 @@ public class MetronomeDisplay : OnMetronome
 
     float interpolateTime;
     float failDelay;
+    float latestTimestamp;
+    float timestampDifference;
     float startupBeats = Metronome.STARTUP_BEATS;
 
     GameState state;
     PlayerTempo tempo;
 
-    Dictionary<int, bool> complete = new();
-    Queue<int> queue = new();
+    Dictionary<float, bool> complete = new();
+    Queue<float> queue = new();
     Accuracy recentAccuracy;
 
     protected new void Start()
@@ -29,23 +35,35 @@ public class MetronomeDisplay : OnMetronome
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
-        interpolateTime = (nextBeatTimestamp - timestamp) * startupBeats;
+        latestTimestamp = timestamp;
+        timestampDifference = nextBeatTimestamp - timestamp;
+        interpolateTime = timestampDifference * startupBeats;
         failDelay = timestamp - failTimestamp;
+        float estimatedTimestamp = timestamp + timestampDifference * startupBeats;
 
-        if(!state.Paused)
+        if (!state.Paused)
         {
-            StartCoroutine(MoveBar());
+            StartCoroutine(MoveBar(estimatedTimestamp));
         }
-    }   
+    }
 
     private void OnPlayerAccuracy(Accuracy accuracy)
     {
-        int hash = queue.Dequeue();
-        complete[hash] = true;
-        recentAccuracy = accuracy;
+        if(queue.Count == 0)
+        {
+            return;
+        }
+
+        float timestamp = queue.Peek();
+        if(Mathf.Abs(timestamp - latestTimestamp) < timestampDifference)
+        {
+            queue.Dequeue();
+            complete[timestamp] = true;
+            recentAccuracy = accuracy;
+        }
     }
 
-    IEnumerator MoveBar()
+    IEnumerator MoveBar(float timestamp)
     {
         float t = interpolateTime;
         float mult = 1 / t;
@@ -53,17 +71,22 @@ public class MetronomeDisplay : OnMetronome
            
         Transform bl = Instantiate(bar, left.position, Quaternion.identity, transform).transform;
         Transform br = Instantiate(bar, right.position, Quaternion.identity, transform).transform;
-        int hash = bl.GetHashCode();
-        complete[hash] = false;
-        queue.Enqueue(hash);
+        complete[timestamp] = false;
+        queue.Enqueue(timestamp);
 
         while(t > 0)
         {
+            if(state.Paused)
+            {
+                Clear();
+                goto Clear;
+            }
+
             t -= Time.deltaTime;
             Interpolate(t, mult, bl, left);
             Interpolate(t, mult, br, right);
 
-            if (IsCompleted(hash))
+            if (IsCompleted(timestamp))
             {
                 accuracy = recentAccuracy;
                 goto Completed;
@@ -76,8 +99,14 @@ public class MetronomeDisplay : OnMetronome
 
         while(t > 0)
         {
+            if(state.Paused)
+            {
+                Clear();
+                goto Clear;
+            }
+
             t -= Time.deltaTime;
-            if(IsCompleted(hash))
+            if(IsCompleted(timestamp))
             {
                 accuracy = recentAccuracy;
                 goto Completed;
@@ -90,10 +119,13 @@ public class MetronomeDisplay : OnMetronome
         Completed:
 
             BarCompleteEffect(accuracy, bl.position, br.position);
+            DisplayAccuracy(accuracy);
+
+        Clear:
+
             Destroy(bl.gameObject);
             Destroy(br.gameObject);
-            complete.Remove(hash);
-            DisplayAccuracy(accuracy);
+            complete.Remove(timestamp);
     }
 
     // variables as incoherent as possible -- just the way i like them
@@ -102,9 +134,9 @@ public class MetronomeDisplay : OnMetronome
         n.position = Vector2.Lerp(center.position, s.position, t * m);
     }
 
-    bool IsCompleted(int hash)
+    bool IsCompleted(float timestamp)
     {
-        return complete[hash];
+        return complete[timestamp];
     }
 
     void BarCompleteEffect(Accuracy accuracy, Vector2 l, Vector2 r)
@@ -115,6 +147,11 @@ public class MetronomeDisplay : OnMetronome
     void DisplayAccuracy(Accuracy accuracy)
     {
         // display the text corresponding, plus any other effects
+    }
+
+    void Clear()
+    {
+        queue.Clear();
     }
 
     protected new void OnEnable()
