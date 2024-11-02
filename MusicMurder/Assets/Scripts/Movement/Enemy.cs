@@ -10,13 +10,15 @@ public abstract class Enemy : Living
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
-    [SerializeField] int playerSighted = 0;
+    int playerSighted = 0;
     PlayerTempo playerTempo;
 
     readonly int layerMask = ~(1 << 2);
 
     static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
     Vector2 startingPoint;
+    [SerializeField] Transform[] waypoints;
+    int waypointIndex = 0;
 
     protected new void Start()
     {
@@ -70,22 +72,34 @@ public abstract class Enemy : Living
         {
             direction = GetRandomDirection();
         }
-        else if(fallback == PathfindingFallback.FOLLOW_WAYPOINTS)
+        else if(fallback == PathfindingFallback.PATROL)
         {
             direction = GetWeightedDirection();
         }
-        else if(fallback == PathfindingFallback.PATROL)
+        else if(fallback == PathfindingFallback.FOLLOW_WAYPOINTS)
         {
-            // patrol a predermined spot
+            if(waypoints.Length <= 1)
+            {
+                Debug.LogWarning("Too few waypoints established for " + name + ".");
+                SetDirectionFromPathfinding(PathfindingFallback.PATROL);
+            }
+            else
+            {
+                direction = GetDirectionToNextWaypoint();
+            }
         }
     }
 
     protected bool PlayerInLineOfSight()
     {
-        if(GetPlayerRaycast().collider != null && GetPlayerRaycast().collider.name == "Player"){
-                playerSighted = 4;
-                return true;
-        }else{
+        RaycastHit2D hit = GetPlayerRaycast();
+        if (hit.collider != null && hit.collider.name == "Player")
+        {
+            playerSighted = 4;
+            return true;
+        }
+        else
+        {
             playerSighted = Mathf.Max(0, playerSighted - 1);
             return false;
         }
@@ -153,6 +167,18 @@ public abstract class Enemy : Living
         {
             return y < 0 ? Vector2.up : Vector2.down;
         }
+    }
+
+    private Vector2 GetDirectionToNextWaypoint()
+    {
+        Vector2 next = waypoints[waypointIndex].position;
+        if(Equals(next, currentTile))
+        {
+            Increment(ref waypointIndex, waypoints.Length - 1);
+            next = waypoints[waypointIndex].position;
+        }
+
+        return pathfinding.GetNextMove(next);
     }
 
     /// <summary>

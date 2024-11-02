@@ -26,7 +26,12 @@ public class Pathfinding
 
     public Vector2Int GetNextMove()
     {
-        List<PathNode> path = FindPath(self.position, grid.GetTrueOrigin());
+        return GetNextMove(grid.GetTrueOrigin());
+    }
+
+    public Vector2Int GetNextMove(Vector2 point)
+    {
+        List<PathNode> path = FindPath(self.position, point);
         if (path != null && path.Count > 1)
         {
             //grid.DrawList(path);
@@ -56,7 +61,7 @@ public class Pathfinding
     public List<PathNode> FindPath(Vector2 startPos, Vector2 endPos)
     {
         Vector2Int s = grid.GetGridPosition(startPos);
-        Vector2Int e = grid.GetTrueOrigin();
+        Vector2Int e = Equals(endPos, grid.GetTrueOrigin()) ? grid.GetTrueOrigin() : grid.GetGridPosition(endPos);
 
         if (grid.Contains(s) && grid.Contains(e))
         {

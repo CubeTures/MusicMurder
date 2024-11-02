@@ -22,7 +22,7 @@ public class RangedEnemy : Enemy
         }
         else
         {
-            SetDirectionFromPathfinding(PathfindingFallback.DO_NOTHING);
+            SetDirectionFromPathfinding(PathfindingFallback.FOLLOW_WAYPOINTS);
         }
     }
 
