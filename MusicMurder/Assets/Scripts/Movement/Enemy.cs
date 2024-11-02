@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,20 +40,30 @@ public abstract class Enemy : Living
         if (beatsSinceAction == beatsBetweenActions)
         {
             Move();
-            Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
-            if (!enemyMap.ContainsKey(temp)){
+            Vector2Int temp = new Vector2Int(
+                Mathf.CeilToInt(getNext().x),
+                Mathf.CeilToInt(getNext().y));
+
+            if (!enemyMap.ContainsKey(temp))
+            {
                 enemyMap.Add(temp, this);
+                // does this ever get removed?
             }
-            else {
+            else
+            {
+                print($"Colliding with existing: {enemyMap[temp]}");
                 colliding = true;
             }
         }
-        else {
+        else
+        {
             Vector2Int temp = new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y));
-            if (!enemyMap.ContainsKey(temp)){
+            if (!enemyMap.ContainsKey(temp))
+            {
                 enemyMap.Add(temp, this);
             }
-            else{
+            else
+            {
                 ChainCancel(temp);
             }
         }
@@ -66,19 +75,20 @@ public abstract class Enemy : Living
     {
         if (PlayerInLineOfSight() || playerSighted > 0)
         {
+            //print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
             direction = pathfinding.GetNextMove();
         }
-        else if(fallback == PathfindingFallback.RANDOM_MOVEMENT)
+        else if (fallback == PathfindingFallback.RANDOM_MOVEMENT)
         {
             direction = GetRandomDirection();
         }
-        else if(fallback == PathfindingFallback.PATROL)
+        else if (fallback == PathfindingFallback.PATROL)
         {
             direction = GetWeightedDirection();
         }
-        else if(fallback == PathfindingFallback.FOLLOW_WAYPOINTS)
+        else if (fallback == PathfindingFallback.FOLLOW_WAYPOINTS)
         {
-            if(waypoints.Length <= 1)
+            if (waypoints.Length <= 1)
             {
                 Debug.LogWarning("Too few waypoints established for " + name + ".");
                 SetDirectionFromPathfinding(PathfindingFallback.PATROL);
@@ -107,18 +117,28 @@ public abstract class Enemy : Living
 
     protected RaycastHit2D GetPlayerRaycast()
     {
-        float unitDistance = Vector2.Distance(player.currentTile, new Vector2(transform.position.x, transform.position.y));
-        Vector2 raydirection = player.currentTile - new Vector2(transform.position.x, transform.position.y);
+        float unitDistance = Vector2.Distance(
+            player.currentTile,
+            new Vector2(transform.position.x, transform.position.y));
+        Vector2 raydirection =
+            player.currentTile -
+            new Vector2(transform.position.x, transform.position.y);
+
         raydirection.x /= unitDistance;
         raydirection.y /= unitDistance;
+
         float grossDistance = 3f;
-        if(playerTempo.getStealth() == 8){
+        if (playerTempo.getStealth() == 8)
+        {
             grossDistance = 2f;
-        }else if(playerTempo.getStealth() <= 2){
+        }
+        else if (playerTempo.getStealth() <= 2)
+        {
             grossDistance = 4f;
         }
+
         float distance = Mathf.Min(grossDistance, unitDistance);
-        Debug.DrawRay(transform.position, raydirection * distance, Color.green);
+        Debug.DrawRay(transform.position, raydirection * distance, Color.green, 1);
         return Physics2D.Raycast(transform.position, raydirection, distance, layerMask);
     }
 
@@ -142,7 +162,7 @@ public abstract class Enemy : Living
         float distance = Mathf.Round(Vector2.Distance(transform.position, startingPoint));
         float weight = 1f / Mathf.Pow(2, distance);
 
-        if(Random.Range(0f, 1f) <= weight)
+        if (Random.Range(0f, 1f) <= weight)
         {
             return GetRandomDirection();
         }
@@ -159,7 +179,7 @@ public abstract class Enemy : Living
         float dx = Mathf.Abs(x);
         float dy = Mathf.Abs(y);
 
-        if(dx > dy)
+        if (dx > dy)
         {
             return x < 0 ? Vector2.right : Vector2.left;
         }
@@ -172,7 +192,7 @@ public abstract class Enemy : Living
     private Vector2 GetDirectionToNextWaypoint()
     {
         Vector2 next = waypoints[waypointIndex].position;
-        if(Equals(next, currentTile))
+        if (next == currentTile)
         {
             Increment(ref waypointIndex, waypoints.Length - 1);
             next = waypoints[waypointIndex].position;
@@ -188,7 +208,7 @@ public abstract class Enemy : Living
     /// <param name="spread">The distance perpendicular to the line the player can be and still be detected</param>
     protected Vector2? PlayerIsInLine(int distance, int spread)
     {
-        if(!PlayerInLineOfSight()) return null;
+        if (!PlayerInLineOfSight()) return null;
 
         Vector2 v = GetDistanceFromPlayer();
 
@@ -197,8 +217,8 @@ public abstract class Enemy : Living
         float line = Mathf.Max(x, y);
         float offset = Mathf.Min(x, y);
 
-        if(line <= distance && offset <= spread)
-        {   
+        if (line <= distance && offset <= spread)
+        {
             return GetUnitDirection(v);
         }
 
@@ -214,7 +234,7 @@ public abstract class Enemy : Living
 
     Vector2 GetUnitDirection(Vector2 direction)
     {
-        if(direction == Vector2.zero) return Vector2.zero;
+        if (direction == Vector2.zero) return Vector2.zero;
 
         float a = Mathf.Abs(direction.x);
         float b = Mathf.Abs(direction.y);
@@ -261,19 +281,24 @@ public abstract class Enemy : Living
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
-            if(!isMoving && player.acc != Accuracy.FAIL){
+            if (!isMoving && player.acc != Accuracy.FAIL)
+            {
                 TakeDamage(1);
                 player.CancelMoveCollide();
-            }else{
+            }
+            else
+            {
                 player.TakeDamage(1);
                 player.CancelMoveCollide();
-                if(isMoving)
+                if (isMoving)
                     ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
             }
-            if(Health <= 0) {
+            if (Health <= 0)
+            {
                 DestroyEnemy();
             }
-            if(player.Health <= 0){
+            if (player.Health <= 0)
+            {
                 Debug.Log("Player died");
             }
         }
@@ -281,31 +306,46 @@ public abstract class Enemy : Living
         base.OnCollisionEnter2D(collision);
     }
 
-    void ChainCancel(Vector2Int v) {
+    void ChainCancel(Vector2Int v)
+    {
         Debug.Log("One " + v);
-        Vector2Int chain = new Vector2Int(Mathf.CeilToInt(enemyMap[v].currentTile.x), Mathf.CeilToInt(enemyMap[v].currentTile.y));
+
+        Vector2Int chain = new Vector2Int(
+            Mathf.CeilToInt(enemyMap[v].currentTile.x),
+            Mathf.CeilToInt(enemyMap[v].currentTile.y));
+
         Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
+
         Enemy tempEnemy = enemyMap[v];
         tempEnemy.CancelMoveCollide();
         enemyMap.Remove(v);
 
-        if(enemyMap.ContainsKey(chain)){
+        if (enemyMap.ContainsKey(chain))
+        {
             ChainCancel(chain);
-            if(!enemyMap.ContainsKey(chain))
+            if (!enemyMap.ContainsKey(chain))
                 enemyMap.Add(chain, tempEnemy);
-        }else{
+        }
+        else
+        {
             enemyMap.Add(chain, tempEnemy);
         }
     }
 
     protected override void RemoveFromMap()
     {
-        enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
+        enemyMap.Remove(
+            new Vector2Int(
+                Mathf.CeilToInt(getNextPrime().x),
+                Mathf.CeilToInt(getNextPrime().y)));
     }
 
     protected override void RemoveFromMapPrime() //Yes I know the names are swapped don't touch it
     {
-        enemyMap.Remove(new Vector2Int(Mathf.CeilToInt(getNext().x), Mathf.CeilToInt(getNext().y)));
+        enemyMap.Remove(
+            new Vector2Int(
+                Mathf.CeilToInt(getNext().x),
+                Mathf.CeilToInt(getNext().y)));
     }
 
     void DestroyEnemy()

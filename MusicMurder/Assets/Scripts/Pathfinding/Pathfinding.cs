@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,7 +32,7 @@ public class Pathfinding
         List<PathNode> path = FindPath(self.position, point);
         if (path != null && path.Count > 1)
         {
-            //grid.DrawList(path);
+            grid.DrawList(path);
             Vector2Int next = path[1].pos - grid.GetGridPosition(self.position);
             //Debug.Log("Next move: " +  next);
             return next;
@@ -61,25 +59,25 @@ public class Pathfinding
     public List<PathNode> FindPath(Vector2 startPos, Vector2 endPos)
     {
         Vector2Int s = grid.GetGridPosition(startPos);
-        Vector2Int e = Equals(endPos, grid.GetTrueOrigin()) ? grid.GetTrueOrigin() : grid.GetGridPosition(endPos);
+        Vector2Int e = endPos == grid.GetTrueOrigin() ? grid.GetTrueOrigin() : grid.GetGridPosition(endPos);
 
         if (grid.Contains(s) && grid.Contains(e))
         {
             return FindPath(s, e);
         }
-        
-        if(!grid.Contains(s))
+
+        if (!grid.Contains(s))
         {
             //Debug.LogWarning(self.gameObject.name + " not in grid");
         }
-        if(!grid.Contains(e))
+        if (!grid.Contains(e))
         {
-            Debug.LogWarning("Player not in grid");
+            Debug.LogWarning("Endpoint not in grid");
         }
 
         return null;
     }
-    
+
 
     public List<PathNode> FindPath(Vector2Int startPos, Vector2Int endPos)
     {
@@ -94,11 +92,11 @@ public class Pathfinding
         start.hCost = CalculateDistanceCost(start, end);
         start.CalculateFCost();
 
-        while(open.Count > 0)
+        while (open.Count > 0)
         {
             PathNode current = GetLowestFCostNode(open);
 
-            if(current.Equals(end))
+            if (current.Equals(end))
             {
                 return CalculatePath(end);
             }
@@ -107,13 +105,13 @@ public class Pathfinding
             closed.Add(current);
             //grid.DrawNode(current);
 
-            foreach(PathNode neighbor in GetNeighborList(current, end))
+            foreach (PathNode neighbor in GetNeighborList(current, end))
             {
-                if(closed.Contains(neighbor))
+                if (closed.Contains(neighbor))
                 {
                     continue;
                 }
-                if(!grid.GetWalkableStatus(neighbor))
+                if (!grid.GetWalkableStatus(neighbor))
                 {
                     closed.Add(neighbor);
                     //grid.DrawNode(neighbor);
@@ -148,7 +146,7 @@ public class Pathfinding
         {
             PathNode n = GetNeighbor(current, direction);
 
-            if(n != null)
+            if (n != null)
             {
                 list.Add(n);
             }
@@ -174,7 +172,7 @@ public class Pathfinding
         List<PathNode> list = new List<PathNode>() { end };
 
         PathNode current = end;
-        while(current.previous != null)
+        while (current.previous != null)
         {
             list.Add(current.previous);
             current = current.previous;

@@ -1,8 +1,6 @@
-using System.Collections;
 using UnityEngine;
 
 using static System.Math;
-using static UnityEngine.ParticleSystem;
 
 public abstract class Movement : OnMetronome
 {
@@ -88,6 +86,7 @@ public abstract class Movement : OnMetronome
     {
         if (colliding)
         {
+            print("Colliding when trying to move to next tile");
             CancelMoveCollide();
             colliding = false;
         }
@@ -100,7 +99,7 @@ public abstract class Movement : OnMetronome
 
     void CheckEndMove()
     {
-        if (Equals(rb.position, nextTile))
+        if (rb.position == nextTile)
         {
             //if(isMoving){
             RemoveFromMap();
@@ -114,10 +113,12 @@ public abstract class Movement : OnMetronome
 
     public void CancelMove()
     {
-        if(direction != Vector2.zero)
+        print("Cancel move");
+        if (direction != Vector2.zero)
             RemoveFromMapPrime();
         else
             RemoveFromMap();
+
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
@@ -125,6 +126,7 @@ public abstract class Movement : OnMetronome
 
     public void CancelMoveCollide()
     {
+        print("Cancel Move Collide");
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
