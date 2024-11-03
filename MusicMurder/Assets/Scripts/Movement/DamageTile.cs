@@ -38,8 +38,7 @@ public class DamageTile : OnMetronome
 
         if (playerInside)
         {
-            player.Health.TakeDamage(1);
-            player.Hurt();
+            player.TakeDamage(1);
         }
 
         // make sure player never takes double damage

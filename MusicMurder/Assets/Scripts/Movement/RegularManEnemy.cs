@@ -12,6 +12,6 @@ public class RegularManEnemy : Enemy
 
     protected override void Move()
     {
-        SetDirectionFromPathfinding(PathfindingFallback.RANDOM_MOVEMENT);
+        SetDirectionFromPathfinding(PathfindingFallback.PATROL);
     }
 }

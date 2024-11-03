@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : Movement
+public class PlayerMovement : Living
 {
     public static PlayerMovement Instance { get; private set; }
 
@@ -14,7 +14,6 @@ public class PlayerMovement : Movement
 
     GameState gameState;
     bool startup = false;
-    public Health Health { get; private set; }
 
     private void Awake()
     {
@@ -30,7 +29,7 @@ public class PlayerMovement : Movement
 
     private new void Start(){
         base.Start();
-        Health = new Health(3);
+        Health = 3;
         tempo = PlayerTempo.Instance;
         gameState = GameState.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);

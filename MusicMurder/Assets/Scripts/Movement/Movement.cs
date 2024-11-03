@@ -1,8 +1,6 @@
-using System.Collections;
 using UnityEngine;
 
 using static System.Math;
-using static UnityEngine.ParticleSystem;
 
 public abstract class Movement : OnMetronome
 {
@@ -18,20 +16,12 @@ public abstract class Movement : OnMetronome
     protected Vector2 direction;
     protected int speed = 100;
 
-    SpriteRenderer sr;
-    GameObject particles;
-    const float flashDuration = .3f;
-    readonly Color flashColor = Color.red;
-
     protected new void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentTile = rb.position;
         isMoving = false;
         colliding = false;
-
-        sr = GetComponent<SpriteRenderer>();
-        particles = Resources.Load<GameObject>("DamageParticles");
 
         base.Start();
     }
@@ -96,6 +86,7 @@ public abstract class Movement : OnMetronome
     {
         if (colliding)
         {
+            print("Colliding when trying to move to next tile");
             CancelMoveCollide();
             colliding = false;
         }
@@ -108,7 +99,7 @@ public abstract class Movement : OnMetronome
 
     void CheckEndMove()
     {
-        if (Equals(rb.position, nextTile))
+        if (rb.position == nextTile)
         {
             //if(isMoving){
             RemoveFromMap();
@@ -122,10 +113,12 @@ public abstract class Movement : OnMetronome
 
     public void CancelMove()
     {
-        if(direction != Vector2.zero)
+        print("Cancel move");
+        if (direction != Vector2.zero)
             RemoveFromMapPrime();
         else
             RemoveFromMap();
+
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
@@ -133,6 +126,7 @@ public abstract class Movement : OnMetronome
 
     public void CancelMoveCollide()
     {
+        print("Cancel Move Collide");
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
@@ -148,27 +142,6 @@ public abstract class Movement : OnMetronome
         if (collision.gameObject.CompareTag(wallTag))
         {
             CancelMove();
-        }
-    }
-
-    public void Hurt()
-    {
-        StopAllCoroutines();
-        Instantiate(particles, transform.position, Quaternion.identity, transform);
-        StartCoroutine(FlashRed());
-    }
-
-    IEnumerator FlashRed()
-    {
-        float t = flashDuration;
-        float mult = 1 / t;
-        Color initial = sr.color;
-
-        while (t > 0)
-        {
-            sr.color = Color.Lerp(initial, flashColor, t * mult);
-            t -= Time.deltaTime;
-            yield return null;
         }
     }
 

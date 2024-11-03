@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class AreaAttackPattern
@@ -34,13 +32,13 @@ public class AreaAttackPattern
         char[] chars = pattern.ToCharArray();
         bool[,] area = new bool[height, width];
 
-        for(int i = 0; i < height; i++)
+        for (int i = 0; i < height; i++)
         {
-            for(int j = 0; j < width; j++)
+            for (int j = 0; j < width; j++)
             {
                 int index = i * width + j;
                 bool include = chars[index] != ' ';
-                area[i,j] = include;
+                area[i, j] = include;
             }
         }
 
@@ -52,8 +50,8 @@ public class AreaAttackPattern
         List<Vector2> positions = new();
         List<Vector2> area = GetArea(direction);
         Vector2 offset = GetOffset(direction);
- 
-        foreach(Vector2 pos in area)
+
+        foreach (Vector2 pos in area)
         {
             positions.Add(pos + offset + origin);
         }
@@ -64,7 +62,7 @@ public class AreaAttackPattern
     private string PrintList(List<Vector2> list)
     {
         string result = "[ ";
-        foreach(Vector2 pos in list)
+        foreach (Vector2 pos in list)
         {
             result += $"{pos.ToString()} ";
         }
@@ -77,9 +75,9 @@ public class AreaAttackPattern
     {
         string result = "";
 
-        for(int i = 0; i < height; i++)
+        for (int i = 0; i < height; i++)
         {
-            for(int j = 0; j < width; j++)
+            for (int j = 0; j < width; j++)
             {
                 result += pattern[i, j] ? "x" : "_";
             }
@@ -94,7 +92,7 @@ public class AreaAttackPattern
         List<Vector2> area = new List<Vector2>();
         int x = 0, y = 0;
 
-        if (Equals(direction, Vector2.down))
+        if (direction == Vector2.down)
         {
             for (int j = 0; j < width; j++)
             {
@@ -110,7 +108,7 @@ public class AreaAttackPattern
                 x++;
             }
         }
-        else if (Equals(direction, Vector2.up))
+        else if (direction == Vector2.up)
         {
             for (int i = width - 1; i >= 0; i--)
             {
@@ -126,13 +124,13 @@ public class AreaAttackPattern
                 x++;
             }
         }
-        else if (Equals(direction, Vector2.right))
+        else if (direction == Vector2.right)
         {
             for (int i = 0; i < width; i++)
             {
                 y = 0;
                 for (int j = 0; j < height; j++)
-                { 
+                {
                     if (transpose[i, j])
                     {
                         area.Add(new Vector2(y, x));
@@ -142,7 +140,7 @@ public class AreaAttackPattern
                 x++;
             }
         }
-        else if (Equals(direction, Vector2.left))
+        else if (direction == Vector2.left)
         {
             for (int j = width - 1; j >= 0; j--)
             {
@@ -168,25 +166,25 @@ public class AreaAttackPattern
 
     private Vector2 GetOffset(Vector2 direction)
     {
-        if (Equals(direction, Vector2.down))
+        if (direction == Vector2.down)
         {
             return new Vector2(-width / 2, -height);
         }
-        else if(Equals(direction, Vector2.up))
+        else if (direction == Vector2.up)
         {
             return new Vector2(-width / 2, 1);
         }
-        else if (Equals(direction, Vector2.right))
+        else if (direction == Vector2.right)
         {
             return new Vector2(1, -width / 2);
         }
-        else if (Equals(direction, Vector2.left))
+        else if (direction == Vector2.left)
         {
             return new Vector2(-height, -width / 2);
         }
         else
         {
-            throw new ("Non-Exaustive Pattern Matching ( " + direction + " fell through).");
+            throw new("Non-Exaustive Pattern Matching ( " + direction + " fell through).");
         }
     }
 
