@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -26,6 +27,9 @@ public class PlayerTempo : MonoBehaviour
     public delegate void PlayerAccuracy(Accuracy accuracy);
     PlayerAccuracy onPlayerAccuracy;
 
+    //Not sure best way to code this but
+    public PerfectBounce Perfect;
+
     private void Awake()
     {
         if(Instance == null)
@@ -43,6 +47,16 @@ public class PlayerTempo : MonoBehaviour
         metronome = Metronome.Instance;
         player = PlayerMovement.Instance;
         text = GetComponent<TMP_Text>();
+
+        
+        
+
+        //Gets the PerfectUiObject
+
+
+        Perfect = GameObject.FindGameObjectWithTag("Perfect").GetComponent<PerfectBounce>();
+
+        
 
         SetListenStatus(true);
         SetIntervals();
@@ -129,6 +143,7 @@ public class PlayerTempo : MonoBehaviour
     {
         string s = GetAccuracyString(acc);
         text.text = GetAccuracyString(acc);
+        bounceAnimation();
         NotifyOnPlayerAccuracy(acc);
     }
 
@@ -202,7 +217,16 @@ public class PlayerTempo : MonoBehaviour
             }
         }
     }
+
+    void bounceAnimation()
+    {
+        Perfect.PlayBounce();
+        return;
+    }
 }
+
+
+
 
 public enum Accuracy { 
     PERFECT,

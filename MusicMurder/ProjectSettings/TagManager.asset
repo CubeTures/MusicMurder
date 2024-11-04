@@ -10,6 +10,7 @@ TagManager:
   - Metronome
   - VirtualCamera
   - Projectile
+  - Perfect
   layers:
   - Default
   - TransparentFX
