@@ -14,7 +14,7 @@ public abstract class Enemy : Living
 
     readonly int layerMask = ~(1 << 2);
 
-    static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
+    public static Dictionary<Vector2Int, Enemy> enemyMap = new Dictionary<Vector2Int, Enemy>();
     Vector2 startingPoint;
     [SerializeField] Transform[] waypoints;
     int waypointIndex = 0;

@@ -95,6 +95,8 @@ public class Metronome : MonoBehaviour
         float failTimestamp = timestamp + tempo.passInterval;
         float nextBeatTimestamp = timestamp + (Interval);
 
+        Enemy.enemyMap.Clear();
+
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
         {
             bool startup = currentStartupBeats-- > 0;
