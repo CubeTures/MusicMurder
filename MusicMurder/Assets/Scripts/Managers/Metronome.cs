@@ -99,14 +99,16 @@ public class Metronome : MonoBehaviour
 
         Enemy.enemyMap.Clear();
 
-        //Debug.Log(onMetronomeBeat);
+        Debug.Log(onMetronomeBeat);
 
+        if(onMetronomeBeat != null){
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
         {
             bool startup = currentStartupBeats-- > 0;
             currentStartupBeats = Mathf.Max(0, currentStartupBeats);
 
             m.Invoke(timestamp, failTimestamp, nextBeatTimestamp, startup);
-        }        
+        } 
+        }      
     }
 }

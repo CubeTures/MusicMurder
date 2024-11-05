@@ -372,7 +372,7 @@ public abstract class Enemy : Living
         player.death2();
 
         GameObject death = Instantiate(deathAnimation, new Vector2(player.currentTile.x, player.currentTile.y), Quaternion.identity) as GameObject;
-        death.GetComponent<SpriteRenderer>().sortingOrder = 101;
+        death.GetComponent<SpriteRenderer>().sortingOrder = 102;
 
         yield return new WaitForSeconds(1f);
 
