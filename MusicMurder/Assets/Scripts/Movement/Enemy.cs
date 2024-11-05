@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class Enemy : Living
 {
-    GameState gameState;
     const string playerTag = "Player";
     protected int beatsBetweenActions = 0;
     protected PlayerMovement player;
@@ -14,6 +14,7 @@ public abstract class Enemy : Living
     PlayerTempo playerTempo;
 
     [SerializeField] GameObject deathAnimation;
+    [SerializeField] GameObject curtain;
 
     readonly int layerMask = ~(1 << 2);
 
@@ -24,7 +25,6 @@ public abstract class Enemy : Living
 
     protected new void Start()
     {
-        gameState = GameState.Instance;
         player = PlayerMovement.Instance;
         playerTempo = PlayerTempo.Instance;
 
@@ -302,7 +302,7 @@ public abstract class Enemy : Living
             }
             if (player.Health <= 0)
             {
-                Debug.Log("Player died");
+                StartCoroutine(DeathScreen());
             }
         }
 
@@ -356,6 +356,33 @@ public abstract class Enemy : Living
         GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
 
         Destroy(gameObject);
+    }
+
+    private IEnumerator DeathScreen(){
+        gameState.SetPaused(true);
+        gameState.SetFreeze(true);
+
+        GameObject temp = Instantiate(curtain, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
+        spriteRenderer.sortingOrder = 102;
+        player.death();
+
+        yield return new WaitForSeconds(2f);
+
+        spriteRenderer.sortingOrder = 10;
+        player.death2();
+
+        GameObject death = Instantiate(deathAnimation, new Vector2(player.currentTile.x, player.currentTile.y), Quaternion.identity) as GameObject;
+        death.GetComponent<SpriteRenderer>().sortingOrder = 101;
+
+        yield return new WaitForSeconds(1f);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Death");
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
     }
 }
 

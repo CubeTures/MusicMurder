@@ -12,7 +12,6 @@ public class PlayerMovement : Living
     PlayerTempo tempo;
     public Accuracy acc{get; private set;}
 
-    GameState gameState;
     bool startup = false;
 
     private void Awake()
@@ -31,7 +30,6 @@ public class PlayerMovement : Living
         base.Start();
         Health = 3;
         tempo = PlayerTempo.Instance;
-        gameState = GameState.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
     }
 
@@ -93,6 +91,14 @@ public class PlayerMovement : Living
 
     void GetAccuracy(Accuracy accuracy){
         acc = accuracy;
+    }
+
+    public void death(){
+        spriteRenderer.sortingOrder = 103;
+    }
+
+    public void death2(){
+        spriteRenderer.sortingOrder = 10;
     }
 }
 

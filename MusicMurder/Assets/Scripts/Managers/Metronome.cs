@@ -54,9 +54,11 @@ public class Metronome : MonoBehaviour
 
     IEnumerator Pulse()
     {
-        NotifyOnMetronomeBeat();
-        ChangeDisplay();
-        metro.Play();
+        if(!gameState.Freeze){
+            NotifyOnMetronomeBeat();
+            ChangeDisplay();
+            metro.Play();
+        }
 
         if (previouslyPaused && !gameState.Paused)
         {
@@ -96,6 +98,8 @@ public class Metronome : MonoBehaviour
         float nextBeatTimestamp = timestamp + (Interval);
 
         Enemy.enemyMap.Clear();
+
+        //Debug.Log(onMetronomeBeat);
 
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
         {

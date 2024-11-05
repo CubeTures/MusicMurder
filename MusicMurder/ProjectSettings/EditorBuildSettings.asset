@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Club.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Death.unity
+    guid: f689066fb7b64c2449a81449fe71ca59
+  - enabled: 1
+    path: Assets/Scenes/Grid.unity
+    guid: dfff52d9cf77500418926716af8b14e2
   m_configObjects: {}
