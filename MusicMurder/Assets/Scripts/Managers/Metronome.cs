@@ -9,10 +9,11 @@ public class Metronome : MonoBehaviour
     public static Metronome Instance { get; private set; }
 
     public const float SECONDS_PER_MINUTE = 60;
-    public float BPM { get; private set; } = 100;
+    public float BPM { get; private set; } = 120;
     public float Interval {  get; private set; } // time between beats
     AudioSource metro;
     PlayerTempo tempo;
+    [SerializeField] AudioSource music;
     
     Image image;
     Color a = Color.black, b = Color.white;
@@ -46,10 +47,12 @@ public class Metronome : MonoBehaviour
     void Start()
     {
         gameState = GameState.Instance;
+        music = GameObject.Find("Music").GetComponent<AudioSource>();
         image = GetComponent<Image>();
         metro = GetComponent<AudioSource>();
         tempo = PlayerTempo.Instance;
         StartCoroutine(Pulse());
+        music.Play();
     }
 
     IEnumerator Pulse()
@@ -98,8 +101,6 @@ public class Metronome : MonoBehaviour
         float nextBeatTimestamp = timestamp + (Interval);
 
         Enemy.enemyMap.Clear();
-
-        Debug.Log(onMetronomeBeat);
 
         if(onMetronomeBeat != null){
         foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())

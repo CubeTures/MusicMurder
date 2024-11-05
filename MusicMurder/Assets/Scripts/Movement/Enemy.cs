@@ -366,7 +366,10 @@ public abstract class Enemy : Living
         spriteRenderer.sortingOrder = 102;
         player.death();
 
-        yield return new WaitForSeconds(2f);
+        GameObject.Find("Music").GetComponent<AudioSource>().Pause();
+
+
+        yield return new WaitForSeconds(1.5f);
 
         spriteRenderer.sortingOrder = 10;
         player.death2();
