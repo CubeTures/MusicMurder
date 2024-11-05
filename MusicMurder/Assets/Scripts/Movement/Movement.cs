@@ -6,6 +6,7 @@ public abstract class Movement : OnMetronome
 {
     private Rigidbody2D rb;
     const string wallTag = "Walls";
+    public SpriteRenderer spriteRenderer;
 
     [SerializeField] protected bool isMoving;
     [SerializeField] public Vector2 currentTile { get; private set; }
@@ -19,6 +20,7 @@ public abstract class Movement : OnMetronome
     protected new void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         currentTile = rb.position;
         isMoving = false;
         colliding = false;
@@ -58,6 +60,11 @@ public abstract class Movement : OnMetronome
         {
             nextTile.x = (float)Round((rb.position.x + (direction.x > 0 ? 1 : -1)) * 2) / 2;
             nextTile.y = rb.position.y;
+            if(direction.x > 0){
+                spriteRenderer.flipX = false;
+            }else{
+                spriteRenderer.flipX = true;
+            }
         }
 
         nextTile = SnapTile(nextTile);

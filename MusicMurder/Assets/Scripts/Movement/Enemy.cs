@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : Living
@@ -11,6 +12,8 @@ public abstract class Enemy : Living
     int beatsSinceAction = 0;
     int playerSighted = 0;
     PlayerTempo playerTempo;
+
+    [SerializeField] GameObject deathAnimation;
 
     readonly int layerMask = ~(1 << 2);
 
@@ -348,9 +351,10 @@ public abstract class Enemy : Living
                 Mathf.CeilToInt(getNext().y)));
     }
 
-    void DestroyEnemy()
+    private void DestroyEnemy()
     {
-        Debug.Log("Enemy Died");
+        GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
+
         Destroy(gameObject);
     }
 }

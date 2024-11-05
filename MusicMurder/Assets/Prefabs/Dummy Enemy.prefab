@@ -100,10 +100,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87a9032444ac8b49a0539e16bc0fd47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
   isMoving: 0
   nextTile: {x: 0, y: 0}
   colliding: 0
-  playerSighted: 8
+  deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
+  waypoints: []
 --- !u!61 &9032774594028506766
 BoxCollider2D:
   m_ObjectHideFlags: 0
