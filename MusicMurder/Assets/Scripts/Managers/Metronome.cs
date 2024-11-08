@@ -13,7 +13,7 @@ public class Metronome : MonoBehaviour
     public float Interval {  get; private set; } // time between beats
     AudioSource metro;
     PlayerTempo tempo;
-    [SerializeField] AudioSource music;
+    AudioSource music;
     
     Image image;
     Color a = Color.black, b = Color.white;
