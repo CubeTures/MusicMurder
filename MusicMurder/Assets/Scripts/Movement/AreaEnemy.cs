@@ -6,7 +6,8 @@ public class AreaEnemy : Enemy
 {
     protected int areaWidth = 5, areaHeight = 2;
     protected AreaAttackPattern area;
-    protected string attackPattern = " xxx xx xx";
+    protected string attackPattern = " xxx "+
+                                     "xx xx";
     [SerializeField] GameObject projctile;
 
     new void Start()

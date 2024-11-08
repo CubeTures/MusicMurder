@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class DamageTile : OnMetronome
 {
-    protected int timerToDamage = 1;
+    protected int timerToDamage = 2;
     protected float fail;
     PlayerMovement player;
     bool playerInside = false;
     const string playerTag = "Player";
+    [SerializeField] GameObject explosion;
 
     new void Start()
     {
@@ -30,6 +31,7 @@ public class DamageTile : OnMetronome
     {
         // animate
         StartCoroutine(CheckDamage());
+        GameObject exp = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
     }
 
     IEnumerator CheckDamage()

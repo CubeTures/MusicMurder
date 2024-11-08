@@ -139,14 +139,14 @@ public abstract class Enemy : Living
         raydirection.x /= unitDistance;
         raydirection.y /= unitDistance;
 
-        float grossDistance = 3f;
+        float grossDistance = 4f;
         if (playerTempo.getStealth() == 8)
         {
-            grossDistance = 2f;
+            grossDistance = 3f;
         }
         else if (playerTempo.getStealth() <= 2)
         {
-            grossDistance = 4f;
+            grossDistance = 5f;
         }
 
         float distance = Mathf.Min(grossDistance, unitDistance);
