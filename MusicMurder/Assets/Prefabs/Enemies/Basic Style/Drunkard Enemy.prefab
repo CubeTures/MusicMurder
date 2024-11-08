@@ -123,7 +123,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -254,7 +254,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bd4a7e8f3e41ac347a36aeafd5614ff0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7114acae2276080469c9c54db5aa34e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
   m_FlipX: 0
   m_FlipY: 0
@@ -277,6 +277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa1b6dc6b7e93549af8c8a8f7a95612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  small: {fileID: 21300000, guid: bd4a7e8f3e41ac347a36aeafd5614ff0, type: 3}
-  medium: {fileID: 21300000, guid: 7114acae2276080469c9c54db5aa34e8, type: 3}
-  large: {fileID: 21300000, guid: cd195056fcf9c6140bf5b14a89fad471, type: 3}
+  small: {fileID: 21300000, guid: 7114acae2276080469c9c54db5aa34e8, type: 3}
+  medium: {fileID: 21300000, guid: cd195056fcf9c6140bf5b14a89fad471, type: 3}
+  large: {fileID: 21300000, guid: 0d94bbfcc970ad54a930e689fc3d9ca8, type: 3}
