@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : Movement
@@ -11,6 +9,11 @@ public class Projectile : Movement
 
     private new void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
+            pm.TakeDamage(1);
+        }
         Destroy(gameObject);
     }
 }
