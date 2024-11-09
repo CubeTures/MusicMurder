@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +10,7 @@ public abstract class Enemy : Living
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
-    int playerSighted = 0;
+    protected int playerSighted = 0;
     PlayerTempo playerTempo;
 
     [SerializeField] GameObject deathAnimation;
@@ -39,9 +39,10 @@ public abstract class Enemy : Living
     {
         if (gameState.Paused || startup) return;
 
-        Increment(ref beatsSinceAction, beatsBetweenActions);
-        if (beatsSinceAction == beatsBetweenActions)
+        beatsSinceAction++;
+        if (beatsSinceAction > beatsBetweenActions)
         {
+            beatsSinceAction = 0;
             Move();
             Vector2Int temp = new Vector2Int(
                 Mathf.CeilToInt(getNext().x),
@@ -78,10 +79,18 @@ public abstract class Enemy : Living
     {
         if (PlayerInLineOfSight() || playerSighted > 0)
         {
-            //print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
+            print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
             direction = pathfinding.GetNextMove();
         }
-        else if (fallback == PathfindingFallback.RANDOM_MOVEMENT)
+        else
+        {
+            AlternateMove(fallback);
+        }
+    }
+
+    void AlternateMove(PathfindingFallback fallback)
+    {
+        if (fallback == PathfindingFallback.RANDOM_MOVEMENT)
         {
             direction = GetRandomDirection();
         }
@@ -130,14 +139,14 @@ public abstract class Enemy : Living
         raydirection.x /= unitDistance;
         raydirection.y /= unitDistance;
 
-        float grossDistance = 3f;
+        float grossDistance = 4f;
         if (playerTempo.getStealth() == 8)
         {
-            grossDistance = 2f;
+            grossDistance = 3f;
         }
         else if (playerTempo.getStealth() <= 2)
         {
-            grossDistance = 4f;
+            grossDistance = 5f;
         }
 
         float distance = Mathf.Min(grossDistance, unitDistance);
@@ -273,11 +282,12 @@ public abstract class Enemy : Living
 
     void Increment(ref int val, int max)
     {
-        val++;
         if (val > max)
         {
             val = 0;
         }
+
+        val++;
     }
 
     private new void OnCollisionEnter2D(Collision2D collision)
@@ -302,7 +312,7 @@ public abstract class Enemy : Living
             }
             if (player.Health <= 0)
             {
-                StartCoroutine(DeathScreen());
+                StartCoroutine(LoadDeathScreen());
             }
         }
 
@@ -358,7 +368,8 @@ public abstract class Enemy : Living
         Destroy(gameObject);
     }
 
-    private IEnumerator DeathScreen(){
+    private IEnumerator LoadDeathScreen()
+    {
         gameState.SetPaused(true);
         gameState.SetFreeze(true);
 
@@ -379,6 +390,7 @@ public abstract class Enemy : Living
 
         yield return new WaitForSeconds(1f);
 
+        DeathScreen.OriginScene = SceneManager.GetActiveScene().name;
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Death");
 
         // Wait until the asynchronous scene fully loads
