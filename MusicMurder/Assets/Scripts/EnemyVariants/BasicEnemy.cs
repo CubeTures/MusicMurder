@@ -11,6 +11,18 @@ public class BasicEnemy : Enemy
 
     protected override void Move()
     {
-        SetDirectionFromPathfinding(PathfindingFallback.PATROL);
+        SetDirectionFromPathfinding();
     }
 }
+
+/** Ranged 
+ * 
+ * TriangleShotEnemy (Shoots in triangle formation around self)
+ */
+
+/** Area - fix to not move until attack is done
+ * 
+ * CheckerboardEnemy (Area attack in cheakerboard pattern, long wind up but hard to avoid)
+ * BubbleEnemy (attack around self)
+ * TriangleAreaEnemy (attack in triangle, but not as often)
+ */

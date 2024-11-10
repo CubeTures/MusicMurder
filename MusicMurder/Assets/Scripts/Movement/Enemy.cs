@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public abstract class Enemy : Living
 {
@@ -13,6 +11,7 @@ public abstract class Enemy : Living
     protected int playerSighted = 0;
     PlayerTempo playerTempo;
 
+    [SerializeField] PathfindingFallback pathfindingFallback;
     [SerializeField] GameObject deathAnimation;
     [SerializeField] GameObject curtain;
 
@@ -75,16 +74,21 @@ public abstract class Enemy : Living
 
     protected abstract void Move();
 
-    protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
+    protected void SetDirectionFromPathfinding()
+    {
+        SetDirectionFromPathfinding(pathfindingFallback);
+    }
+
+    protected void SetDirectionFromPathfinding(PathfindingFallback fallbackOverride)
     {
         if (PlayerInLineOfSight() || playerSighted > 0)
         {
-            print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
+            //print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
             direction = pathfinding.GetNextMove();
         }
         else
         {
-            AlternateMove(fallback);
+            AlternateMove(fallbackOverride);
         }
     }
 
@@ -296,23 +300,26 @@ public abstract class Enemy : Living
         {
             if (!isMoving && player.acc != Accuracy.FAIL)
             {
-                TakeDamage(1);
+                bool died = TakeDamage(1);
                 player.CancelMoveCollide();
+
+                if (died)
+                {
+                    DestroyEnemy();
+                }
             }
             else
             {
-                player.TakeDamage(1);
+                bool died = player.TakeDamage(1);
                 player.CancelMoveCollide();
                 if (isMoving)
                     ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
-            }
-            if (Health <= 0)
-            {
-                DestroyEnemy();
-            }
-            if (player.Health <= 0)
-            {
-                StartCoroutine(LoadDeathScreen());
+
+                if (died)
+                {
+                    spriteRenderer.sortingOrder = 102;
+                    player.Death();
+                }
             }
         }
 
@@ -367,40 +374,9 @@ public abstract class Enemy : Living
 
         Destroy(gameObject);
     }
-
-    private IEnumerator LoadDeathScreen()
-    {
-        gameState.SetPaused(true);
-        gameState.SetFreeze(true);
-
-        GameObject temp = Instantiate(curtain, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
-        spriteRenderer.sortingOrder = 102;
-        player.death();
-
-        GameObject.Find("Music").GetComponent<AudioSource>().Pause();
-
-
-        yield return new WaitForSeconds(1.5f);
-
-        spriteRenderer.sortingOrder = 10;
-        player.death2();
-
-        GameObject death = Instantiate(deathAnimation, new Vector2(player.currentTile.x, player.currentTile.y), Quaternion.identity) as GameObject;
-        death.GetComponent<SpriteRenderer>().sortingOrder = 102;
-
-        yield return new WaitForSeconds(1f);
-
-        DeathScreen.OriginScene = SceneManager.GetActiveScene().name;
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Death");
-
-        // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-    }
 }
 
+[System.Serializable]
 public enum PathfindingFallback
 {
     DO_NOTHING,

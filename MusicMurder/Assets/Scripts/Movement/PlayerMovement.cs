@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : Living
 {
@@ -10,7 +9,10 @@ public class PlayerMovement : Living
     public delegate void PlayerAction(PlayerActionType actionType, float timestamp);
     PlayerAction onPlayerAction;
     PlayerTempo tempo;
-    public Accuracy acc{get; private set;}
+    public Accuracy acc { get; private set; }
+
+    [SerializeField] GameObject deathAnimation;
+    [SerializeField] GameObject curtain;
 
     bool startup = false;
 
@@ -26,7 +28,8 @@ public class PlayerMovement : Living
         }
     }
 
-    private new void Start(){
+    private new void Start()
+    {
         base.Start();
         Health = 3;
         tempo = PlayerTempo.Instance;
@@ -45,7 +48,7 @@ public class PlayerMovement : Living
 
     void GetInput()
     {
-        if(gameState.Paused || startup) return;
+        if (gameState.Paused || startup) return;
 
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -83,22 +86,52 @@ public class PlayerMovement : Living
     void NotifyOnPlayerAction(PlayerActionType actionType)
     {
         float timestamp = Time.time;
-        foreach(PlayerAction p in onPlayerAction.GetInvocationList())
+        foreach (PlayerAction p in onPlayerAction.GetInvocationList())
         {
             p.Invoke(actionType, timestamp);
         }
     }
 
-    void GetAccuracy(Accuracy accuracy){
+    void GetAccuracy(Accuracy accuracy)
+    {
         acc = accuracy;
     }
 
-    public void death(){
-        spriteRenderer.sortingOrder = 103;
+    public void Death()
+    {
+        StartCoroutine(LoadDeathScreen());
     }
 
-    public void death2(){
+    public IEnumerator LoadDeathScreen()
+    {
+        gameState.SetPaused(true);
+        gameState.SetFreeze(true);
+
+        GameObject temp = Instantiate(curtain, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
+        spriteRenderer.sortingOrder = 103;
+
+        GameObject.Find("Music").GetComponent<AudioSource>().Pause();
+
+        yield return new WaitForSeconds(1.5f);
+
         spriteRenderer.sortingOrder = 10;
+        spriteRenderer.sortingOrder = 10;
+
+        GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
+        death.GetComponent<SpriteRenderer>().sortingOrder = 102;
+
+        yield return new WaitForSeconds(1f);
+
+        DeathScreen.OriginScene = SceneManager.GetActiveScene().name;
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Death");
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        print("death done");
     }
 }
 

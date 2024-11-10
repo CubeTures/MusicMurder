@@ -1,7 +1,4 @@
-/// <summary>
-/// An enemy that acts like the basic enemy but has a more intracate movement pattern.
-/// </summary>
-public class DancerEnemy : Enemy
+public class RapidFireEnemy : RangedEnemy
 {
     readonly int[] movementPattern = { 0, 1 };
     int patternIndex = 0;
@@ -15,7 +12,7 @@ public class DancerEnemy : Enemy
     protected override void Move()
     {
         SetNextMove();
-        SetDirectionFromPathfinding();
+        base.Move();
     }
 
     void SetNextMove()

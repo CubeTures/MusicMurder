@@ -798,6 +798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4826756034827513954}
   - component: {fileID: 8394427656434921853}
+  - component: {fileID: 676914797920585430}
   m_Layer: 5
   m_Name: Music
   m_TagString: Untagged
@@ -834,7 +835,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3a9781091a06c9044b85bec05bf64fcc, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ee58068645e19b74ea1b592f12de8d41, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -920,6 +921,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &676914797920585430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5989719581868192796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc4023eb99e03844a7a379b71e12b63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6263772626505558415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,7 +1103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5112330160486699154
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1160,7 +1173,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc4023eb99e03844a7a379b71e12b63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  music: {fileID: 0}
 --- !u!82 &8512276931385703206
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1569,6 +1581,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6067266981041218834, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6489508803040285168, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6489508803040285168, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

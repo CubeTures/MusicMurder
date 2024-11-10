@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class Projectile : Movement
 {
+    SpriteRenderer sr;
+
+    protected new void Start()
+    {
+        sr = GetComponent<SpriteRenderer>();
+        base.Start();
+    }
+
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         direction = transform.right;
@@ -12,7 +20,14 @@ public class Projectile : Movement
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
-            pm.TakeDamage(1);
+            bool died = pm.TakeDamage(1);
+
+            if (died)
+            {
+                sr.sortingOrder = 102;
+                pm.Death();
+                return;
+            }
         }
         Destroy(gameObject);
     }

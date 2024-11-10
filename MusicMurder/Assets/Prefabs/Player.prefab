@@ -102,8 +102,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55cc28792d7deda4783ce51de62d8234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameState: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   isMoving: 0
-  health: 0
+  nextTile: {x: 0, y: 0}
+  colliding: 0
+  deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
+  curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}
 --- !u!114 &2109278149302368785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,7 +412,7 @@ Transform:
   m_GameObject: {fileID: 5607693410340071042}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0.5, y: -5.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public abstract class Living : Movement
 {
@@ -20,10 +18,12 @@ public abstract class Living : Movement
         base.Start();
     }
 
-    public void TakeDamage(int damage)
+    public bool TakeDamage(int damage)
     {
         Health -= damage;
         Hurt();
+
+        return Health <= 0;
     }
     private void Hurt()
     {

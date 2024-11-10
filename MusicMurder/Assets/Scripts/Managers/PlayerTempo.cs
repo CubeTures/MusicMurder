@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -29,13 +28,14 @@ public class PlayerTempo : MonoBehaviour
 
     //Not sure best way to code this but
     public PerfectBounce Perfect;
+    Queue<float> averageDelta = new();
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
-        } 
+        }
         else
         {
             Debug.LogError("Player Tempo Instance no Null");
@@ -48,15 +48,15 @@ public class PlayerTempo : MonoBehaviour
         player = PlayerMovement.Instance;
         text = GetComponent<TMP_Text>();
 
-        
-        
+
+
 
         //Gets the PerfectUiObject
 
 
         Perfect = GameObject.FindGameObjectWithTag("Perfect").GetComponent<PerfectBounce>();
 
-        
+
 
         SetListenStatus(true);
         SetIntervals();
@@ -71,7 +71,7 @@ public class PlayerTempo : MonoBehaviour
             passInterval = prevInterval * passMargin;
             //movedSinceTempoChange = false;
 
-            Debug.Log("Perfect Interval: " +  perfectInterval + "s, Pass Interval: " + passInterval + "s");
+            Debug.Log("Perfect Interval: " + perfectInterval + "s, Pass Interval: " + passInterval + "s");
         }
     }
 
@@ -87,11 +87,11 @@ public class PlayerTempo : MonoBehaviour
 
     // IEnumerator PenalizeNoAction()
     // {
-        // yield return new WaitForSeconds(passInterval);
-        // if (movedSinceTempoChange && !movedThisBeat)
-        // {
-        //     SetAccuracy(Accuracy.FAIL);
-        // }
+    // yield return new WaitForSeconds(passInterval);
+    // if (movedSinceTempoChange && !movedThisBeat)
+    // {
+    //     SetAccuracy(Accuracy.FAIL);
+    // }
     // }
 
     void OnPlayerAction(PlayerActionType actionType, float timestamp)
@@ -109,17 +109,17 @@ public class PlayerTempo : MonoBehaviour
          *      User moves more than once on beat (next beat)
          */
 
-        if(delta >= passInterval)
+        if (delta >= passInterval)
         {
             SetAccuracy(Accuracy.FAIL);
             stealth = Mathf.Max(0, stealth - 2);
         }
-        else if(movedThisBeat && thisBeat)
+        else if (movedThisBeat && thisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
             stealth = Mathf.Max(0, stealth - 2);
         }
-        else if(movedNextBeat && !thisBeat)
+        else if (movedNextBeat && !thisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
             stealth = Mathf.Max(0, stealth - 2);
@@ -135,8 +135,21 @@ public class PlayerTempo : MonoBehaviour
             SetAccuracy(Accuracy.PASS);
         }
 
+        PrintDelta(delta);
         movedThisBeat = thisBeat || movedThisBeat;
         movedNextBeat = !thisBeat || movedNextBeat;
+    }
+
+    void PrintDelta(float delta)
+    {
+        averageDelta.Enqueue(delta);
+
+        if (averageDelta.Count > 8)
+        {
+            averageDelta.Dequeue();
+        }
+
+        print(averageDelta.Sum() / averageDelta.Count);
     }
 
     void SetAccuracy(Accuracy acc)
@@ -149,7 +162,7 @@ public class PlayerTempo : MonoBehaviour
 
     string GetAccuracyString(Accuracy acc)
     {
-        switch(acc)
+        switch (acc)
         {
             case Accuracy.PERFECT:
                 return "Perfect";
@@ -197,13 +210,14 @@ public class PlayerTempo : MonoBehaviour
         SetListenStatus(false);
     }
 
-    public int getStealth(){
+    public int getStealth()
+    {
         return stealth;
     }
 
     void SetListenStatus(bool status)
     {
-        if(metronome != null && player != null)
+        if (metronome != null && player != null)
         {
             if (status)
             {
@@ -228,7 +242,8 @@ public class PlayerTempo : MonoBehaviour
 
 
 
-public enum Accuracy { 
+public enum Accuracy
+{
     PERFECT,
     PASS,
     FAIL
