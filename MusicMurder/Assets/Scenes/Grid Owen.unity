@@ -6785,6 +6785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Triangle Shot Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2579856334630640136, guid: a7220b56d48b5b442863d59cfbc39fd1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6842,6 +6846,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Essentials
       objectReference: {fileID: 0}
+    - target: {fileID: 8394427656434921853, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: ee58068645e19b74ea1b592f12de8d41, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -12,6 +12,9 @@ public class Projectile : Movement
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+
+        if (!canAct) return;
         direction = transform.right;
     }
 

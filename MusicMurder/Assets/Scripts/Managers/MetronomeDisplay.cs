@@ -16,8 +16,8 @@ public class MetronomeDisplay : OnMetronome
     float latestTimestamp;
     float timestampDifference;
     float startupBeats = Metronome.STARTUP_BEATS;
+    bool prevPaused = false;
 
-    GameState state;
     PlayerTempo tempo;
 
     Dictionary<float, bool> complete = new();
@@ -26,7 +26,6 @@ public class MetronomeDisplay : OnMetronome
 
     protected new void Start()
     {
-        state = GameState.Instance;
         tempo = PlayerTempo.Instance;
         SetListenStatus(true);
 
@@ -35,16 +34,20 @@ public class MetronomeDisplay : OnMetronome
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+
         latestTimestamp = timestamp;
         timestampDifference = nextBeatTimestamp - timestamp;
         interpolateTime = timestampDifference * startupBeats;
         failDelay = timestamp - failTimestamp;
         float estimatedTimestamp = timestamp + timestampDifference * startupBeats;
 
-        if (!state.Paused)
+        if (!gameState.Paused && !prevPaused)
         {
             StartCoroutine(MoveBar(estimatedTimestamp));
         }
+
+        prevPaused = gameState.Paused;
     }
 
     private void OnPlayerAccuracy(Accuracy accuracy)
@@ -77,7 +80,7 @@ public class MetronomeDisplay : OnMetronome
 
         while (t > 0)
         {
-            if (state.Paused)
+            if (gameState.Paused)
             {
                 Clear();
                 goto Clear;
@@ -100,7 +103,7 @@ public class MetronomeDisplay : OnMetronome
 
         while (t > 0)
         {
-            if (state.Paused)
+            if (gameState.Paused)
             {
                 Clear();
                 goto Clear;

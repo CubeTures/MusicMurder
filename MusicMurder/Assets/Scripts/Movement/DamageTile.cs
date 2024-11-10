@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageTile : OnMetronome
@@ -19,9 +18,11 @@ public class DamageTile : OnMetronome
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+
         timerToDamage--;
-        fail = timestamp -  failTimestamp;
-        if(timerToDamage <= 0)
+        fail = timestamp - failTimestamp;
+        if (timerToDamage <= 0)
         {
             Explode();
         }
@@ -49,7 +50,7 @@ public class DamageTile : OnMetronome
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag(playerTag))
+        if (collision.gameObject.CompareTag(playerTag))
         {
             playerInside = true;
         }
@@ -57,7 +58,7 @@ public class DamageTile : OnMetronome
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag(playerTag))
+        if (collision.gameObject.CompareTag(playerTag))
         {
             playerInside = false;
         }

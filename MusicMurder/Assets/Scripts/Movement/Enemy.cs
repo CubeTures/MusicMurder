@@ -36,7 +36,8 @@ public abstract class Enemy : Living
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
-        if (gameState.Paused || startup) return;
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+        if (!canAct) return;
 
         beatsSinceAction++;
         if (beatsSinceAction > beatsBetweenActions)

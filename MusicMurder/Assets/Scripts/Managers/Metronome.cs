@@ -44,6 +44,7 @@ public class Metronome : MonoBehaviour
         gameState = GameState.Instance;
         music = GetComponent<AudioSource>();
         tempo = PlayerTempo.Instance;
+        currentStartupBeats = STARTUP_BEATS;
     }
 
     private void Update()
@@ -75,15 +76,14 @@ public class Metronome : MonoBehaviour
 
     void Pulse()
     {
-        print("Beat");
-        if (!gameState.Freeze)
-        {
-            NotifyOnMetronomeBeat();
-        }
-
         if (previouslyPaused && !gameState.Paused)
         {
             currentStartupBeats = STARTUP_BEATS;
+        }
+
+        if (!gameState.Freeze)
+        {
+            NotifyOnMetronomeBeat();
         }
 
         previouslyPaused = gameState.Paused;
@@ -109,11 +109,19 @@ public class Metronome : MonoBehaviour
 
         if (onMetronomeBeat != null)
         {
+            bool startup = currentStartupBeats-- > 0;
+            currentStartupBeats = Mathf.Max(0, currentStartupBeats);
+            //if (startup)
+            //{
+            //    Debug.LogWarning("Startup");
+            //}
+            //else
+            //{
+            //    Debug.Log("Beat");
+            //}
+
             foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
             {
-                bool startup = currentStartupBeats-- > 0;
-                currentStartupBeats = Mathf.Max(0, currentStartupBeats);
-
                 m.Invoke(timestamp, failTimestamp, nextBeatTimestamp, startup);
             }
         }

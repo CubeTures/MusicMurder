@@ -135,7 +135,7 @@ public class PlayerTempo : MonoBehaviour
             SetAccuracy(Accuracy.PASS);
         }
 
-        PrintDelta(delta);
+        //PrintDelta(delta);
         movedThisBeat = thisBeat || movedThisBeat;
         movedNextBeat = !thisBeat || movedNextBeat;
     }

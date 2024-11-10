@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class OnMetronome : MonoBehaviour
 {
     Metronome metronome;
+    protected GameState gameState;
+    protected bool canAct = false;
+    private bool previouslyPaused;
 
     protected void Start()
     {
         metronome = Metronome.Instance;
+        gameState = GameState.Instance;
         SetListenStatus(true);
     }
 
-    protected abstract void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup);
+    protected virtual void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
+    {
+        previouslyPaused = gameState.Paused;
+
+        canAct = !gameState.Paused && !startup && !previouslyPaused && !gameState.Freeze;
+    }
 
     protected void OnEnable()
     {

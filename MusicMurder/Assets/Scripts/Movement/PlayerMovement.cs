@@ -14,8 +14,6 @@ public class PlayerMovement : Living
     [SerializeField] GameObject deathAnimation;
     [SerializeField] GameObject curtain;
 
-    bool startup = false;
-
     private void Awake()
     {
         if (Instance == null)
@@ -36,11 +34,6 @@ public class PlayerMovement : Living
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
     }
 
-    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
-    {
-        this.startup = startup;
-    }
-
     void Update()
     {
         GetInput();
@@ -48,7 +41,7 @@ public class PlayerMovement : Living
 
     void GetInput()
     {
-        if (gameState.Paused || startup) return;
+        if (!canAct) return;
 
         if (Input.GetKeyDown(KeyCode.W))
         {

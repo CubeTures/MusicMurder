@@ -4,7 +4,6 @@ using static System.Math;
 
 public abstract class Movement : OnMetronome
 {
-    public GameState gameState;
     private Rigidbody2D rb;
     const string wallTag = "Walls";
     public SpriteRenderer spriteRenderer;
@@ -20,7 +19,6 @@ public abstract class Movement : OnMetronome
 
     protected new void Start()
     {
-        gameState = GameState.Instance;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         currentTile = rb.position;
