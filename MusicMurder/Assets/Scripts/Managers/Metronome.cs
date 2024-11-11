@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Metronome : MonoBehaviour
@@ -15,6 +16,7 @@ public class Metronome : MonoBehaviour
     MetronomeBeat onMetronomeBeat;
     bool musicStarted = false;
     int previousInterval = 0;
+    Queue<float> calculatedBeats = new();
 
     GameState gameState;
     public static readonly int STARTUP_BEATS = 4;
@@ -45,21 +47,40 @@ public class Metronome : MonoBehaviour
         music = GetComponent<AudioSource>();
         tempo = PlayerTempo.Instance;
         currentStartupBeats = STARTUP_BEATS;
+
     }
 
     private void Update()
     {
-        if (!musicStarted)
+        if (!musicStarted && Time.time > float.Epsilon)
         {
             music.Play();
             musicStarted = true;
         }
 
         float sampledTime = music.timeSamples / (music.clip.frequency * Interval);
+
         if (NewInterval(sampledTime))
         {
             Pulse();
         }
+    }
+
+    float GetCalculatedBeat()
+    {
+        if (calculatedBeats.Count == 0)
+        {
+            calculatedBeats.Enqueue(Time.time);
+        }
+
+        float time = calculatedBeats.Dequeue();
+        calculatedBeats.Enqueue(time + Interval);
+        return time;
+    }
+
+    float PeekNextCalculatedBeat()
+    {
+        return calculatedBeats.Peek();
     }
 
     bool NewInterval(float interval)
@@ -101,9 +122,11 @@ public class Metronome : MonoBehaviour
 
     private void NotifyOnMetronomeBeat()
     {
-        float timestamp = Time.time;
+        float timestamp = GetCalculatedBeat();
         float failTimestamp = timestamp + tempo.passInterval;
-        float nextBeatTimestamp = timestamp + (Interval);
+        float nextBeatTimestamp = PeekNextCalculatedBeat();
+
+        print($"Current: {Time.time}, timestamp: {timestamp}, fail: {failTimestamp}, next: {nextBeatTimestamp}, music: {music.time}");
 
         Enemy.enemyMap.Clear();
 

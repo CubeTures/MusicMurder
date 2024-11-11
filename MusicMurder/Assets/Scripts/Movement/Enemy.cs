@@ -302,6 +302,7 @@ public abstract class Enemy : Living
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
+            print($"Moving: {isMoving}, Accuracy: {player.acc}");
             if (!isMoving && player.acc != Accuracy.FAIL)
             {
                 bool died = TakeDamage(1);
@@ -332,13 +333,13 @@ public abstract class Enemy : Living
 
     void ChainCancel(Vector2Int v)
     {
-        Debug.Log("One " + v);
+        //Debug.Log("One " + v);
 
         Vector2Int chain = new Vector2Int(
             Mathf.CeilToInt(enemyMap[v].currentTile.x),
             Mathf.CeilToInt(enemyMap[v].currentTile.y));
 
-        Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
+        //Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
 
         Enemy tempEnemy = enemyMap[v];
         tempEnemy.CancelMoveCollide();
