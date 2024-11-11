@@ -15,11 +15,6 @@ public class BasicEnemy : Enemy
     }
 }
 
-/** Ranged 
- * 
- * TriangleShotEnemy (Shoots in triangle formation around self)
- */
-
 /** Area - fix to not move until attack is done
  * 
  * CheckerboardEnemy (Area attack in cheakerboard pattern, long wind up but hard to avoid)

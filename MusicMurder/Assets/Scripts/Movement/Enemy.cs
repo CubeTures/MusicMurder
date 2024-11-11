@@ -4,11 +4,12 @@ using UnityEngine;
 public abstract class Enemy : Living
 {
     const string playerTag = "Player";
-    protected int beatsBetweenActions = 0;
+    protected int beatsBetweenActions = 1;
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
     protected int playerSighted = 0;
+    protected int cooldown = 0;
     PlayerTempo playerTempo;
 
     [SerializeField] PathfindingFallback pathfindingFallback;
@@ -38,6 +39,8 @@ public abstract class Enemy : Living
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
         if (!canAct) return;
+        if (cooldown-- > 0) return;
+        cooldown = 0;
 
         beatsSinceAction++;
         if (beatsSinceAction > beatsBetweenActions)

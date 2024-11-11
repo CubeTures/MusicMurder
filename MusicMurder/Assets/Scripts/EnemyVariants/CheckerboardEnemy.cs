@@ -1,18 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class CheckerboardEnemy : MonoBehaviour
+public class CheckerboardEnemy : AreaEnemy
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Attack(Vector2 direction)
     {
-        
-    }
+        HashSet<Vector2> positions = new();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        foreach (Vector2 d in directions)
+        {
+            positions.AddRange(area.GetPositionsSet(transform.position, d));
+        }
+
+        CreateDamageTiles(positions);
     }
 }

@@ -1,18 +1,34 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class TriangleAreaEnemy : MonoBehaviour
+public class TriangleAreaEnemy : AreaEnemy
 {
-    // Start is called before the first frame update
-    void Start()
+    string attackLeft = " xx x ", attackRight = "xx  x ";
+    AreaAttackPattern areaLeft, areaRight;
+
+    new void Start()
     {
-        
+        areaWidth = 3;
+        areaHeight = 2;
+        attackPattern = "xxx x ";
+
+        base.Start();
+
+        areaLeft = new AreaAttackPattern(areaHeight, areaWidth, attackLeft);
+        areaRight = new AreaAttackPattern(areaHeight, areaWidth, attackRight);
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Attack(Vector2 direction)
     {
-        
+        Vector2 left = new(direction.y, -direction.x);
+        Vector2 right = -left;
+
+        HashSet<Vector2> positions = new();
+        positions.AddRange(area.GetPositionsSet(transform.position, direction));
+        positions.AddRange(areaLeft.GetPositionsSet(transform.position, left));
+        positions.AddRange(areaRight.GetPositionsSet(transform.position, right));
+
+        CreateDamageTiles(positions);
     }
 }

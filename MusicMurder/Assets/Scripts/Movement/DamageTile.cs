@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class DamageTile : OnMetronome
 {
-    protected int timerToDamage = 2;
+    protected int timerToDamage = 0;
+    bool setup = false;
+
     protected float fail;
     PlayerMovement player;
     bool playerInside = false;
@@ -14,11 +16,46 @@ public class DamageTile : OnMetronome
     {
         player = PlayerMovement.Instance;
         base.Start();
+
+        if (IsInvalid())
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    bool IsInvalid()
+    {
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(.5f, .5f), 0);
+        return InsideWall(colliders);
+    }
+
+    bool InsideWall(Collider2D[] colliders)
+    {
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Walls"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void Setup(int timer)
+    {
+        timerToDamage = timer;
+        setup = true;
     }
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+
+        if (!setup)
+        {
+            Debug.LogWarning("Damage tile never setup");
+        }
 
         timerToDamage--;
         fail = timestamp - failTimestamp;

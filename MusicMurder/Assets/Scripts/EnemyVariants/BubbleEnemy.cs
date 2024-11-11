@@ -1,18 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class BubbleEnemy : MonoBehaviour
+public class BubbleEnemy : AreaEnemy
 {
-    // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-        
+        beatsBetweenActions = 0;
+        attackCooldown = 2;
+        areaWidth = 3;
+        areaHeight = 2;
+        attackPattern = "xxx   ";
+
+        base.Start();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Attack(Vector2 direction)
     {
-        
+        HashSet<Vector2> positions = new();
+
+        foreach (Vector2 d in directions)
+        {
+            positions.AddRange(area.GetPositionsSet(transform.position, d));
+        }
+
+        CreateDamageTiles(positions);
     }
 }

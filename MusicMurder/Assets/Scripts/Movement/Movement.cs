@@ -126,7 +126,7 @@ public abstract class Movement : OnMetronome
 
     public void CancelMove()
     {
-        print("Cancel move");
+        //print("Cancel move");
         if (direction != Vector2.zero)
             RemoveFromMapPrime();
         else
@@ -139,7 +139,7 @@ public abstract class Movement : OnMetronome
 
     public void CancelMoveCollide()
     {
-        print("Cancel Move Collide");
+        //print("Cancel Move Collide");
         isMoving = true;
         nextTile = currentTile;
         direction = Vector2.zero;
