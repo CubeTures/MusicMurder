@@ -100,7 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d726dafc225bd04280ef264ca40e5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
   spriteRenderer: {fileID: 0}
   isMoving: 0
   nextTile: {x: 0, y: 0}
@@ -152,7 +151,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &3088607872801714986
 Rigidbody2D:

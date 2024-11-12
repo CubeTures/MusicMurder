@@ -49,7 +49,7 @@ public abstract class Movement : OnMetronome
 
     protected virtual void OnMove() { }
 
-    void SetNextTile()
+    public virtual void SetNextTile()
     {
         isMoving = true;
         currentTile = rb.position;
@@ -137,7 +137,7 @@ public abstract class Movement : OnMetronome
         direction = Vector2.zero;
     }
 
-    public void CancelMoveCollide()
+    public virtual void CancelMoveCollide()
     {
         //print("Cancel Move Collide");
         isMoving = true;

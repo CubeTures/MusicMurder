@@ -10,6 +10,7 @@ public class PlayerMovement : Living
     PlayerAction onPlayerAction;
     PlayerTempo tempo;
     public Accuracy acc { get; private set; }
+    AudioSource audioSource;
 
     [SerializeField] GameObject deathAnimation;
     [SerializeField] GameObject curtain;
@@ -32,6 +33,7 @@ public class PlayerMovement : Living
         Health = 3;
         tempo = PlayerTempo.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -125,6 +127,20 @@ public class PlayerMovement : Living
         }
 
         print("death done");
+    }
+
+    public override void CancelMoveCollide(){
+        audioSource.Play();
+        base.CancelMoveCollide();
+    }
+
+    public override void SetNextTile(){
+        base.SetNextTile();
+
+        int layerMask = ~((1 << 2) | (1 << 3));
+        if(Physics.CheckSphere(getNextPrime(), .1f, layerMask)){
+            audioSource.Play();
+        };
     }
 }
 

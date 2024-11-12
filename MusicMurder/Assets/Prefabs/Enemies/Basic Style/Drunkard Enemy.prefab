@@ -100,11 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ce8c296e01a644b9c50d0204086bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
   spriteRenderer: {fileID: 0}
   isMoving: 0
   nextTile: {x: 0, y: 0}
   colliding: 0
+  pathfindingFallback: 0
   deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
   curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}
   waypoints: []
@@ -151,7 +151,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &7703386399542515352
 Rigidbody2D:
