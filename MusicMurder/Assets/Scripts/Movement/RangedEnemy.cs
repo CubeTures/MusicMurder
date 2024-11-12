@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RangedEnemy : Enemy
 {
     protected int attackCooldown;
-    protected int sightRange = 4;
-    [SerializeField] GameObject projectile;
+    protected int sightRange = 10;
+    [SerializeField] protected GameObject projectile;
 
     new void Start()
     {
@@ -16,18 +14,18 @@ public class RangedEnemy : Enemy
 
     protected override void Move()
     {
-        if(PlayerIsInLine(sightRange, 0) is Vector2 direction)
+        if (PlayerIsInLine(sightRange, 0) is Vector2 direction)
         {
             Attack(direction);
         }
         else
         {
-            SetDirectionFromPathfinding(PathfindingFallback.FOLLOW_WAYPOINTS);
+            SetDirectionFromPathfinding();
         }
     }
 
     protected virtual void Attack(Vector2 direction)
     {
-        Instantiate(projectile, (Vector2) transform.position + direction, GetQuaternionFromDirection(direction), transform);
+        Instantiate(projectile, (Vector2)transform.position + direction, GetQuaternionFromDirection(direction), transform);
     }
 }

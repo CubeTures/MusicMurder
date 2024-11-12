@@ -16,8 +16,8 @@ public class MetronomeDisplay : OnMetronome
     float latestTimestamp;
     float timestampDifference;
     float startupBeats = Metronome.STARTUP_BEATS;
+    bool prevPaused = false;
 
-    GameState state;
     PlayerTempo tempo;
 
     Dictionary<float, bool> complete = new();
@@ -26,7 +26,6 @@ public class MetronomeDisplay : OnMetronome
 
     protected new void Start()
     {
-        state = GameState.Instance;
         tempo = PlayerTempo.Instance;
         SetListenStatus(true);
 
@@ -35,27 +34,31 @@ public class MetronomeDisplay : OnMetronome
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+
         latestTimestamp = timestamp;
         timestampDifference = nextBeatTimestamp - timestamp;
         interpolateTime = timestampDifference * startupBeats;
         failDelay = timestamp - failTimestamp;
         float estimatedTimestamp = timestamp + timestampDifference * startupBeats;
 
-        if (!state.Paused)
+        if (!gameState.Paused && !prevPaused)
         {
             StartCoroutine(MoveBar(estimatedTimestamp));
         }
+
+        prevPaused = gameState.Paused;
     }
 
     private void OnPlayerAccuracy(Accuracy accuracy)
     {
-        if(queue.Count == 0)
+        if (queue.Count == 0)
         {
             return;
         }
 
         float timestamp = queue.Peek();
-        if(Mathf.Abs(timestamp - latestTimestamp) < timestampDifference)
+        if (Mathf.Abs(timestamp - latestTimestamp) < timestampDifference)
         {
             queue.Dequeue();
             complete[timestamp] = true;
@@ -65,18 +68,19 @@ public class MetronomeDisplay : OnMetronome
 
     IEnumerator MoveBar(float timestamp)
     {
+        float startTime = Time.time;
         float t = interpolateTime;
         float mult = 1 / t;
         Accuracy accuracy = Accuracy.FAIL;
-           
+
         Transform bl = Instantiate(bar, left.position, Quaternion.identity, transform).transform;
         Transform br = Instantiate(bar, right.position, Quaternion.identity, transform).transform;
         complete[timestamp] = false;
         queue.Enqueue(timestamp);
 
-        while(t > 0)
+        while (t > 0)
         {
-            if(state.Paused)
+            if (gameState.Paused)
             {
                 Clear();
                 goto Clear;
@@ -92,40 +96,40 @@ public class MetronomeDisplay : OnMetronome
                 goto Completed;
             }
 
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
         t = failDelay;
 
-        while(t > 0)
+        while (t > 0)
         {
-            if(state.Paused)
+            if (gameState.Paused)
             {
                 Clear();
                 goto Clear;
             }
 
-            t -= Time.deltaTime;
-            if(IsCompleted(timestamp))
+            t = Time.deltaTime;
+            if (IsCompleted(timestamp))
             {
                 accuracy = recentAccuracy;
                 goto Completed;
             }
 
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
-        
-        Completed:
 
-            BarCompleteEffect(accuracy, bl.position, br.position);
-            DisplayAccuracy(accuracy);
+    Completed:
 
-        Clear:
+        BarCompleteEffect(accuracy, bl.position, br.position);
+        DisplayAccuracy(accuracy);
 
-            Destroy(bl.gameObject);
-            Destroy(br.gameObject);
-            complete.Remove(timestamp);
+    Clear:
+
+        Destroy(bl.gameObject);
+        Destroy(br.gameObject);
+        complete.Remove(timestamp);
     }
 
     // variables as incoherent as possible -- just the way i like them

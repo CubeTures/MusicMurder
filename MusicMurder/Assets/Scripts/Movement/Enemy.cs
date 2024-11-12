@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public abstract class Enemy : Living
 {
     const string playerTag = "Player";
-    protected int beatsBetweenActions = 0;
+    protected int beatsBetweenActions = 1;
     protected PlayerMovement player;
     protected Pathfinding pathfinding;
     int beatsSinceAction = 0;
-    int playerSighted = 0;
+    protected int playerSighted = 0;
+    protected int cooldown = 0;
     PlayerTempo playerTempo;
 
+    [SerializeField] PathfindingFallback pathfindingFallback;
     [SerializeField] GameObject deathAnimation;
     [SerializeField] GameObject curtain;
 
@@ -37,11 +37,15 @@ public abstract class Enemy : Living
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
-        if (gameState.Paused || startup) return;
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+        if (!canAct) return;
+        if (cooldown-- > 0) return;
+        cooldown = 0;
 
-        Increment(ref beatsSinceAction, beatsBetweenActions);
-        if (beatsSinceAction == beatsBetweenActions)
+        beatsSinceAction++;
+        if (beatsSinceAction > beatsBetweenActions)
         {
+            beatsSinceAction = 0;
             Move();
             Vector2Int temp = new Vector2Int(
                 Mathf.CeilToInt(getNext().x),
@@ -74,14 +78,27 @@ public abstract class Enemy : Living
 
     protected abstract void Move();
 
-    protected void SetDirectionFromPathfinding(PathfindingFallback fallback = PathfindingFallback.DO_NOTHING)
+    protected void SetDirectionFromPathfinding()
+    {
+        SetDirectionFromPathfinding(pathfindingFallback);
+    }
+
+    protected void SetDirectionFromPathfinding(PathfindingFallback fallbackOverride)
     {
         if (PlayerInLineOfSight() || playerSighted > 0)
         {
             //print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
             direction = pathfinding.GetNextMove();
         }
-        else if (fallback == PathfindingFallback.RANDOM_MOVEMENT)
+        else
+        {
+            AlternateMove(fallbackOverride);
+        }
+    }
+
+    void AlternateMove(PathfindingFallback fallback)
+    {
+        if (fallback == PathfindingFallback.RANDOM_MOVEMENT)
         {
             direction = GetRandomDirection();
         }
@@ -130,14 +147,14 @@ public abstract class Enemy : Living
         raydirection.x /= unitDistance;
         raydirection.y /= unitDistance;
 
-        float grossDistance = 3f;
+        float grossDistance = 4f;
         if (playerTempo.getStealth() == 8)
         {
-            grossDistance = 2f;
+            grossDistance = 3f;
         }
         else if (playerTempo.getStealth() <= 2)
         {
-            grossDistance = 4f;
+            grossDistance = 5f;
         }
 
         float distance = Mathf.Min(grossDistance, unitDistance);
@@ -273,36 +290,41 @@ public abstract class Enemy : Living
 
     void Increment(ref int val, int max)
     {
-        val++;
         if (val > max)
         {
             val = 0;
         }
+
+        val++;
     }
 
     private new void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
+            print($"Moving: {isMoving}, Accuracy: {player.acc}");
             if (!isMoving && player.acc != Accuracy.FAIL)
             {
-                TakeDamage(1);
+                bool died = TakeDamage(1);
                 player.CancelMoveCollide();
+
+                if (died)
+                {
+                    DestroyEnemy();
+                }
             }
             else
             {
-                player.TakeDamage(1);
+                bool died = player.TakeDamage(1);
                 player.CancelMoveCollide();
                 if (isMoving)
                     ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
-            }
-            if (Health <= 0)
-            {
-                DestroyEnemy();
-            }
-            if (player.Health <= 0)
-            {
-                StartCoroutine(DeathScreen());
+
+                if (died)
+                {
+                    spriteRenderer.sortingOrder = 102;
+                    player.Death();
+                }
             }
         }
 
@@ -311,13 +333,13 @@ public abstract class Enemy : Living
 
     void ChainCancel(Vector2Int v)
     {
-        Debug.Log("One " + v);
+        //Debug.Log("One " + v);
 
         Vector2Int chain = new Vector2Int(
             Mathf.CeilToInt(enemyMap[v].currentTile.x),
             Mathf.CeilToInt(enemyMap[v].currentTile.y));
 
-        Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
+        //Debug.Log("Chain" + enemyMap[v] + " " + enemyMap[v].currentTile);
 
         Enemy tempEnemy = enemyMap[v];
         tempEnemy.CancelMoveCollide();
@@ -357,38 +379,9 @@ public abstract class Enemy : Living
 
         Destroy(gameObject);
     }
-
-    private IEnumerator DeathScreen(){
-        gameState.SetPaused(true);
-        gameState.SetFreeze(true);
-
-        GameObject temp = Instantiate(curtain, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
-        spriteRenderer.sortingOrder = 102;
-        player.death();
-
-        GameObject.Find("Music").GetComponent<AudioSource>().Pause();
-
-
-        yield return new WaitForSeconds(1.5f);
-
-        spriteRenderer.sortingOrder = 10;
-        player.death2();
-
-        GameObject death = Instantiate(deathAnimation, new Vector2(player.currentTile.x, player.currentTile.y), Quaternion.identity) as GameObject;
-        death.GetComponent<SpriteRenderer>().sortingOrder = 102;
-
-        yield return new WaitForSeconds(1f);
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Death");
-
-        // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-    }
 }
 
+[System.Serializable]
 public enum PathfindingFallback
 {
     DO_NOTHING,

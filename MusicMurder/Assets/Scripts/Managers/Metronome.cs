@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Metronome : MonoBehaviour
 {
@@ -10,16 +8,15 @@ public class Metronome : MonoBehaviour
 
     public const float SECONDS_PER_MINUTE = 60;
     public float BPM { get; private set; } = 120;
-    public float Interval {  get; private set; } // time between beats
-    AudioSource metro;
+    public float Interval { get; private set; } // time between beats
     PlayerTempo tempo;
-    [SerializeField] AudioSource music;
-    
-    Image image;
-    Color a = Color.black, b = Color.white;
+    AudioSource music;
 
     public delegate void MetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup);
     MetronomeBeat onMetronomeBeat;
+    bool musicStarted = false;
+    int previousInterval = 0;
+    Queue<float> calculatedBeats = new();
 
     GameState gameState;
     public static readonly int STARTUP_BEATS = 4;
@@ -28,11 +25,11 @@ public class Metronome : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             SetInterval();
-        } 
+        }
         else
         {
             Debug.LogError("Metronome Instance not Null");
@@ -47,41 +44,70 @@ public class Metronome : MonoBehaviour
     void Start()
     {
         gameState = GameState.Instance;
-        music = GameObject.Find("Music").GetComponent<AudioSource>();
-        image = GetComponent<Image>();
-        metro = GetComponent<AudioSource>();
+        music = GetComponent<AudioSource>();
         tempo = PlayerTempo.Instance;
-        StartCoroutine(Pulse());
-        music.Play();
+        currentStartupBeats = STARTUP_BEATS;
+
     }
 
-    IEnumerator Pulse()
+    private void Update()
     {
-        if(!gameState.Freeze){
-            NotifyOnMetronomeBeat();
-            ChangeDisplay();
-            metro.Play();
+        if (!musicStarted && Time.time > float.Epsilon)
+        {
+            music.Play();
+            musicStarted = true;
         }
 
+        float sampledTime = music.timeSamples / (music.clip.frequency * Interval);
+
+        if (NewInterval(sampledTime))
+        {
+            Pulse();
+        }
+    }
+
+    float GetCalculatedBeat()
+    {
+        if (calculatedBeats.Count == 0)
+        {
+            calculatedBeats.Enqueue(Time.time);
+        }
+
+        float time = calculatedBeats.Dequeue();
+        calculatedBeats.Enqueue(time + Interval);
+        return time;
+    }
+
+    float PeekNextCalculatedBeat()
+    {
+        return calculatedBeats.Peek();
+    }
+
+    bool NewInterval(float interval)
+    {
+        int floor = Mathf.FloorToInt(interval);
+        if (floor != previousInterval)
+        {
+            previousInterval = floor;
+            return true;
+        }
+
+        return false;
+    }
+
+    void Pulse()
+    {
         if (previouslyPaused && !gameState.Paused)
         {
             currentStartupBeats = STARTUP_BEATS;
         }
-        previouslyPaused = gameState.Paused;
-        
-        yield return new WaitForSecondsRealtime(Interval);
-        StartCoroutine(Pulse());
-    }
 
-    void ChangeDisplay()
-    {
-        if(image.color == a)
+        if (!gameState.Freeze)
         {
-            image.color = b;
-        } else
-        {
-            image.color = a;
+            NotifyOnMetronomeBeat();
         }
+
+        previouslyPaused = gameState.Paused;
     }
 
     public void ListenOnMetronomeBeat(MetronomeBeat m)
@@ -96,20 +122,31 @@ public class Metronome : MonoBehaviour
 
     private void NotifyOnMetronomeBeat()
     {
-        float timestamp = Time.time;
+        float timestamp = GetCalculatedBeat();
         float failTimestamp = timestamp + tempo.passInterval;
-        float nextBeatTimestamp = timestamp + (Interval);
+        float nextBeatTimestamp = PeekNextCalculatedBeat();
+
+        print($"Current: {Time.time}, timestamp: {timestamp}, fail: {failTimestamp}, next: {nextBeatTimestamp}, music: {music.time}");
 
         Enemy.enemyMap.Clear();
 
-        if(onMetronomeBeat != null){
-        foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
+        if (onMetronomeBeat != null)
         {
             bool startup = currentStartupBeats-- > 0;
             currentStartupBeats = Mathf.Max(0, currentStartupBeats);
+            //if (startup)
+            //{
+            //    Debug.LogWarning("Startup");
+            //}
+            //else
+            //{
+            //    Debug.Log("Beat");
+            //}
 
-            m.Invoke(timestamp, failTimestamp, nextBeatTimestamp, startup);
-        } 
-        }      
+            foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
+            {
+                m.Invoke(timestamp, failTimestamp, nextBeatTimestamp, startup);
+            }
+        }
     }
 }

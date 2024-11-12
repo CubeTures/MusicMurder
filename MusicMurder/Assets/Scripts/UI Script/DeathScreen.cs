@@ -1,14 +1,17 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DeathScreen : MonoBehaviour
 {
+    public static string OriginScene { get; set; }
+
     Image metronome;
     TMPro.TextMeshProUGUI text;
 
-    void Awake(){
+    void Awake()
+    {
         metronome = GameObject.Find("Metronome").GetComponent<Image>();
         text = GameObject.Find("Text").GetComponentInChildren<TMPro.TextMeshProUGUI>();
     }
@@ -23,10 +26,11 @@ public class DeathScreen : MonoBehaviour
 
     IEnumerator LoadYourAsyncScene()
     {
-        float endTime = Time.time+1;
-        while(Time.time <= endTime){
-            metronome.color = Color.Lerp(Color.clear, Color.white, endTime-Time.time);
-            text.color = Color.Lerp(Color.clear, Color.white, endTime-Time.time);
+        float endTime = Time.time + 1;
+        while (Time.time <= endTime)
+        {
+            metronome.color = Color.Lerp(Color.clear, Color.white, endTime - Time.time);
+            text.color = Color.Lerp(Color.clear, Color.white, endTime - Time.time);
 
             yield return null;
         }
@@ -34,7 +38,7 @@ public class DeathScreen : MonoBehaviour
         metronome.color = Color.clear;
         text.color = Color.clear;
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Grid Evan");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(OriginScene);
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AreaAttackPattern
@@ -43,6 +44,11 @@ public class AreaAttackPattern
         }
 
         return area;
+    }
+
+    public HashSet<Vector2> GetPositionsSet(Vector2 origin, Vector2 direction)
+    {
+        return GetPositions(origin, direction).ToHashSet();
     }
 
     public List<Vector2> GetPositions(Vector2 origin, Vector2 direction)
