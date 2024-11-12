@@ -81,7 +81,7 @@ public class PlayerTempo : MonoBehaviour
         nextBeat = nextBeatTimestamp;
         movedThisBeat = movedNextBeat;
         movedNextBeat = false;
-
+        bounceAnimation();
         //StartCoroutine(PenalizeNoAction());
     }
 
@@ -156,7 +156,7 @@ public class PlayerTempo : MonoBehaviour
     {
         string s = GetAccuracyString(acc);
         text.text = GetAccuracyString(acc);
-        bounceAnimation();
+        setbeatUI(s);
         NotifyOnPlayerAccuracy(acc);
     }
 
@@ -235,6 +235,26 @@ public class PlayerTempo : MonoBehaviour
     void bounceAnimation()
     {
         Perfect.PlayBounce();
+        return;
+    }
+
+    void setbeatUI(string s)
+    {
+        if (s == "Perfect")
+        {
+            Perfect.setPerfect();
+            return;
+        }
+        else if (s == "Pass")
+        {
+            Perfect.setPass();
+            return;
+        }
+        else if (s == "Fail")
+        {
+            Perfect.setFail();
+            return;
+        }
         return;
     }
 }
