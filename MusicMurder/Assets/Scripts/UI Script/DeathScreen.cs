@@ -7,13 +7,23 @@ public class DeathScreen : MonoBehaviour
 {
     public static string OriginScene { get; set; }
 
+    AudioSource determination;
+    AudioSource audioSource;
     Image metronome;
     TMPro.TextMeshProUGUI text;
+    Camera camera;
+
+    [SerializeField] Sprite[] frames = new Sprite[13];
 
     void Awake()
     {
         metronome = GameObject.Find("Metronome").GetComponent<Image>();
         text = GameObject.Find("Text").GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        audioSource = GetComponent<AudioSource>();
+        determination = GameObject.Find("Canvas").GetComponent<AudioSource>();
+        StartCoroutine(BreakMetronome());
+        camera = GetComponent<Camera>();
+        camera.backgroundColor = new Color(.2f, .2f, .2f);
     }
 
     void Update()
@@ -29,13 +39,12 @@ public class DeathScreen : MonoBehaviour
         float endTime = Time.time + 1;
         while (Time.time <= endTime)
         {
-            metronome.color = Color.Lerp(Color.clear, Color.white, endTime - Time.time);
-            text.color = Color.Lerp(Color.clear, Color.white, endTime - Time.time);
+            text.color = Color.Lerp(Color.clear, Color.red, endTime - Time.time);
+            camera.backgroundColor = Color.Lerp(Color.clear, new Color(.2f, .2f, .2f), endTime - Time.time);
 
             yield return null;
         }
 
-        metronome.color = Color.clear;
         text.color = Color.clear;
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(OriginScene);
@@ -45,5 +54,33 @@ public class DeathScreen : MonoBehaviour
         {
             yield return null;
         }
+    }
+
+    IEnumerator BreakMetronome(){
+        yield return new WaitForSeconds(.5f);
+        audioSource.Play();
+        yield return new WaitForSeconds(.5f);
+        audioSource.Play();
+        yield return new WaitForSeconds(.75f);
+        audioSource.Play();
+        yield return new WaitForSeconds(1f);
+        audioSource.Play();
+        for(int i = 1; i < 7; i++){
+            metronome.sprite = frames[i];
+            yield return new WaitForSeconds(.2f);
+        }
+        yield return new WaitForSeconds(.5f);
+        metronome.GetComponent<AudioSource>().Play();
+        for(int i = 7; i < 13; i++){
+            metronome.sprite = frames[i];
+            yield return new WaitForSeconds(.1f);
+        }
+        metronome.sprite = null;
+        metronome.color = Color.clear;
+
+        yield return new WaitForSeconds(.5f);
+
+        determination.Play();
+        text.color = Color.red;
     }
 }

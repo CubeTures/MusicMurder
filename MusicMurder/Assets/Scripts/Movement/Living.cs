@@ -36,7 +36,7 @@ public abstract class Living : Movement
     {
         float t = flashDuration;
         float mult = 1 / t;
-        Color initial = sr.color;
+        Color initial = Color.white;
 
         while (t > 0)
         {
