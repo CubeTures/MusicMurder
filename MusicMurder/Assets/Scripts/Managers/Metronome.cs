@@ -17,6 +17,7 @@ public class Metronome : MonoBehaviour
     bool musicStarted = false;
     int previousInterval = 0;
     Queue<float> calculatedBeats = new();
+    float offset;
 
     GameState gameState;
     public static readonly int STARTUP_BEATS = 4;
@@ -47,7 +48,7 @@ public class Metronome : MonoBehaviour
         music = GetComponent<AudioSource>();
         tempo = PlayerTempo.Instance;
         currentStartupBeats = STARTUP_BEATS;
-
+        offset = PlayerPrefs.GetFloat("calibration");
     }
 
     private void Update()
@@ -59,7 +60,6 @@ public class Metronome : MonoBehaviour
         }
 
         float sampledTime = music.timeSamples / (music.clip.frequency * Interval);
-
         if (NewInterval(sampledTime))
         {
             Pulse();
@@ -70,7 +70,7 @@ public class Metronome : MonoBehaviour
     {
         if (calculatedBeats.Count == 0)
         {
-            calculatedBeats.Enqueue(Time.time);
+            calculatedBeats.Enqueue(Time.time + offset);
         }
 
         float time = calculatedBeats.Dequeue();

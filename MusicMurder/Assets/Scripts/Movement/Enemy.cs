@@ -11,6 +11,7 @@ public abstract class Enemy : Living
     protected int playerSighted = 0;
     protected int cooldown = 0;
     PlayerTempo playerTempo;
+    protected bool boss = false;
 
     [SerializeField] PathfindingFallback pathfindingFallback;
     [SerializeField] GameObject deathAnimation;
@@ -308,7 +309,7 @@ public abstract class Enemy : Living
                 bool died = TakeDamage(1);
                 player.CancelMoveCollide();
 
-                if (died)
+                if (died && !boss)
                 {
                     DestroyEnemy();
                 }
@@ -373,7 +374,7 @@ public abstract class Enemy : Living
                 Mathf.CeilToInt(getNext().y)));
     }
 
-    private void DestroyEnemy()
+    protected void DestroyEnemy()
     {
         GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
 

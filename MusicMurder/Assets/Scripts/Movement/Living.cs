@@ -9,6 +9,7 @@ public abstract class Living : Movement
     GameObject particles;
     const float flashDuration = .3f;
     readonly Color flashColor = Color.red;
+    protected Color initialColor = Color.white;
 
     protected new void Start()
     {
@@ -36,7 +37,7 @@ public abstract class Living : Movement
     {
         float t = flashDuration;
         float mult = 1 / t;
-        Color initial = Color.white;
+        Color initial = initialColor;
 
         while (t > 0)
         {

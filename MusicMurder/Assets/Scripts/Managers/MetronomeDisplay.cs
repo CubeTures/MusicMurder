@@ -23,6 +23,7 @@ public class MetronomeDisplay : OnMetronome
     Dictionary<float, bool> complete = new();
     Queue<float> queue = new();
     Accuracy recentAccuracy;
+    List<GameObject> activeBars = new();
 
     protected new void Start()
     {
@@ -66,17 +67,21 @@ public class MetronomeDisplay : OnMetronome
         }
     }
 
-    IEnumerator MoveBar(float timestamp)
+    IEnumerator MoveBar(float endTimestamp)
     {
         float startTime = Time.time;
-        float t = interpolateTime;
+        float t = endTimestamp - startTime;
         float mult = 1 / t;
         Accuracy accuracy = Accuracy.FAIL;
 
         Transform bl = Instantiate(bar, left.position, Quaternion.identity, transform).transform;
         Transform br = Instantiate(bar, right.position, Quaternion.identity, transform).transform;
-        complete[timestamp] = false;
-        queue.Enqueue(timestamp);
+        bl.name = $"{endTimestamp} Left";
+        br.name = $"{endTimestamp} Right";
+        complete[endTimestamp] = false;
+        queue.Enqueue(endTimestamp);
+        activeBars.Add(bl.gameObject);
+        activeBars.Add(br.gameObject);
 
         while (t > 0)
         {
@@ -86,17 +91,17 @@ public class MetronomeDisplay : OnMetronome
                 goto Clear;
             }
 
-            t -= Time.deltaTime;
+            t = endTimestamp - Time.time;
             Interpolate(t, mult, bl, left);
             Interpolate(t, mult, br, right);
 
-            if (IsCompleted(timestamp))
+            if (IsCompleted(endTimestamp))
             {
                 accuracy = recentAccuracy;
                 goto Completed;
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         t = failDelay;
@@ -109,14 +114,14 @@ public class MetronomeDisplay : OnMetronome
                 goto Clear;
             }
 
-            t = Time.deltaTime;
-            if (IsCompleted(timestamp))
+            t = failDelay + endTimestamp - Time.time;
+            if (IsCompleted(endTimestamp))
             {
                 accuracy = recentAccuracy;
                 goto Completed;
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
 
@@ -127,9 +132,11 @@ public class MetronomeDisplay : OnMetronome
 
     Clear:
 
+        activeBars.Remove(bl.gameObject);
+        activeBars.Remove(br.gameObject);
         Destroy(bl.gameObject);
         Destroy(br.gameObject);
-        complete.Remove(timestamp);
+        complete.Remove(endTimestamp);
     }
 
     // variables as incoherent as possible -- just the way i like them
@@ -158,6 +165,16 @@ public class MetronomeDisplay : OnMetronome
         queue.Clear();
     }
 
+    void DestroyBars()
+    {
+        foreach (GameObject obj in activeBars)
+        {
+            Destroy(obj);
+        }
+
+        activeBars.Clear();
+    }
+
     protected new void OnEnable()
     {
         SetListenStatus(true);
@@ -167,6 +184,8 @@ public class MetronomeDisplay : OnMetronome
     protected new void OnDisable()
     {
         SetListenStatus(false);
+        Clear();
+        DestroyBars();
         base.OnDisable();
     }
 
