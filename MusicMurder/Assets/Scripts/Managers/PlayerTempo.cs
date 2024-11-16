@@ -48,15 +48,8 @@ public class PlayerTempo : MonoBehaviour
         player = PlayerMovement.Instance;
         text = GetComponent<TMP_Text>();
 
-
-
-
         //Gets the PerfectUiObject
-
-
         Perfect = GameObject.FindGameObjectWithTag("Perfect").GetComponent<PerfectBounce>();
-
-
 
         SetListenStatus(true);
         SetIntervals();
@@ -155,7 +148,7 @@ public class PlayerTempo : MonoBehaviour
     void SetAccuracy(Accuracy acc)
     {
         string s = GetAccuracyString(acc);
-        text.text = GetAccuracyString(acc);
+        //text.text = GetAccuracyString(acc);
         setbeatUI(s);
         NotifyOnPlayerAccuracy(acc);
     }

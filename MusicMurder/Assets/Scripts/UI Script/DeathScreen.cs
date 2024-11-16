@@ -56,7 +56,8 @@ public class DeathScreen : MonoBehaviour
         }
     }
 
-    IEnumerator BreakMetronome(){
+    IEnumerator BreakMetronome()
+    {
         yield return new WaitForSeconds(.5f);
         audioSource.Play();
         yield return new WaitForSeconds(.5f);
@@ -65,13 +66,15 @@ public class DeathScreen : MonoBehaviour
         audioSource.Play();
         yield return new WaitForSeconds(1f);
         audioSource.Play();
-        for(int i = 1; i < 7; i++){
+        for (int i = 1; i < 7; i++)
+        {
             metronome.sprite = frames[i];
             yield return new WaitForSeconds(.2f);
         }
         yield return new WaitForSeconds(.5f);
         metronome.GetComponent<AudioSource>().Play();
-        for(int i = 7; i < 13; i++){
+        for (int i = 7; i < 13; i++)
+        {
             metronome.sprite = frames[i];
             yield return new WaitForSeconds(.1f);
         }

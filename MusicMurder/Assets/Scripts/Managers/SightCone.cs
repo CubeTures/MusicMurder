@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SightCone : MonoBehaviour
@@ -13,18 +11,23 @@ public class SightCone : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        playerTempo = GameObject.Find("Canvas/Accuracy").GetComponent<PlayerTempo>();
+        playerTempo = GameObject.FindGameObjectWithTag("Manager").GetComponent<PlayerTempo>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(playerTempo.getStealth() <= 2){
+        if (playerTempo.getStealth() <= 2)
+        {
             spriteRenderer.sprite = large;
-        }else if(playerTempo.getStealth() == 8){
+        }
+        else if (playerTempo.getStealth() == 8)
+        {
             spriteRenderer.sprite = small;
-        }else{
+        }
+        else
+        {
             spriteRenderer.sprite = medium;
         }
     }

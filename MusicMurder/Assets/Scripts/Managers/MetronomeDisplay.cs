@@ -8,8 +8,9 @@ using UnityEngine;
 /// </summary>
 public class MetronomeDisplay : OnMetronome
 {
-    [SerializeField] Transform left, right, center;
-    [SerializeField] GameObject bar;
+    [SerializeField] Transform left, right, centerLeft, centerRight;
+    [SerializeField] GameObject barRight;
+    readonly Quaternion barLeftRotation = Quaternion.Euler(0, 0, 180);
 
     float interpolateTime;
     float failDelay;
@@ -74,8 +75,8 @@ public class MetronomeDisplay : OnMetronome
         float mult = 1 / t;
         Accuracy accuracy = Accuracy.FAIL;
 
-        Transform bl = Instantiate(bar, left.position, Quaternion.identity, transform).transform;
-        Transform br = Instantiate(bar, right.position, Quaternion.identity, transform).transform;
+        Transform bl = Instantiate(barRight, left.position, barLeftRotation, transform).transform;
+        Transform br = Instantiate(barRight, right.position, Quaternion.identity, transform).transform;
         bl.name = $"{endTimestamp} Left";
         br.name = $"{endTimestamp} Right";
         complete[endTimestamp] = false;
@@ -92,8 +93,8 @@ public class MetronomeDisplay : OnMetronome
             }
 
             t = endTimestamp - Time.time;
-            Interpolate(t, mult, bl, left);
-            Interpolate(t, mult, br, right);
+            Interpolate(t, mult, bl, left, centerLeft);
+            Interpolate(t, mult, br, right, centerRight);
 
             if (IsCompleted(endTimestamp))
             {
@@ -140,7 +141,7 @@ public class MetronomeDisplay : OnMetronome
     }
 
     // variables as incoherent as possible -- just the way i like them
-    void Interpolate(float t, float m, Transform n, Transform s)
+    void Interpolate(float t, float m, Transform n, Transform s, Transform center)
     {
         n.position = Vector2.Lerp(center.position, s.position, t * m);
     }

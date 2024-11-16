@@ -105,7 +105,7 @@ public class PlayerMovement : Living
         GameObject temp = Instantiate(curtain, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
         spriteRenderer.sortingOrder = 103;
 
-        GameObject.Find("Music").GetComponent<AudioSource>().Pause();
+        GameObject.FindGameObjectWithTag("Manager").GetComponent<AudioSource>().Pause();
 
         yield return new WaitForSeconds(1.5f);
 
@@ -129,16 +129,19 @@ public class PlayerMovement : Living
         print("death done");
     }
 
-    public override void CancelMoveCollide(){
+    public override void CancelMoveCollide()
+    {
         audioSource.Play();
         base.CancelMoveCollide();
     }
 
-    public override void SetNextTile(){
+    public override void SetNextTile()
+    {
         base.SetNextTile();
 
         int layerMask = ~((1 << 2) | (1 << 3));
-        if(Physics.CheckSphere(getNextPrime(), .1f, layerMask)){
+        if (Physics.CheckSphere(getNextPrime(), .1f, layerMask))
+        {
             audioSource.Play();
         };
     }
