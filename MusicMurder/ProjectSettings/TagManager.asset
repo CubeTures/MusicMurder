@@ -3,15 +3,23 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Walls
+  - Enemy
+  - Bounds
+  - Metronome
+  - VirtualCamera
+  - Projectile
+  - Perfect
+  - Manager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - NoPostProcessing
   - 
   - 
   - 
@@ -38,6 +46,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Curtain
+    uniqueID: 249413197
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
