@@ -12,6 +12,8 @@ TagManager:
   - Projectile
   - Perfect
   - Manager
+  - Canvas
+  - Curtain
   layers:
   - Default
   - TransparentFX

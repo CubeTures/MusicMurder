@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScreen.unity
     guid: aaa83f262f1f8634a94774f2a0e02f87
   - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: ba14ba5103d8d6d4c9c0f0e217f7fec0
+  - enabled: 1
     path: Assets/Scenes/Storerooms-Grid2.unity
     guid: ce6d3a416e4aaa4418aef21de6408c08
   - enabled: 1
