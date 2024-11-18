@@ -1,23 +1,29 @@
+using Cinemachine;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public abstract class Boss : Enemy
 {
-    int[] healths;
+    [SerializeField] UnityEvent interphase2Events, interphase3Events, onDeathEvents;
+
+    protected int[] healths;
     int phase;
 
-    [SerializeField] UnityEvent[] interphase2Events, interphase3Events;
-
-    SpriteRenderer sr;
+    SpriteRenderer spr;
+    CinemachineVirtualCamera virtualCamera;
+    CinemachineBasicMultiChannelPerlin shake;
 
     protected new void Start()
     {
-
-        Health = healths[0];
         boss = true;
-        sr = GetComponent<SpriteRenderer>();
+        spr = GetComponent<SpriteRenderer>();
+        virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+        shake = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
         base.Start();
+
+        Health = healths[0];
     }
 
     protected override void Move()
@@ -34,59 +40,93 @@ public abstract class Boss : Enemy
         {
             Phase3();
         }
-
-        if (Health < 0)
-        {
-            if (phase == 2)
-            {
-                Death();
-                return;
-            }
-
-            Interphase();
-
-            phase++;
-            Health = healths[phase];
-        }
     }
 
     protected abstract void Phase1();
     protected abstract void Phase2();
     protected abstract void Phase3();
 
-    void Interphase()
+    IEnumerator Interphase()
     {
-        // zoom in on boss if time permits
+        gameState.SetPaused(true);
+
+        virtualCamera.Priority = 15;
+
+        if (phase == 1)
+        {
+            StartCoroutine(SlideColor(1, Color.yellow));
+        }
+        else if (phase == 2)
+        {
+            StartCoroutine(SlideColor(1, Color.red));
+        }
+
+        yield return new WaitForSeconds(1);
 
         if (phase == 1)
         {
             initialColor = Color.yellow;
-            sr.color = Color.yellow;
-            InvokeInterphaseEvents(interphase2Events);
+            spr.color = Color.yellow;
+            InvokeEvents(interphase2Events);
             Interphase2();
         }
         else if (phase == 2)
         {
             initialColor = Color.red;
-            sr.color = Color.red;
-            InvokeInterphaseEvents(interphase3Events);
+            spr.color = Color.red;
+            InvokeEvents(interphase3Events);
             Interphase3();
+        }
+        else
+        {
+            virtualCamera.transform.parent = transform.parent;
+            Destroy(virtualCamera.gameObject, 10);
+            Death();
+        }
+
+        virtualCamera.Priority = 0;
+
+        gameState.SetPaused(false);
+    }
+
+    IEnumerator SlideColor(float duration, Color color)
+    {
+        float t = duration;
+        float mult = 1 / t;
+
+        while (t > 0)
+        {
+            t -= Time.deltaTime;
+            spr.color = Color.Lerp(initialColor, color, 1 - (t * mult));
+            yield return new WaitForEndOfFrame();
         }
     }
 
     protected abstract void Interphase2();
     protected abstract void Interphase3();
 
-    void InvokeInterphaseEvents(UnityEvent[] events)
+    protected override void DestroyEnemy()
     {
-        foreach (UnityEvent @event in events)
+        phase++;
+        if (phase != 3)
         {
-            @event.Invoke();
+            Health = healths[phase];
         }
+
+        StartCoroutine(Interphase());
     }
 
     void Death()
     {
-        DestroyEnemy();
+        OnDeath();
+        InvokeEvents(onDeathEvents);
+        base.DestroyEnemy();
+    }
+
+    protected abstract void OnDeath();
+
+    void InvokeEvents(UnityEvent events)
+    {
+        events.Invoke();
     }
 }

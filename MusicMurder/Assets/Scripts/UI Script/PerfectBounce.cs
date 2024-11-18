@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 
 
@@ -9,7 +6,7 @@ public class PerfectBounce : MonoBehaviour
 
     public float timer = 0;
     public float bounceRate = 4;
-    
+
     Animation BounceAnimation;
 
     public GameObject Perfect;
@@ -27,13 +24,13 @@ public class PerfectBounce : MonoBehaviour
         BounceAnimation = GetComponent<Animation>();
     }
 
-    public void setPerfect() 
-    { 
+    public void setPerfect()
+    {
         Perfect.transform.localScale = new Vector3(1, 1, 1);
         Pass.transform.localScale = new Vector3(0, 0, 0);
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Perfect";
-        Debug.Log("Perfect");
+        //Debug.Log("Perfect");
         return;
     }
 
@@ -43,7 +40,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(1, 1, 1);
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Pass";
-        Debug.Log("pass");
+        //Debug.Log("pass");
         return;
     }
     public void setFail()
@@ -52,14 +49,14 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(0, 0, 0);
         Fail.transform.localScale = new Vector3(1, 1, 1);
         activeBeatUI = "Fail";
-        Debug.Log("Fail");
+        //Debug.Log("Fail");
         return;
     }
- 
+
     public void PlayBounce()
     {
         BounceAnimation.Play("TestAnimation");
-        Debug.Log("BOUNCE");
+        //Debug.Log("BOUNCE");
         return;
     }
 }

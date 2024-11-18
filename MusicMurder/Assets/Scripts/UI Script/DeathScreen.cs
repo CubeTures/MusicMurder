@@ -11,7 +11,7 @@ public class DeathScreen : MonoBehaviour
     AudioSource audioSource;
     Image metronome;
     TMPro.TextMeshProUGUI text;
-    Camera camera;
+    Camera _camera;
 
     [SerializeField] Sprite[] frames = new Sprite[13];
 
@@ -22,8 +22,9 @@ public class DeathScreen : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         determination = GameObject.Find("Canvas").GetComponent<AudioSource>();
         StartCoroutine(BreakMetronome());
-        camera = GetComponent<Camera>();
-        camera.backgroundColor = new Color(.2f, .2f, .2f);
+        _camera = GetComponent<Camera>();
+        float _1A = 0x1A / 255f;
+        _camera.backgroundColor = new Color(_1A, _1A, _1A);
     }
 
     void Update()
@@ -40,7 +41,7 @@ public class DeathScreen : MonoBehaviour
         while (Time.time <= endTime)
         {
             text.color = Color.Lerp(Color.clear, Color.red, endTime - Time.time);
-            camera.backgroundColor = Color.Lerp(Color.clear, new Color(.2f, .2f, .2f), endTime - Time.time);
+            _camera.backgroundColor = Color.Lerp(Color.clear, new Color(.2f, .2f, .2f), endTime - Time.time);
 
             yield return null;
         }

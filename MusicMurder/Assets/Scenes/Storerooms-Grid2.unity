@@ -15370,7 +15370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7205875446099665481, guid: cd99e561b6e58c641a3b47413a08cc71, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7205875446099665481, guid: cd99e561b6e58c641a3b47413a08cc71, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15457,10 +15457,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Essentials
       objectReference: {fileID: 0}
-    - target: {fileID: 4627004194246973368, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 15768913295586444b85e8c8804f37a2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

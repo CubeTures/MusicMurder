@@ -303,15 +303,16 @@ public abstract class Enemy : Living
     {
         if (collision.gameObject.CompareTag(playerTag))
         {
-            print($"Moving: {isMoving}, Accuracy: {player.acc}");
+            //print($"Moving: {isMoving}, Accuracy: {player.acc}");
             if (!isMoving && player.acc != Accuracy.FAIL)
             {
                 bool died = TakeDamage(1);
                 player.CancelMoveCollide();
 
-                if (died && !boss)
+                if (died)
                 {
                     DestroyEnemy();
+                    beatsSinceAction = beatsBetweenActions;
                 }
             }
             else
@@ -374,7 +375,7 @@ public abstract class Enemy : Living
                 Mathf.CeilToInt(getNext().y)));
     }
 
-    protected void DestroyEnemy()
+    protected virtual void DestroyEnemy()
     {
         GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
 

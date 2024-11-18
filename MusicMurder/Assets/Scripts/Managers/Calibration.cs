@@ -19,8 +19,9 @@ public class Calibration : OnMetronome
         base.Start();
     }
 
-    private void Update()
+    private new void Update()
     {
+        base.Update();
         if (KeyPressed())
         {
             AddOffset();

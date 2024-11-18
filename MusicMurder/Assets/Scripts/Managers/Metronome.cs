@@ -21,8 +21,8 @@ public class Metronome : MonoBehaviour
 
     GameState gameState;
     public static readonly int STARTUP_BEATS = 4;
-    int currentStartupBeats = 0;
-    bool previouslyPaused = false;
+    public int currentStartupBeats = 0;
+    bool paused = false;
 
     private void Awake()
     {
@@ -59,6 +59,7 @@ public class Metronome : MonoBehaviour
             musicStarted = true;
         }
 
+        paused = gameState.Paused || paused;
         float sampledTime = music.timeSamples / (music.clip.frequency * Interval);
         if (NewInterval(sampledTime))
         {
@@ -97,17 +98,14 @@ public class Metronome : MonoBehaviour
 
     void Pulse()
     {
-        if (previouslyPaused && !gameState.Paused)
+        if (paused)
         {
             currentStartupBeats = STARTUP_BEATS;
         }
 
-        if (!gameState.Freeze)
-        {
-            NotifyOnMetronomeBeat();
-        }
+        NotifyOnMetronomeBeat();
 
-        previouslyPaused = gameState.Paused;
+        paused = gameState.Paused;
     }
 
     public void ListenOnMetronomeBeat(MetronomeBeat m)
@@ -126,22 +124,14 @@ public class Metronome : MonoBehaviour
         float failTimestamp = timestamp + tempo.passInterval;
         float nextBeatTimestamp = PeekNextCalculatedBeat();
 
-        print($"Current: {Time.time}, timestamp: {timestamp}, fail: {failTimestamp}, next: {nextBeatTimestamp}, music: {music.time}");
+        //print($"Current: {Time.time}, timestamp: {timestamp}, fail: {failTimestamp}, next: {nextBeatTimestamp}, music: {music.time}");
 
         Enemy.enemyMap.Clear();
 
-        if (onMetronomeBeat != null)
+        if (onMetronomeBeat != null && !paused && !gameState.Freeze)
         {
             bool startup = currentStartupBeats-- > 0;
             currentStartupBeats = Mathf.Max(0, currentStartupBeats);
-            //if (startup)
-            //{
-            //    Debug.LogWarning("Startup");
-            //}
-            //else
-            //{
-            //    Debug.Log("Beat");
-            //}
 
             foreach (MetronomeBeat m in onMetronomeBeat.GetInvocationList())
             {

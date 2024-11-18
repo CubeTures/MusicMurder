@@ -17,13 +17,11 @@ public class CCTVTime : OnMetronome
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
 
-        if (beats == changeOnBeats)
+        if (++beats == changeOnBeats)
         {
             text.text = GetTime();
             beats = 0;
         }
-
-        beats++;
     }
 
     string GetTime()

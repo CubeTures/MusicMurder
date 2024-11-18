@@ -17,7 +17,6 @@ public class MetronomeDisplay : OnMetronome
     float latestTimestamp;
     float timestampDifference;
     float startupBeats = Metronome.STARTUP_BEATS;
-    bool prevPaused = false;
 
     PlayerTempo tempo;
 
@@ -44,12 +43,7 @@ public class MetronomeDisplay : OnMetronome
         failDelay = timestamp - failTimestamp;
         float estimatedTimestamp = timestamp + timestampDifference * startupBeats;
 
-        if (!gameState.Paused && !prevPaused)
-        {
-            StartCoroutine(MoveBar(estimatedTimestamp));
-        }
-
-        prevPaused = gameState.Paused;
+        StartCoroutine(MoveBar(estimatedTimestamp));
     }
 
     private void OnPlayerAccuracy(Accuracy accuracy)

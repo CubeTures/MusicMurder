@@ -2,10 +2,10 @@ using UnityEngine;
 
 public abstract class OnMetronome : MonoBehaviour
 {
-    Metronome metronome;
+    protected Metronome metronome;
     protected GameState gameState;
     protected bool canAct = false;
-    private bool previouslyPaused;
+    protected bool paused;
 
     protected void Start()
     {
@@ -16,9 +16,18 @@ public abstract class OnMetronome : MonoBehaviour
 
     protected virtual void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
-        previouslyPaused = gameState.Paused;
+        canAct = !startup && !paused;
+        paused = gameState.Paused;
+    }
 
-        canAct = !gameState.Paused && !startup && !previouslyPaused && !gameState.Freeze;
+    protected void Update()
+    {
+        paused = gameState.Paused || paused;
+
+        if (paused)
+        {
+            canAct = false;
+        }
     }
 
     protected void OnEnable()

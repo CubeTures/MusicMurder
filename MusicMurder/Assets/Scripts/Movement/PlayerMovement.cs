@@ -36,14 +36,15 @@ public class PlayerMovement : Living
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Update()
+    new void Update()
     {
+        base.Update();
         GetInput();
     }
 
     void GetInput()
     {
-        if (!canAct) return;
+        if (gameState.Paused || !canAct && metronome.currentStartupBeats != 0) return;
 
         if (Input.GetKeyDown(KeyCode.W))
         {

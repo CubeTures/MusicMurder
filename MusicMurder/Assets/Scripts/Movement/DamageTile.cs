@@ -5,6 +5,7 @@ public class DamageTile : OnMetronome
 {
     protected int timerToDamage = 0;
     bool setup = false;
+    DamageTileCreator creator;
 
     protected float fail;
     PlayerMovement player;
@@ -48,10 +49,17 @@ public class DamageTile : OnMetronome
         setup = true;
     }
 
+    public void Setup(int timer, DamageTileCreator creator)
+    {
+        Setup(timer);
+        this.creator = creator;
+    }
+
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
 
+        if (!canAct) return;
         if (!setup)
         {
             Debug.LogWarning("Damage tile never setup");
@@ -82,6 +90,7 @@ public class DamageTile : OnMetronome
         }
 
         // make sure player never takes double damage
+        if (creator != null) creator.TileDestroyed(this);
         Destroy(gameObject);
     }
 

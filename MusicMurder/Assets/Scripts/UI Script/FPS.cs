@@ -16,18 +16,17 @@ public class FPS : OnMetronome
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
 
-        if (beats == changeOnBeats)
+        if (++beats == changeOnBeats)
         {
             CalculateFPS();
             UpdateDisplay();
             beats = 0;
         }
-
-        beats++;
     }
 
-    void Update()
+    new void Update()
     {
+        base.Update();
         frameCount++;
         dt += Time.deltaTime;
     }

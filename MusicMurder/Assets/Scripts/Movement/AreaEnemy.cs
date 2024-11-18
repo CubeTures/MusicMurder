@@ -55,3 +55,8 @@ public class AreaEnemy : Enemy
         cooldown = attackCooldown;
     }
 }
+
+public interface DamageTileCreator
+{
+    public void TileDestroyed(DamageTile tile);
+}
