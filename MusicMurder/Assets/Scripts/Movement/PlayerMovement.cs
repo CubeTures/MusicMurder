@@ -8,7 +8,7 @@ public class PlayerMovement : Living
 
     public delegate void PlayerAction(PlayerActionType actionType, float timestamp);
     PlayerAction onPlayerAction;
-    PlayerTempo tempo;
+    public PlayerTempo tempo;
     public Accuracy acc { get; private set; }
     AudioSource audioSource;
 
@@ -88,7 +88,7 @@ public class PlayerMovement : Living
         }
     }
 
-    void GetAccuracy(Accuracy accuracy)
+    public void GetAccuracy(Accuracy accuracy)
     {
         acc = accuracy;
     }
