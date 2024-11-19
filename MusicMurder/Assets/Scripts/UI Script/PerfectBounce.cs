@@ -4,8 +4,6 @@ using UnityEngine;
 public class PerfectBounce : MonoBehaviour
 {
 
-    public float timer = 0;
-    public float bounceRate = 4;
 
     Animation BounceAnimation;
 
