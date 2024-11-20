@@ -48,7 +48,7 @@ public class PlayerMovement : Living
     {
         if (gameState.Paused || !canAct && metronome.currentStartupBeats != 0) return;
 
-        if(tempo.dizzyCount < 6){
+        if (tempo.dizzyCount < 6)
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
@@ -66,8 +66,10 @@ public class PlayerMovement : Living
             {
                 direction.x = 1;
             }
-        }else{
-            if(!diz)
+        }
+        else
+        {
+            if (!diz)
                 StartCoroutine(Dizzy());
         }
     }
@@ -106,9 +108,10 @@ public class PlayerMovement : Living
         StartCoroutine(LoadDeathScreen());
     }
 
-    private IEnumerator Dizzy(){
+    private IEnumerator Dizzy()
+    {
         diz = true;
-        GameObject dizzyObj = Instantiate(dizzy, new Vector2(getNextPrime().x, getNextPrime().y+.5f), Quaternion.identity) as GameObject;
+        GameObject dizzyObj = Instantiate(dizzy, new Vector2(getNextPrime().x, getNextPrime().y + .5f), Quaternion.identity) as GameObject;
 
         yield return new WaitForSeconds(2f);
 
