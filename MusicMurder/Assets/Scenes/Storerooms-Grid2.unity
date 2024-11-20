@@ -15496,9 +15496,33 @@ PrefabInstance:
       propertyPath: m_TagString
       value: HealthUI
       objectReference: {fileID: 0}
+    - target: {fileID: 2479135449074731173, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479135449074731173, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479135449074731173, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 9.3
+      objectReference: {fileID: 0}
     - target: {fileID: 2730506350921198290, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_Name
       value: Essentials
+      objectReference: {fileID: 0}
+    - target: {fileID: 3553954327016526753, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3553954327016526753, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3553954327016526753, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.9
       objectReference: {fileID: 0}
     - target: {fileID: 6571159283004997197, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -15507,6 +15531,14 @@ PrefabInstance:
     - target: {fileID: 6571159283004997197, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 258
+      objectReference: {fileID: 0}
+    - target: {fileID: 6577743643686276144, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6577743643686276144, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7652309148778617136, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15518,11 +15550,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8821740050892657324, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -530.82
+      value: -6.15
       objectReference: {fileID: 0}
     - target: {fileID: 8821740050892657324, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 285.7
+      value: -241.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
