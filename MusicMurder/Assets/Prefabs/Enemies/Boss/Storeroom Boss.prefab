@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 6397772625677113123}
   - component: {fileID: 7145009454033565458}
   - component: {fileID: 793226548981620699}
-  - component: {fileID: 6097545105505778577}
+  - component: {fileID: 7352256185694789613}
   m_Layer: 0
   m_Name: Exit
   m_TagString: Untagged
@@ -483,7 +483,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6097545105505778577
+--- !u!114 &7352256185694789613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -492,10 +492,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6790254058928920231}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cba11ba852180146894fbfab17e4627, type: 3}
+  m_Script: {fileID: 11500000, guid: 6482f5c8a620a354db8e1263b7691eae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadNextSceneInBuildOrderOnTriggerEnter: 1
 --- !u!1 &7033602927969885710
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,6 +601,7 @@ MonoBehaviour:
   isMoving: 0
   nextTile: {x: 0, y: 0}
   colliding: 0
+  healthUI: {fileID: 0}
   pathfindingFallback: 3
   deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
   curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}

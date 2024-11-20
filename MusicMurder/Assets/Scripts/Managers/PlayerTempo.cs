@@ -17,6 +17,7 @@ public class PlayerTempo : MonoBehaviour
     float prevInterval = 0;
     const float perfectMargin = .12f;
     const float passMargin = .24f;
+    public int dizzyCount = 0;
 
     //bool movedSinceTempoChange = false;
     bool movedThisBeat = false, movedNextBeat = false;
@@ -106,26 +107,31 @@ public class PlayerTempo : MonoBehaviour
         {
             SetAccuracy(Accuracy.FAIL);
             stealth = Mathf.Max(0, stealth - 2);
+            dizzyCount++;
         }
         else if (movedThisBeat && thisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
             stealth = Mathf.Max(0, stealth - 2);
+            dizzyCount++;
         }
         else if (movedNextBeat && !thisBeat)
         {
             SetAccuracy(Accuracy.FAIL);
             stealth = Mathf.Max(0, stealth - 2);
+            dizzyCount++;
         }
 
         else if (delta < perfectInterval)
         {
             SetAccuracy(Accuracy.PERFECT);
             stealth = Mathf.Min(8, stealth + 2);
+            dizzyCount = Mathf.Max(0, dizzyCount - 1);
         }
         else if (delta < passInterval)
         {
             SetAccuracy(Accuracy.PASS);
+            dizzyCount = Mathf.Max(0, dizzyCount - 1);
         }
 
         //PrintDelta(delta);

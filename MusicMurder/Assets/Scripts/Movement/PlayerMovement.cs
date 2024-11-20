@@ -46,6 +46,7 @@ public class PlayerMovement : Living
     {
         if (gameState.Paused || !canAct && metronome.currentStartupBeats != 0) return;
 
+        if(tempo.dizzyCount < 4){
         if (Input.GetKeyDown(KeyCode.W))
         {
             direction.y = 1;
@@ -61,6 +62,7 @@ public class PlayerMovement : Living
         else if (Input.GetKeyDown(KeyCode.D))
         {
             direction.x = 1;
+        }
         }
     }
 

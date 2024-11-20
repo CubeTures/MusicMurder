@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Storerooms-Grid2.unity
     guid: ce6d3a416e4aaa4418aef21de6408c08
   - enabled: 1
-    path: Assets/Scenes/Storerooms Boss.unity
-    guid: 84c86bcdbbfa4a046a9b8532b7bcd176
-  - enabled: 1
     path: Assets/Scenes/MainRoom.unity
     guid: 3f8c58f8f298cab42815e2378385a184
   - enabled: 1
