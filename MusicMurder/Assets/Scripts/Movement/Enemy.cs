@@ -14,6 +14,8 @@ public abstract class Enemy : Living
     protected bool boss = false;
     public HealthUIScript healthUI;
 
+    [SerializeField] GameObject warp;
+    [SerializeField] GameObject block;
     [SerializeField] PathfindingFallback pathfindingFallback;
     [SerializeField] GameObject deathAnimation;
     [SerializeField] GameObject curtain;
@@ -384,6 +386,11 @@ public abstract class Enemy : Living
     protected virtual void DestroyEnemy()
     {
         GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
+
+        if((this.name).Contains("Key")){
+            warp.SetActive(true);
+            block.SetActive(false);
+        }
 
         Destroy(gameObject);
     }

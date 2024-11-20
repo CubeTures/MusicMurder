@@ -48,7 +48,7 @@ public class PlayerMovement : Living
     {
         if (gameState.Paused || !canAct && metronome.currentStartupBeats != 0) return;
 
-        if (tempo.dizzyCount < 4)
+        if(tempo.dizzyCount < 6){
         {
             if (Input.GetKeyDown(KeyCode.W))
             {

@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 4574327202281458002}
   m_Layer: 0
   m_Name: Warp
-  m_TagString: Untagged
+  m_TagString: Warp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &18025448214108757
 Transform:
   m_ObjectHideFlags: 0

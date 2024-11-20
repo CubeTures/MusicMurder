@@ -15,6 +15,7 @@ TagManager:
   - Canvas
   - Curtain
   - HealthUI
+  - Warp
   layers:
   - Default
   - TransparentFX

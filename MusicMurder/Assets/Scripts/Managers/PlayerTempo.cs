@@ -126,7 +126,7 @@ public class PlayerTempo : MonoBehaviour
         {
             SetAccuracy(Accuracy.PERFECT);
             stealth = Mathf.Min(8, stealth + 2);
-            dizzyCount = Mathf.Max(0, dizzyCount - 1);
+            dizzyCount = Mathf.Max(0, dizzyCount - 2);
         }
         else if (delta < passInterval)
         {
