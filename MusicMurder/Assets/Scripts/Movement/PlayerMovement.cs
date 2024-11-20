@@ -30,7 +30,7 @@ public class PlayerMovement : Living
     private new void Start()
     {
         base.Start();
-        Health = 3;
+        Health = 3000;
         tempo = PlayerTempo.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
         audioSource = GetComponent<AudioSource>();
@@ -46,23 +46,24 @@ public class PlayerMovement : Living
     {
         if (gameState.Paused || !canAct && metronome.currentStartupBeats != 0) return;
 
-        if(tempo.dizzyCount < 4){
-        if (Input.GetKeyDown(KeyCode.W))
+        if (tempo.dizzyCount < 4)
         {
-            direction.y = 1;
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            direction.y = -1;
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            direction.x = -1;
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            direction.x = 1;
-        }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                direction.y = 1;
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                direction.y = -1;
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                direction.x = -1;
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                direction.x = 1;
+            }
         }
     }
 
@@ -121,7 +122,7 @@ public class PlayerMovement : Living
         yield return new WaitForSeconds(1f);
 
         DeathScreen.OriginScene = SceneManager.GetActiveScene().name;
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Death");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("8 - Death");
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)

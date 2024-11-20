@@ -6,27 +6,30 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/StartScreen.unity
+    path: Assets/Scenes/0 - Start Screen.unity
     guid: aaa83f262f1f8634a94774f2a0e02f87
   - enabled: 1
-    path: Assets/Scenes/Tutorial.unity
+    path: Assets/Scenes/1 - Tutorial.unity
     guid: ba14ba5103d8d6d4c9c0f0e217f7fec0
   - enabled: 1
-    path: Assets/Scenes/Storerooms-Grid2.unity
+    path: Assets/Scenes/2 - Storerooms.unity
     guid: ce6d3a416e4aaa4418aef21de6408c08
   - enabled: 1
-    path: Assets/Scenes/MainRoom.unity
+    path: Assets/Scenes/3 - Main Room.unity
     guid: 3f8c58f8f298cab42815e2378385a184
   - enabled: 1
-    path: Assets/Scenes/Main Room Boss.unity
+    path: Assets/Scenes/4 - Main Room Boss.unity
     guid: b963fd30b7b7b794aaa35c6a37e7319b
   - enabled: 1
-    path: Assets/Scenes/VIP Room Boss.unity
+    path: Assets/Scenes/5 - VIP Rooms.unity
+    guid: a706b378c32a5e045aeccc3c958754a2
+  - enabled: 1
+    path: Assets/Scenes/6 - VIP Room Boss.unity
     guid: 6ba40b2c7e588af40b04da89d005c245
   - enabled: 1
-    path: Assets/Scenes/Win Screen.unity
+    path: Assets/Scenes/7 - Win Screen.unity
     guid: 9977f0aa631d34842a75531beffa4edf
   - enabled: 1
-    path: Assets/Scenes/Death.unity
+    path: Assets/Scenes/8 - Death.unity
     guid: f689066fb7b64c2449a81449fe71ca59
   m_configObjects: {}

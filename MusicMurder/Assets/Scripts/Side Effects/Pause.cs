@@ -1,25 +1,21 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Pause : MonoBehaviour
 {
-    Transform canvas;
-    GameObject pausePrefab;
-    GameObject liveScreen;
+    [SerializeField] GameObject pauseScreen;
     GameState gameState;
 
     void Start()
     {
         gameState = GameState.Instance;
-        canvas = transform;
-        pausePrefab = Resources.Load<GameObject>("PauseScreen");
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (liveScreen != null && liveScreen.activeInHierarchy)
+            if (pauseScreen.activeInHierarchy)
             {
                 Unpause();
             }
@@ -27,29 +23,23 @@ public class Pause : MonoBehaviour
             {
                 PauseGame();
             }
-
         }
     }
 
     void PauseGame()
     {
-        if (liveScreen == null)
-        {
-            liveScreen = Instantiate(pausePrefab, canvas);
-            Button button = liveScreen.GetComponentInChildren<Button>(true);
-            button.onClick.AddListener(Unpause);
-        }
-        else
-        {
-            liveScreen.SetActive(true);
-        }
-
+        pauseScreen.SetActive(true);
         gameState.SetPaused(true);
     }
 
-    void Unpause()
+    public void Unpause()
     {
-        liveScreen.SetActive(false);
+        pauseScreen.SetActive(false);
         gameState.SetPaused(false);
+    }
+
+    public void LoadRoom(int buildIndex)
+    {
+        SceneManager.LoadScene(buildIndex);
     }
 }
