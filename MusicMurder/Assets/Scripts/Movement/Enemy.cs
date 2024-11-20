@@ -12,6 +12,7 @@ public abstract class Enemy : Living
     protected int cooldown = 0;
     PlayerTempo playerTempo;
     protected bool boss = false;
+    public HealthUIScript healthUI;
 
     [SerializeField] PathfindingFallback pathfindingFallback;
     [SerializeField] GameObject deathAnimation;
@@ -34,6 +35,9 @@ public abstract class Enemy : Living
         Health = 3;
         pathfinding = new Pathfinding(transform);
         startingPoint = transform.position;
+
+        //Gets the health UI so can update when player gets hurt (May be a better way to do this, pls don't judge me)
+        healthUI = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<HealthUIScript>();
     }
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
@@ -307,6 +311,7 @@ public abstract class Enemy : Living
             if (!isMoving && player.acc != Accuracy.FAIL)
             {
                 bool died = TakeDamage(1);
+                
                 player.CancelMoveCollide();
 
                 if (died)
@@ -318,6 +323,7 @@ public abstract class Enemy : Living
             else
             {
                 bool died = player.TakeDamage(1);
+                healthUI.UpdateHealth(player.Health);
                 player.CancelMoveCollide();
                 if (isMoving)
                     ChainCancel(new Vector2Int(Mathf.CeilToInt(getNextPrime().x), Mathf.CeilToInt(getNextPrime().y)));
