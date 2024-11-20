@@ -131,7 +131,6 @@ public class PlayerTempo : MonoBehaviour
         else if (delta < passInterval)
         {
             SetAccuracy(Accuracy.PASS);
-            dizzyCount = Mathf.Max(0, dizzyCount - 1);
         }
 
         //PrintDelta(delta);
