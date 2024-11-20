@@ -329,6 +329,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1046093925175690758, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -353.99994
+      objectReference: {fileID: 0}
     - target: {fileID: 2730506350921198290, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_Name
       value: Essentials
@@ -336,6 +340,10 @@ PrefabInstance:
     - target: {fileID: 5262472360644452240, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8146526847153899364, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -406.99994
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
