@@ -297,9 +297,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1168404308304616459, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 75e1183cf2b874b4fae86afa5d0ade7c, type: 3}
     - target: {fileID: 2730506350921198290, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_Name
       value: Essentials
+      objectReference: {fileID: 0}
+    - target: {fileID: 7652309148778617136, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7652309148778617136, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -11.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1980,6 +1992,7 @@ MonoBehaviour:
   isMoving: 0
   nextTile: {x: 0, y: 0}
   colliding: 0
+  healthUI: {fileID: 0}
   pathfindingFallback: 3
   deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
   curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}

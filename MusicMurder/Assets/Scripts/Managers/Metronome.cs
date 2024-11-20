@@ -4,6 +4,7 @@ using UnityEngine;
 public class Metronome : MonoBehaviour
 {
 
+    bool isTutorial;
     public static Metronome Instance { get; private set; }
 
     public const float SECONDS_PER_MINUTE = 60;
