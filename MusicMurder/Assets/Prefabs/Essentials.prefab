@@ -4250,6 +4250,7 @@ MonoBehaviour:
   stealth: 8
   perfectInterval: 0
   passInterval: 0
+  dizzyCount: 0
   Perfect: {fileID: 0}
 --- !u!82 &1168404308304616459
 AudioSource:
@@ -4575,6 +4576,10 @@ PrefabInstance:
       propertyPath: m_YDamping
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3890271217358071063, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
+      propertyPath: dizzy
+      value: 
+      objectReference: {fileID: 7790728488825138900, guid: 8ebcf006749adb041b2dc624b3641cdd, type: 3}
     - target: {fileID: 4777330649553025111, guid: 502f17097a957094d958fd13edfe5fb3, type: 3}
       propertyPath: m_ForceIntoRT
       value: 1

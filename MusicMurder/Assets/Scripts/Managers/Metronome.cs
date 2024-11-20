@@ -8,7 +8,7 @@ public class Metronome : MonoBehaviour
     public static Metronome Instance { get; private set; }
 
     public const float SECONDS_PER_MINUTE = 60;
-    public float BPM { get; private set; } = 160;
+    public float BPM { get; private set; } = 120;
     public float Interval { get; private set; } // time between beats
     PlayerTempo tempo;
     AudioSource music;

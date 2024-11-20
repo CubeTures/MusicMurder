@@ -9,11 +9,13 @@ public class PlayerMovement : Living
     public delegate void PlayerAction(PlayerActionType actionType, float timestamp);
     PlayerAction onPlayerAction;
     PlayerTempo tempo;
+    bool diz = false;
     public Accuracy acc { get; private set; }
     AudioSource audioSource;
 
     [SerializeField] GameObject deathAnimation;
     [SerializeField] GameObject curtain;
+    [SerializeField] GameObject dizzy;
 
     private void Awake()
     {
@@ -63,6 +65,9 @@ public class PlayerMovement : Living
         {
             direction.x = 1;
         }
+        }else{
+            if(!diz)
+                StartCoroutine(Dizzy());
         }
     }
 
@@ -98,6 +103,18 @@ public class PlayerMovement : Living
     public void Death()
     {
         StartCoroutine(LoadDeathScreen());
+    }
+
+    private IEnumerator Dizzy(){
+        diz = true;
+        GameObject dizzyObj = Instantiate(dizzy, new Vector2(getNextPrime().x, getNextPrime().y+.5f), Quaternion.identity) as GameObject;
+
+        yield return new WaitForSeconds(2f);
+
+        Destroy(dizzyObj);
+
+        tempo.dizzyCount = 0;
+        diz = false;
     }
 
     public IEnumerator LoadDeathScreen()
