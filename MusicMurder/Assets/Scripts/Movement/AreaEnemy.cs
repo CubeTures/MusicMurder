@@ -14,10 +14,22 @@ public class AreaEnemy : Enemy
                                      " x x ";
     [SerializeField] GameObject projctile;
 
+    AudioSource audio;
+    protected int audioCountdown = -1;
+
     protected new void Start()
     {
         area = new AreaAttackPattern(areaHeight, areaWidth, attackPattern);
         base.Start();
+        audio = GetComponent<AudioSource>();
+    }
+
+    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup){
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+        if(audioCountdown == 0){
+            audio.Play();
+        }
+        audioCountdown--;
     }
 
     protected override void Move()
@@ -36,6 +48,7 @@ public class AreaEnemy : Enemy
     {
         List<Vector2> positions = area.GetPositions(transform.position, direction);
         CreateDamageTiles(positions);
+        audioCountdown = areaAttackLife;
     }
 
     protected void CreateDamageTiles(HashSet<Vector2> positions)
