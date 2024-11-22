@@ -177,7 +177,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -860451267, guid: f2f71b1eb1f7f9848b8314e9b074a46c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8cc9a3928bb9b8f42ac0e89da1f84d2b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -204,6 +204,9 @@ MonoBehaviour:
   isMoving: 0
   nextTile: {x: 0, y: 0}
   colliding: 0
+  healthUI: {fileID: 0}
+  warp: {fileID: 0}
+  block: {fileID: 0}
   pathfindingFallback: 3
   deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
   curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}

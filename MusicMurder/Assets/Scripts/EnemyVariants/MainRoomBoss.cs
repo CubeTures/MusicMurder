@@ -7,7 +7,7 @@ public class MainRoomBoss : Boss
 
     protected new void Start()
     {
-        healths = new int[] { 2, 2, 2 };
+        healths = new int[] { 2, 2, 1 };
         base.Start();
     }
 

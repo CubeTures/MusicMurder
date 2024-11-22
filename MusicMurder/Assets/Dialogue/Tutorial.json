@@ -13,7 +13,7 @@
 		{
 			"name": "Boss",
 			"focus": "Player",
-			"text": "Go through the club, assassinate the 3 targets, and leave no witnesses"
+			"text": "Go through the club, assassinate the 2 targets, and leave no witnesses"
 		},
 		{
 			"name": "Boss",
@@ -29,6 +29,11 @@
 			"name": "Boss",
 			"focus": "Player",
 			"text": "If you are somehow spotted, make sure the threat is neutralized before it endangers the mission"
+		},
+		{
+			"name": "Boss",
+			"focus": "Player",
+			"text": "You can attack enemies by running into them on a beat when they don't move"
 		},
 		{
 			"name": "Boss",

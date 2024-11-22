@@ -9,7 +9,7 @@ public class PlayerMovement : Living
     public delegate void PlayerAction(PlayerActionType actionType, float timestamp);
     PlayerAction onPlayerAction;
     PlayerTempo tempo;
-    bool diz = false;
+    public bool diz = false;
     public Accuracy acc { get; private set; }
     AudioSource audioSource;
 

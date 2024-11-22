@@ -12,6 +12,7 @@ public class DrunkardEnemy : Enemy
     protected new void Start()
     {
         beatsBetweenActions = 0;
+        Health = 1;
         base.Start();
     }
 

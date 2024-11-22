@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using static UnityEditor.ShaderData;
 
@@ -9,10 +10,12 @@ public class HealthUIScript : MonoBehaviour
     public GameObject Full;
     public GameObject Half;
     public GameObject Low;
+
     
+
+
     private void Awake()
     {
-        
     }
 
     // Update is called once per frame

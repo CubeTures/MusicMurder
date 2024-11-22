@@ -3,10 +3,14 @@ using UnityEngine;
 public class Projectile : Movement
 {
     SpriteRenderer sr;
+    PlayerTempo playerTempo;
+    PlayerMovement player;
 
     protected new void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        playerTempo = PlayerTempo.Instance;
+        player = PlayerMovement.Instance;
         base.Start();
     }
 
@@ -24,6 +28,14 @@ public class Projectile : Movement
         {
             PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
             bool died = pm.TakeDamage(1);
+            if(player.diz){
+                GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
+                if (dizzy != null){
+                    Destroy(dizzy);
+                }
+                player.diz = false;
+                playerTempo.dizzyCount = 0;
+            }
 
             if (died)
             {

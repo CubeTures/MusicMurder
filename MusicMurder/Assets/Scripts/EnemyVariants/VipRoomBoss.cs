@@ -32,7 +32,7 @@ public class VipRoomBoss : Boss, DamageTileCreator
     protected new void Start()
     {
         beatsBetweenActions = 0;
-        healths = new int[] { 2, 2, 2 };
+        healths = new int[] { 2, 2, 1 };
         base.Start();
     }
 

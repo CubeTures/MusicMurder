@@ -9,6 +9,7 @@ public class TriangleAreaEnemy : AreaEnemy
 
     new void Start()
     {
+        Health = 3;
         areaWidth = 3;
         areaHeight = 2;
         attackPattern = "xxx x ";
@@ -21,6 +22,7 @@ public class TriangleAreaEnemy : AreaEnemy
 
     protected override void Attack(Vector2 direction)
     {
+        audioCountdown = areaAttackLife;
         Vector2 left = new(direction.y, -direction.x);
         Vector2 right = -left;
 
