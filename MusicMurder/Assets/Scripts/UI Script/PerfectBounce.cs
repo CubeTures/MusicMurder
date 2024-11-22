@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,6 +14,9 @@ public class PerfectBounce : MonoBehaviour
     public GameObject Perfect;
     public GameObject Pass;
     public GameObject Fail;
+    GameObject [] BeatparticlesArray;
+    ParticleSystem BeatparticlesLeft;
+    ParticleSystem BeatparticlesRight;
 
     public string activeBeatUI;
     public int disapearTime;
@@ -26,6 +30,10 @@ public class PerfectBounce : MonoBehaviour
         Fail = gameObject.transform.GetChild(2).gameObject;
         BounceAnimation = GetComponent<Animation>();
         timeint = 3;
+        BeatparticlesArray = GameObject.FindGameObjectsWithTag("BeatEffects");
+        BeatparticlesLeft = BeatparticlesArray[0].GetComponent<ParticleSystem>();
+        BeatparticlesRight = BeatparticlesArray[1].GetComponent<ParticleSystem>();
+       
     }
 
     public void setPerfect()
@@ -36,6 +44,8 @@ public class PerfectBounce : MonoBehaviour
         activeBeatUI = "Perfect";
         timeint = 3;
         //Debug.Log("Perfect");
+        BeatparticlesLeft.Play();
+        BeatparticlesRight.Play();
         return;
     }
 

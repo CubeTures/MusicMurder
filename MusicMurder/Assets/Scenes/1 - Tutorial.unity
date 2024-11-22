@@ -254,7 +254,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 74529135}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 0.2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -265,7 +265,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -329,7 +329,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -382,7 +382,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -964,7 +964,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1
+      value: 0.3
       mode: 0
       spread: 0
       speed:
@@ -1193,7 +1193,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 15
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -5035,13 +5035,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 74529135}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -9.09, y: -16.57, z: -1.0689331}
+  m_LocalRotation: {x: -0.0022631004, y: 0.7132468, z: -0.002302948, w: -0.70090556}
+  m_LocalPosition: {x: -66.37, y: -113.8, z: -169.33447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_Father: {fileID: 1199479024}
+  m_LocalEulerAnglesHint: {x: 0.37, y: 269, z: 0}
 --- !u!1 &380876185
 GameObject:
   m_ObjectHideFlags: 0
@@ -5223,7 +5223,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8821740050892657324, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 74529138}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
 --- !u!4 &507574836 stripped
@@ -6446,6 +6449,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &1199479024 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8821740050892657324, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
+  m_PrefabInstance: {fileID: 507574835}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1262775437
 GameObject:
   m_ObjectHideFlags: 0
@@ -13142,4 +13150,3 @@ SceneRoots:
   - {fileID: 1909824233}
   - {fileID: 14648004}
   - {fileID: 409944266774011374}
-  - {fileID: 74529138}
