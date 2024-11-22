@@ -5422,7 +5422,7 @@ PrefabInstance:
     - target: {fileID: 6506886850148725732, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 48649df3e2576ed429f1c2471d8ee872, type: 3}
+      objectReference: {fileID: 21300000, guid: 40fe1c1e40fedbc4797a23671557c790, type: 3}
     - target: {fileID: 6634872122961633922, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
       propertyPath: m_Name
       value: Dancer Enemy
@@ -5531,7 +5531,7 @@ PrefabInstance:
     - target: {fileID: 3209449127797831288, guid: 807989369025659448b830a16af6b44a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0bad59ffbfcf8d44f8ceaea785431774, type: 3}
+      objectReference: {fileID: 21300000, guid: e357014dbe33012458ac4451a8bd9051, type: 3}
     - target: {fileID: 8377989008867542374, guid: 807989369025659448b830a16af6b44a, type: 3}
       propertyPath: m_Name
       value: Basic Enemy (Key)
