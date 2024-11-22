@@ -368,7 +368,7 @@ public abstract class Enemy : Living
 
     private bool AboutToMove()
     {
-        return beatsSinceAction == beatsBetweenActions;
+        return beatsSinceAction == beatsBetweenActions && !this is AreaEnemy && !this is RangedEnemy;
     }
 
     void ChainCancel(Vector2Int v)

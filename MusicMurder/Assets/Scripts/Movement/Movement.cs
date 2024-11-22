@@ -74,6 +74,8 @@ public abstract class Movement : OnMetronome
         }
 
         nextTile = SnapTile(nextTile);
+
+        print($"{name} moving to {nextTile}");
         direction = Vector2.zero;
     }
 
