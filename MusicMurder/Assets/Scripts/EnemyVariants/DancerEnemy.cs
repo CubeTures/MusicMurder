@@ -3,7 +3,7 @@
 /// </summary>
 public class DancerEnemy : Enemy
 {
-    readonly int[] movementPattern = { 0, 1 };
+    readonly int[] movementPattern = { 0, 2 };
     int patternIndex = 0;
 
     protected new void Start()

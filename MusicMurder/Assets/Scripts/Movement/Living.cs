@@ -12,25 +12,52 @@ public abstract class Living : Movement
     readonly Color flashColor = Color.red;
     protected Color initialColor = Color.white;
 
+    bool iframes = false;
+
     protected new void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         particles = Resources.Load<GameObject>("DamageParticles");
 
-
-
-
         base.Start();
+    }
+
+    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
+    {
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+        float midtime = (((timestamp + nextBeatTimestamp) / 2) + failTimestamp) / 2;
+        StartCoroutine(ResetIFrames(midtime));
+    }
+
+    IEnumerator ResetIFrames(float failTimestamp)
+    {
+        yield return new WaitForSeconds(failTimestamp - Time.time);
+
+        if (name == "Player")
+        {
+            print("Reset iFrames");
+        }
+
+        iframes = false;
     }
 
     public bool TakeDamage(int damage)
     {
+        if (iframes) return false;
+
         Health -= damage;
+        iframes = true;
+
+        if (name == "Player")
+        {
+            print("iFrames active");
+        }
 
         Hurt();
 
         return Health <= 0;
     }
+
     private void Hurt()
     {
         StopAllCoroutines();

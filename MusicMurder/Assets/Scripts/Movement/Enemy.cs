@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,8 +46,15 @@ public abstract class Enemy : Living
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
-        if (!canAct) return;
-        if (cooldown-- > 0) return;
+        StartCoroutine(MoveOnFail(failTimestamp));
+    }
+
+    IEnumerator MoveOnFail(float failTimestamp)
+    {
+        yield return new WaitForSeconds(failTimestamp - Time.time);
+
+        if (!canAct) yield break;
+        if (cooldown-- > 0) yield break;
         cooldown = 0;
 
         beatsSinceAction++;
@@ -310,10 +318,10 @@ public abstract class Enemy : Living
         if (collision.gameObject.CompareTag(playerTag))
         {
             //print($"Moving: {isMoving}, Accuracy: {player.acc}");
-            if (!isMoving && player.acc != Accuracy.FAIL)
+            if (!isMoving && player.acc != Accuracy.FAIL && !AboutToMove())
             {
                 bool died = TakeDamage(1);
-                
+
                 player.CancelMoveCollide();
 
                 if (died)
@@ -339,6 +347,11 @@ public abstract class Enemy : Living
         }
 
         base.OnCollisionEnter2D(collision);
+    }
+
+    private bool AboutToMove()
+    {
+        return beatsSinceAction == beatsBetweenActions;
     }
 
     void ChainCancel(Vector2Int v)
@@ -387,7 +400,8 @@ public abstract class Enemy : Living
     {
         GameObject death = Instantiate(deathAnimation, new Vector2(currentTile.x, currentTile.y), Quaternion.identity) as GameObject;
 
-        if((this.name).Contains("Key")){
+        if ((this.name).Contains("Key"))
+        {
             warp.SetActive(true);
             block.SetActive(false);
         }
