@@ -26,7 +26,7 @@ public class AreaEnemy : Enemy
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup){
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
-        if(audioCountdown == 0){
+        if(audioCountdown == 1){
             audio.Play();
         }
         audioCountdown--;
