@@ -3339,6 +3339,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2697551477250200858, guid: c75681d2393599140b810306bcbd32f0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c1d30c676581eaf4ebe95a2e70969717, type: 3}
     - target: {fileID: 5325965584686139056, guid: c75681d2393599140b810306bcbd32f0, type: 3}
       propertyPath: m_Name
       value: Main Room Boss
