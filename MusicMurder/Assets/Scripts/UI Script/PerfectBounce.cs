@@ -1,4 +1,6 @@
+using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class PerfectBounce : MonoBehaviour
@@ -12,6 +14,8 @@ public class PerfectBounce : MonoBehaviour
     public GameObject Fail;
 
     public string activeBeatUI;
+    public int disapearTime;
+    public int timeint;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +24,7 @@ public class PerfectBounce : MonoBehaviour
         Pass = gameObject.transform.GetChild(1).gameObject;
         Fail = gameObject.transform.GetChild(2).gameObject;
         BounceAnimation = GetComponent<Animation>();
+        timeint = 3;
     }
 
     public void setPerfect()
@@ -28,6 +33,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(0, 0, 0);
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Perfect";
+        timeint = 3;
         //Debug.Log("Perfect");
         return;
     }
@@ -38,6 +44,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(1, 1, 1);
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Pass";
+        timeint = 3;
         //Debug.Log("pass");
         return;
     }
@@ -47,6 +54,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(0, 0, 0);
         Fail.transform.localScale = new Vector3(1, 1, 1);
         activeBeatUI = "Fail";
+        timeint = 3;
         //Debug.Log("Fail");
         return;
     }
@@ -55,6 +63,20 @@ public class PerfectBounce : MonoBehaviour
     {
         BounceAnimation.Play("TestAnimation");
         //Debug.Log("BOUNCE");
+        timeint -= 1;
+        if (timeint == 0)
+        {
+            Perfect.transform.localScale = new Vector3(0, 0, 0);
+            Pass.transform.localScale = new Vector3(0, 0, 0);
+            Fail.transform.localScale = new Vector3(0, 0, 0);
+        }
+        
+        return;
+    }
+
+
+    public void HideBeat()
+    {
         return;
     }
 }
