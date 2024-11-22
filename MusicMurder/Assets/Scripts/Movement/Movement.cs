@@ -109,6 +109,8 @@ public abstract class Movement : OnMetronome
         {
             rb.position = Vector2.Lerp(currentTile, nextTile, t);
             t += 0.1f * Time.fixedDeltaTime * speed;
+        }else{
+            rb.position = currentTile;
         }
     }
 
