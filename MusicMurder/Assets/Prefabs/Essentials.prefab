@@ -1458,6 +1458,8 @@ MonoBehaviour:
   Pass: {fileID: 0}
   Fail: {fileID: 0}
   activeBeatUI: 
+  disapearTime: 0
+  timeint: 0
 --- !u!111 &2299735904842871485
 Animation:
   m_ObjectHideFlags: 0
@@ -4630,11 +4632,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3170488199724439518, guid: dfcc7e0bddeed824d8a262f9e0402da1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -354
+      value: -353.99994
       objectReference: {fileID: 0}
     - target: {fileID: 6086027587717732028, guid: dfcc7e0bddeed824d8a262f9e0402da1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -407
+      value: -406.99994
       objectReference: {fileID: 0}
     - target: {fileID: 6421284953640050423, guid: dfcc7e0bddeed824d8a262f9e0402da1, type: 3}
       propertyPath: m_AnchoredPosition.x
