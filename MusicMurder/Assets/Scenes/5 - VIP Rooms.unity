@@ -7373,6 +7373,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5028516111771274222, guid: 749e68223b84e5542b978044d9013afd, type: 3}
+      propertyPath: warp
+      value: 
+      objectReference: {fileID: 3914492020444439702}
+    - target: {fileID: 5028516111771274222, guid: 749e68223b84e5542b978044d9013afd, type: 3}
+      propertyPath: block
+      value: 
+      objectReference: {fileID: 3306374894259251276}
     - target: {fileID: 7394541559600400797, guid: 749e68223b84e5542b978044d9013afd, type: 3}
       propertyPath: m_Name
       value: Bubble Enemy (Key)
@@ -7656,7 +7664,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4906117318511370431
 Transform:
   m_ObjectHideFlags: 0
