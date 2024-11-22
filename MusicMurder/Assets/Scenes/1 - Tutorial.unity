@@ -329,49 +329,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2299735904842871485, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_Animations.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2479135449074731173, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2479135449074731173, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2479135449074731173, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 14.96
-      objectReference: {fileID: 0}
     - target: {fileID: 2730506350921198290, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
       propertyPath: m_Name
       value: Essentials
-      objectReference: {fileID: 0}
-    - target: {fileID: 3553954327016526753, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3553954327016526753, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3553954327016526753, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 5.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6577743643686276144, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6577743643686276144, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6577743643686276144, guid: 315b0d92287a9ca448f632b549afde38, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 11.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
