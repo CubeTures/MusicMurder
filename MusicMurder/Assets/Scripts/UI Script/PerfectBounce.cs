@@ -29,7 +29,7 @@ public class PerfectBounce : MonoBehaviour
         Pass = gameObject.transform.GetChild(1).gameObject;
         Fail = gameObject.transform.GetChild(2).gameObject;
         BounceAnimation = GetComponent<Animation>();
-        timeint = 3;
+        timeint = 1;
         BeatparticlesArray = GameObject.FindGameObjectsWithTag("BeatEffects");
         Beatparticles = BeatparticlesArray[0].GetComponent<ParticleSystem>();
         
@@ -42,7 +42,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(0, 0, 0);
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Perfect";
-        timeint = 3;
+        timeint = 1;
         //Debug.Log("Perfect");
         Beatparticles.Play();
 
@@ -55,7 +55,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(1, 1, 1);
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Pass";
-        timeint = 3;
+        timeint = 1;
         //Debug.Log("pass");
         return;
     }
@@ -65,7 +65,7 @@ public class PerfectBounce : MonoBehaviour
         Pass.transform.localScale = new Vector3(0, 0, 0);
         Fail.transform.localScale = new Vector3(1, 1, 1);
         activeBeatUI = "Fail";
-        timeint = 3;
+        timeint = 1;
         //Debug.Log("Fail");
         return;
     }
@@ -74,14 +74,14 @@ public class PerfectBounce : MonoBehaviour
     {
         BounceAnimation.Play("TestAnimation");
         //Debug.Log("BOUNCE");
-        timeint -= 1;
+        
         if (timeint == 0)
         {
             Perfect.transform.localScale = new Vector3(0, 0, 0);
             Pass.transform.localScale = new Vector3(0, 0, 0);
             Fail.transform.localScale = new Vector3(0, 0, 0);
         }
-        
+        timeint -= 1;
         return;
     }
 
