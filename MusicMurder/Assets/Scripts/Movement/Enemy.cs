@@ -325,6 +325,14 @@ public abstract class Enemy : Living
             else
             {
                 bool died = player.TakeDamage(1);
+                if(player.diz){
+                    GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
+                    if (dizzy != null){
+                        Destroy(dizzy);
+                    }
+                    player.diz = false;
+                    playerTempo.dizzyCount = 0;
+                }
                 healthUI.UpdateHealth(player.Health);
                 player.CancelMoveCollide();
                 if (isMoving)
