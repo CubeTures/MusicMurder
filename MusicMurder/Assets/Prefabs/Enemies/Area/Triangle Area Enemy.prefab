@@ -212,6 +212,7 @@ MonoBehaviour:
   deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
   curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}
   waypoints: []
+  keyVisual: {fileID: 5986021336847466524, guid: 75099b74e2ca26645bc521c1a9f9065f, type: 3}
   projctile: {fileID: 8954269300263763678, guid: 90058abdc9e2c4b4b86c9b565ca432e9, type: 3}
 --- !u!61 &239158765600802684
 BoxCollider2D:

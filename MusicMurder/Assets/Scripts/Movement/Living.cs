@@ -25,8 +25,8 @@ public abstract class Living : Movement
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
-        float midtime = (((timestamp + nextBeatTimestamp) / 2) + failTimestamp) / 2;
-        StartCoroutine(ResetIFrames(midtime));
+        //float midtime = (((timestamp + nextBeatTimestamp) / 2) + failTimestamp) / 2;
+        //StartCoroutine(ResetIFrames(midtime));
     }
 
     IEnumerator ResetIFrames(float failTimestamp)
@@ -43,15 +43,15 @@ public abstract class Living : Movement
 
     public bool TakeDamage(int damage)
     {
-        if (iframes) return false;
+        //if (iframes) return false;
 
         Health -= damage;
-        iframes = true;
+        //iframes = true;
 
-        if (name == "Player")
-        {
-            print("iFrames active");
-        }
+        //if (name == "Player")
+        //{
+        //    print("iFrames active");
+        //}
 
         Hurt();
 

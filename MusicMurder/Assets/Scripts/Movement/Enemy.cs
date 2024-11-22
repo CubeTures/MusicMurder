@@ -45,8 +45,8 @@ public abstract class Enemy : Living
 
         if (name.Contains("Key"))
         {
-            GameObject key = Instantiate(keyVisual, Vector2.zero, Quaternion.identity, transform);
-            key.transform.position = new Vector2(0, .5f);
+            GameObject key = Instantiate(keyVisual, Vector2.zero, Quaternion.Euler(new Vector3(0, 0, -90)), transform);
+            key.transform.localPosition = new Vector2(0, .5f);
         }
     }
 
