@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dancer Enemy (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8528215659468230216, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
+      propertyPath: pathfindingFallback
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9199767307184041620, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5
@@ -4690,6 +4694,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dancer Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8528215659468230216, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
+      propertyPath: pathfindingFallback
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9199767307184041620, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.410499
@@ -7363,6 +7371,10 @@ PrefabInstance:
     - target: {fileID: 6634872122961633922, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
       propertyPath: m_Name
       value: Dancer Enemy (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528215659468230216, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
+      propertyPath: pathfindingFallback
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9199767307184041620, guid: 7e7d11e0bba41ac469a3a929fe516b67, type: 3}
       propertyPath: m_LocalPosition.x

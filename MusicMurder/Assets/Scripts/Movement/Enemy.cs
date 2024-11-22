@@ -28,6 +28,8 @@ public abstract class Enemy : Living
     [SerializeField] Transform[] waypoints;
     int waypointIndex = 0;
 
+    [SerializeField] GameObject keyVisual;
+
     protected new void Start()
     {
         player = PlayerMovement.Instance;
@@ -40,6 +42,12 @@ public abstract class Enemy : Living
 
         //Gets the health UI so can update when player gets hurt (May be a better way to do this, pls don't judge me)
         healthUI = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<HealthUIScript>();
+
+        if (name.Contains("Key"))
+        {
+            GameObject key = Instantiate(keyVisual, Vector2.zero, Quaternion.identity, transform);
+            key.transform.position = new Vector2(0, .5f);
+        }
     }
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
@@ -332,9 +340,11 @@ public abstract class Enemy : Living
             else
             {
                 bool died = player.TakeDamage(1);
-                if(player.diz){
+                if (player.diz)
+                {
                     GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
-                    if (dizzy != null){
+                    if (dizzy != null)
+                    {
                         Destroy(dizzy);
                     }
                     player.diz = false;
