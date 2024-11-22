@@ -8,6 +8,7 @@ public class PerfectBounce : MonoBehaviour
 
 
     Animation BounceAnimation;
+    Animation Fadeout;
 
     public GameObject Perfect;
     public GameObject Pass;
