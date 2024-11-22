@@ -16,6 +16,7 @@ TagManager:
   - Curtain
   - HealthUI
   - Warp
+  - Dizzy
   layers:
   - Default
   - TransparentFX

@@ -6,6 +6,7 @@ public class CheckerboardEnemy : AreaEnemy
 {
     protected override void Attack(Vector2 direction)
     {
+        audioCountdown = areaAttackLife;
         HashSet<Vector2> positions = new();
 
         foreach (Vector2 d in directions)
