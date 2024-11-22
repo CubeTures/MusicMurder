@@ -10,12 +10,14 @@ public class DamageTile : OnMetronome
     protected float fail;
     PlayerMovement player;
     bool playerInside = false;
+    PlayerTempo playerTempo;
     const string playerTag = "Player";
     [SerializeField] GameObject explosion;
 
     new void Start()
     {
         player = PlayerMovement.Instance;
+        playerTempo = PlayerTempo.Instance;
         base.Start();
 
         if (IsInvalid())
@@ -87,6 +89,14 @@ public class DamageTile : OnMetronome
         if (playerInside)
         {
             player.TakeDamage(1);
+            if(player.diz){
+                    GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
+                    if (dizzy != null){
+                        Destroy(dizzy);
+                    }
+                    player.diz = false;
+                    playerTempo.dizzyCount = 0;
+                }
         }
 
         // make sure player never takes double damage
