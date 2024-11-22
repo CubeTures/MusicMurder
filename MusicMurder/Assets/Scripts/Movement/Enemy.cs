@@ -34,7 +34,6 @@ public abstract class Enemy : Living
 
         base.Start();
 
-        Health = 3;
         pathfinding = new Pathfinding(transform);
         startingPoint = transform.position;
 

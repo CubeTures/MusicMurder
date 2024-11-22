@@ -6,6 +6,7 @@ public class BubbleEnemy : AreaEnemy
 {
     new void Start()
     {
+        Health = 3;
         beatsBetweenActions = 0;
         attackCooldown = 2;
         areaWidth = 3;

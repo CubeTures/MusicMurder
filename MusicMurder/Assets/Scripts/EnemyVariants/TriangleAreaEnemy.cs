@@ -9,6 +9,7 @@ public class TriangleAreaEnemy : AreaEnemy
 
     new void Start()
     {
+        Health = 3;
         areaWidth = 3;
         areaHeight = 2;
         attackPattern = "xxx x ";

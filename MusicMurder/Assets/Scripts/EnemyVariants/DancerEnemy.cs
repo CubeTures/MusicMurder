@@ -8,6 +8,7 @@ public class DancerEnemy : Enemy
 
     protected new void Start()
     {
+        Health = 1;
         SetNextMove();
         base.Start();
     }

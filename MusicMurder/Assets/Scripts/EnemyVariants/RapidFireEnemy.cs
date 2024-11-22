@@ -5,6 +5,7 @@ public class RapidFireEnemy : RangedEnemy
 
     protected new void Start()
     {
+        Health = 2;
         SetNextMove();
         base.Start();
     }
