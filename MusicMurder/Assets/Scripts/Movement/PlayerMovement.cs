@@ -111,7 +111,7 @@ public class PlayerMovement : Living
     private IEnumerator Dizzy()
     {
         diz = true;
-        GameObject dizzyObj = Instantiate(dizzy, new Vector2(getNextPrime().x, getNextPrime().y + .5f), Quaternion.identity) as GameObject;
+        GameObject dizzyObj = Instantiate(dizzy, new Vector2(getNextPrime().x, getNextPrime().y + .5f), Quaternion.identity, transform) as GameObject;
 
         yield return new WaitForSeconds(2f);
 
