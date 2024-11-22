@@ -17,6 +17,7 @@ TagManager:
   - HealthUI
   - Warp
   - Dizzy
+  - BeatEffects
   layers:
   - Default
   - TransparentFX

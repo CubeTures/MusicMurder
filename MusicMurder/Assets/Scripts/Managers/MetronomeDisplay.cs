@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 /// <summary>
 /// This class breaks if the tempo changes in the middle of action. 
@@ -17,6 +18,8 @@ public class MetronomeDisplay : OnMetronome
     float latestTimestamp;
     float timestampDifference;
     float startupBeats = Metronome.STARTUP_BEATS;
+    ParticleSystem Beatparticles;
+
 
     PlayerTempo tempo;
 
@@ -29,6 +32,8 @@ public class MetronomeDisplay : OnMetronome
     {
         tempo = PlayerTempo.Instance;
         SetListenStatus(true);
+        
+        Beatparticles = GameObject.FindGameObjectWithTag("BeatEffects").GetComponent<ParticleSystem>();
 
         base.Start();
     }
@@ -147,7 +152,9 @@ public class MetronomeDisplay : OnMetronome
 
     void BarCompleteEffect(Accuracy accuracy, Vector2 l, Vector2 r)
     {
-        // some effect when destroying the bars
+  
+            Instantiate(Beatparticles, l, Quaternion.identity, transform);
+      
     }
 
     void DisplayAccuracy(Accuracy accuracy)
