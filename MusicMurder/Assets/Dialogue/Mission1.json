@@ -3,12 +3,12 @@
 		{
 			"name": "Boss",
 			"focus": "Player",
-			"text": "Glad to see you've made it inside agent"
+			"text": "Glad to see you've made it inside agent."
 		},
 		{
 			"name": "Boss",
 			"focus": "Player",
-			"text": "Your first mission, assassinate the owner of the club. Killing one of his goons should open the way"
+			"text": "Your first mission, assassinate the owner of the club. Killing one of his goons should open the way."
 		}
 	]
 }

@@ -1,7 +1,4 @@
-using System;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 public class PerfectBounce : MonoBehaviour
@@ -14,9 +11,8 @@ public class PerfectBounce : MonoBehaviour
     public GameObject Perfect;
     public GameObject Pass;
     public GameObject Fail;
-    GameObject [] BeatparticlesArray;
-    ParticleSystem Beatparticles;
-
+    [SerializeField] ParticleSystem perfectParticles;
+    [SerializeField] ParticleSystem passParticles;
 
     public string activeBeatUI;
     public int disapearTime;
@@ -30,10 +26,6 @@ public class PerfectBounce : MonoBehaviour
         Fail = gameObject.transform.GetChild(2).gameObject;
         BounceAnimation = GetComponent<Animation>();
         timeint = 1;
-        BeatparticlesArray = GameObject.FindGameObjectsWithTag("BeatEffects");
-        Beatparticles = BeatparticlesArray[0].GetComponent<ParticleSystem>();
-        
-       
     }
 
     public void setPerfect()
@@ -44,7 +36,7 @@ public class PerfectBounce : MonoBehaviour
         activeBeatUI = "Perfect";
         timeint = 1;
         //Debug.Log("Perfect");
-        Beatparticles.Play();
+        perfectParticles.Play();
 
         return;
     }
@@ -56,6 +48,7 @@ public class PerfectBounce : MonoBehaviour
         Fail.transform.localScale = new Vector3(0, 0, 0);
         activeBeatUI = "Pass";
         timeint = 1;
+        passParticles.Play();
         //Debug.Log("pass");
         return;
     }
@@ -74,7 +67,7 @@ public class PerfectBounce : MonoBehaviour
     {
         BounceAnimation.Play("TestAnimation");
         //Debug.Log("BOUNCE");
-        
+
         if (timeint == 0)
         {
             Perfect.transform.localScale = new Vector3(0, 0, 0);

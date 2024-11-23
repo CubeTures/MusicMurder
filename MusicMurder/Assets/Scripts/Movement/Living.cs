@@ -12,7 +12,7 @@ public abstract class Living : Movement
     readonly Color flashColor = Color.red;
     protected Color initialColor = Color.white;
 
-    bool iframes = false;
+    Coroutine hurtRoutine;
 
     protected new void Start()
     {
@@ -37,21 +37,11 @@ public abstract class Living : Movement
         {
             print("Reset iFrames");
         }
-
-        iframes = false;
     }
 
     public bool TakeDamage(int damage)
     {
-        //if (iframes) return false;
-
         Health -= damage;
-        //iframes = true;
-
-        //if (name == "Player")
-        //{
-        //    print("iFrames active");
-        //}
 
         Hurt();
 
@@ -60,9 +50,14 @@ public abstract class Living : Movement
 
     private void Hurt()
     {
-        StopAllCoroutines();
+        if (hurtRoutine != null)
+        {
+            StopCoroutine(hurtRoutine);
+            hurtRoutine = null;
+        }
+
         Instantiate(particles, transform.position, Quaternion.identity, transform);
-        StartCoroutine(FlashRed());
+        hurtRoutine = StartCoroutine(FlashRed());
     }
 
     IEnumerator FlashRed()

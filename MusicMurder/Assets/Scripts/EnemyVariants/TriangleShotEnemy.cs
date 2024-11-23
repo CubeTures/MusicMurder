@@ -5,7 +5,7 @@ public class TriangleShotEnemy : RangedEnemy
     new void Start()
     {
         Health = 2;
-        beatsBetweenActions = 2;
+        beatsBetweenActions = 3;
         base.Start();
     }
 

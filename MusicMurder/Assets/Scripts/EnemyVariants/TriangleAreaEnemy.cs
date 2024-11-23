@@ -13,6 +13,7 @@ public class TriangleAreaEnemy : AreaEnemy
         areaWidth = 3;
         areaHeight = 2;
         attackPattern = "xxx x ";
+        attackCooldown = 3;
 
         base.Start();
 

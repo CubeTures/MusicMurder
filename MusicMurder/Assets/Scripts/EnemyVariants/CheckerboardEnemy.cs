@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class CheckerboardEnemy : AreaEnemy
 {
-    new void Start(){
+    new void Start()
+    {
         Health = 3;
+        attackCooldown = 2;
         base.Start();
     }
 

@@ -29,6 +29,7 @@ public abstract class Enemy : Living
     int waypointIndex = 0;
 
     [SerializeField] GameObject keyVisual;
+    Vector2 previousPlayerAttackPosition;
 
     protected new void Start()
     {
@@ -52,21 +53,29 @@ public abstract class Enemy : Living
 
     protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
     {
+        //Debug.LogWarning($"On Metronome: {Time.time}");
         base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+        //print($"Calling coroutine: {Time.time}");
         StartCoroutine(MoveOnFail(failTimestamp));
     }
 
     IEnumerator MoveOnFail(float failTimestamp)
     {
-        yield return new WaitForSeconds(failTimestamp - Time.time);
+        float duration = failTimestamp - Time.time;
+        //print($"Coroutine started: {Time.time}; Waiting until: {failTimestamp}; wait for {duration}");
+        yield return new WaitForSeconds(duration);
+        //if (Time.time - failTimestamp > .5f) Debug.LogError("Here");
+        //print($"Wait for {failTimestamp} complete; After wait: CA: {canAct}, CD: {cooldown}");
 
         if (!canAct) yield break;
         if (cooldown-- > 0) yield break;
         cooldown = 0;
 
         beatsSinceAction++;
+        //Debug.LogWarning($"Since: {beatsSinceAction}; Between: {beatsBetweenActions}; Time: {Time.time}");
         if (beatsSinceAction > beatsBetweenActions)
         {
+            //Debug.LogError("Move");
             beatsSinceAction = 0;
             Move();
             Vector2Int temp = new Vector2Int(
@@ -330,7 +339,7 @@ public abstract class Enemy : Living
         if (collision.gameObject.CompareTag(playerTag))
         {
             //print($"Moving: {isMoving}, Accuracy: {player.acc}");
-            if (!isMoving && player.acc != Accuracy.FAIL && !AboutToMove())
+            if ((!isMoving && player.acc != Accuracy.FAIL && !AboutToMove()))
             {
                 bool died = TakeDamage(1);
 
@@ -339,11 +348,12 @@ public abstract class Enemy : Living
                 if (died)
                 {
                     DestroyEnemy();
-                    beatsSinceAction = beatsBetweenActions;
+                    beatsSinceAction = beatsBetweenActions + 100;
                 }
             }
             else
             {
+                previousPlayerAttackPosition = player.currentTile;
                 bool died = player.TakeDamage(1);
                 if (player.diz)
                 {
@@ -374,7 +384,7 @@ public abstract class Enemy : Living
     private bool AboutToMove()
     {
         return beatsSinceAction == beatsBetweenActions
-            && !this is AreaEnemy && !this is RangedEnemy;
+            && !this is AreaEnemy && !this is RangedEnemy && !this is Boss;
     }
 
     void ChainCancel(Vector2Int v)
