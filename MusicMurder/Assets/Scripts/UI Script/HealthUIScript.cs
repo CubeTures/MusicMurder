@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using static UnityEditor.ShaderData;
 
 public class HealthUIScript : MonoBehaviour
 {
@@ -11,7 +7,7 @@ public class HealthUIScript : MonoBehaviour
     public GameObject Half;
     public GameObject Low;
 
-    
+
 
 
     private void Awake()
@@ -21,7 +17,7 @@ public class HealthUIScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -42,7 +38,7 @@ public class HealthUIScript : MonoBehaviour
             Low.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             return;
         }
-        else if (health == 1) 
+        else if (health == 1)
         {
             Full.transform.localScale = new Vector3(0, 0, 0);
             Half.transform.localScale = new Vector3(0, 0, 0);

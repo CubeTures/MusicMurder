@@ -32,7 +32,7 @@ public class PlayerMovement : Living
     private new void Start()
     {
         base.Start();
-        Health = 3;
+        Health = 6;
         tempo = PlayerTempo.Instance;
         tempo.ListenOnPlayerAccuracy(GetAccuracy);
         audioSource = GetComponent<AudioSource>();
