@@ -22,14 +22,14 @@ public class Pathfinding
         //grid.DrawNode(new PathNode(grid, grid.GetOrigin()));
     }
 
-    public Vector2Int GetNextMove()
+    public Vector2Int GetNextMove(Vector2 from)
     {
-        return GetNextMove(grid.GetTrueOrigin());
+        return GetNextMove(from, grid.GetTrueOrigin());
     }
 
-    public Vector2Int GetNextMove(Vector2 point)
+    public Vector2Int GetNextMove(Vector2 from, Vector2 point)
     {
-        List<PathNode> path = FindPath(self.position, point);
+        List<PathNode> path = FindPath(from, point);
         if (path != null && path.Count > 1)
         {
             grid.DrawList(path);

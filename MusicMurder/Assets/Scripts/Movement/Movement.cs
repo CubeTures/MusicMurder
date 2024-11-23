@@ -75,7 +75,11 @@ public abstract class Movement : OnMetronome
 
         nextTile = SnapTile(nextTile);
 
-        print($"{name} moving to {nextTile}");
+        if (name != "Player")
+        {
+            print($"{name} moving from {currentTile} to {nextTile}");
+        }
+
         direction = Vector2.zero;
     }
 
@@ -109,7 +113,9 @@ public abstract class Movement : OnMetronome
         {
             rb.position = Vector2.Lerp(currentTile, nextTile, t);
             t += 0.1f * Time.fixedDeltaTime * speed;
-        }else{
+        }
+        else
+        {
             rb.position = currentTile;
         }
     }

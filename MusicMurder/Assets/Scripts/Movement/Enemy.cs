@@ -110,7 +110,7 @@ public abstract class Enemy : Living
         if (PlayerInLineOfSight() || playerSighted > 0)
         {
             //print($"Player In Line: {PlayerInLineOfSight()}, Duration: {playerSighted}");
-            direction = pathfinding.GetNextMove();
+            direction = pathfinding.GetNextMove(currentTile);
         }
         else
         {
@@ -236,7 +236,12 @@ public abstract class Enemy : Living
         Vector2 next = waypoints[waypointIndex].position;
         if (next == currentTile)
         {
-            Increment(ref waypointIndex, waypoints.Length - 1);
+            waypointIndex++;
+            if (waypointIndex >= waypoints.Length)
+            {
+                waypointIndex = 0;
+            }
+
             next = waypoints[waypointIndex].position;
         }
 
@@ -368,7 +373,8 @@ public abstract class Enemy : Living
 
     private bool AboutToMove()
     {
-        return beatsSinceAction == beatsBetweenActions && !this is AreaEnemy && !this is RangedEnemy;
+        return beatsSinceAction == beatsBetweenActions
+            && !this is AreaEnemy && !this is RangedEnemy;
     }
 
     void ChainCancel(Vector2Int v)

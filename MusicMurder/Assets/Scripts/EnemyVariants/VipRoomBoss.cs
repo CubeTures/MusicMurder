@@ -29,11 +29,26 @@ public class VipRoomBoss : Boss, DamageTileCreator
     [SerializeField] GameObject projctile;
     public HashSet<DamageTile> activeProjectiles = new();
 
+    AudioSource audio;
+    protected int audioCountdown = -1;
+
     protected new void Start()
     {
         beatsBetweenActions = 0;
         healths = new int[] { 2, 2, 1 };
+
         base.Start();
+
+        audio = GetComponent<AudioSource>();
+    }
+
+    protected override void OnMetronomeBeat(float timestamp, float failTimestamp, float nextBeatTimestamp, bool startup)
+    {
+        base.OnMetronomeBeat(timestamp, failTimestamp, nextBeatTimestamp, startup);
+        if (audioCountdown-- == 1)
+        {
+            audio.Play();
+        }
     }
 
     protected override void Phase1()
@@ -46,6 +61,7 @@ public class VipRoomBoss : Boss, DamageTileCreator
         {
             SetDirectionFromPathfinding();
         }
+
     }
 
     protected override void Phase2()
@@ -65,7 +81,7 @@ public class VipRoomBoss : Boss, DamageTileCreator
         if (PlayerIsInLine(triangleAreaHeight, triangleAreaWidth) is Vector2 direction)
         {
             Phase3Attack(direction);
-            cooldown = 3;
+            cooldown = 4;
         }
         else
         {
@@ -141,6 +157,7 @@ public class VipRoomBoss : Boss, DamageTileCreator
         }
 
         cooldown = attackCooldown;
+        audioCountdown = areaAttackLife;
     }
 
     public void TileDestroyed(DamageTile tile)
