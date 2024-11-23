@@ -1346,7 +1346,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6571159283004997197}
   - component: {fileID: 1918680891453003035}
-  - component: {fileID: 9007336801468228508}
   m_Layer: 5
   m_Name: HealthUI
   m_TagString: HealthUI
@@ -1392,29 +1391,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Full: {fileID: 3766322333341796629}
-  Five: {fileID: 0}
+  Five: {fileID: 3352751780215494393}
   Half: {fileID: 6691157578737498902}
-  three: {fileID: 0}
+  three: {fileID: 4020786412626923929}
   Low: {fileID: 1789681201712777035}
-  One: {fileID: 0}
---- !u!114 &9007336801468228508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2245104879208432844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9caf8b5c96d03804b8ce4415066ab196, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Full: {fileID: 3766322333341796629}
-  Five: {fileID: 0}
-  Half: {fileID: 6691157578737498902}
-  three: {fileID: 0}
-  Low: {fileID: 1789681201712777035}
-  One: {fileID: 0}
+  One: {fileID: 7217288045653708580}
 --- !u!1 &2600955355794528484
 GameObject:
   m_ObjectHideFlags: 0

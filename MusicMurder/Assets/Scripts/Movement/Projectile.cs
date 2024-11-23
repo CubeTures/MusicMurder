@@ -5,12 +5,15 @@ public class Projectile : Movement
     SpriteRenderer sr;
     PlayerTempo playerTempo;
     PlayerMovement player;
+    HealthUIScript healthUI;
 
     protected new void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         playerTempo = PlayerTempo.Instance;
         player = PlayerMovement.Instance;
+        healthUI = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<HealthUIScript>();
+
         base.Start();
     }
 
@@ -28,14 +31,18 @@ public class Projectile : Movement
         {
             PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
             bool died = pm.TakeDamage(1);
-            if(player.diz){
+            if (player.diz)
+            {
                 GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
-                if (dizzy != null){
+                if (dizzy != null)
+                {
                     Destroy(dizzy);
                 }
                 player.diz = false;
                 playerTempo.dizzyCount = 0;
             }
+
+            healthUI.UpdateHealth(player.Health);
 
             if (died)
             {

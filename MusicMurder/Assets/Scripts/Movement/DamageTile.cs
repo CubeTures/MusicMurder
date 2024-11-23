@@ -13,11 +13,12 @@ public class DamageTile : OnMetronome
     PlayerTempo playerTempo;
     const string playerTag = "Player";
     [SerializeField] GameObject explosion;
-
+    HealthUIScript healthUI;
     new void Start()
     {
         player = PlayerMovement.Instance;
         playerTempo = PlayerTempo.Instance;
+        healthUI = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<HealthUIScript>();
         base.Start();
 
         if (IsInvalid())
@@ -88,15 +89,24 @@ public class DamageTile : OnMetronome
 
         if (playerInside)
         {
-            player.TakeDamage(1);
-            if(player.diz){
-                    GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
-                    if (dizzy != null){
-                        Destroy(dizzy);
-                    }
-                    player.diz = false;
-                    playerTempo.dizzyCount = 0;
+            bool died = player.TakeDamage(1);
+            if (player.diz)
+            {
+                GameObject dizzy = GameObject.FindGameObjectWithTag("Dizzy");
+                if (dizzy != null)
+                {
+                    Destroy(dizzy);
                 }
+                player.diz = false;
+                playerTempo.dizzyCount = 0;
+            }
+
+            healthUI.UpdateHealth(player.Health);
+
+            if (died)
+            {
+                player.Death();
+            }
         }
 
         // make sure player never takes double damage
