@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7537332714201502823}
   - component: {fileID: 9089334340985220228}
-  - component: {fileID: 6408956445411640059}
   m_Layer: 0
   m_Name: Interphase 3 Effects
   m_TagString: Untagged
@@ -48,22 +47,6 @@ MonoBehaviour:
   attemptPositions:
   - {x: 5.5, y: -7.5}
   - {x: -4.5, y: -7.5}
-  enemy: {fileID: 9093118681971352105, guid: 715e518ce07aa1a40b7d48f4a02040d7, type: 3}
---- !u!114 &6408956445411640059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569637819989414542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca2e36c2eb1be494c848d371222bda5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attemptPositions:
-  - {x: -4.5, y: -4.5}
-  - {x: 5.5, y: -4.5}
   enemy: {fileID: 9093118681971352105, guid: 715e518ce07aa1a40b7d48f4a02040d7, type: 3}
 --- !u!1 &1069964568504449808
 GameObject:
@@ -536,7 +519,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1058831857, guid: f2f71b1eb1f7f9848b8314e9b074a46c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c1d30c676581eaf4ebe95a2e70969717, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -564,10 +547,13 @@ MonoBehaviour:
   nextTile: {x: 0, y: 0}
   colliding: 0
   healthUI: {fileID: 0}
+  warp: {fileID: 0}
+  block: {fileID: 0}
   pathfindingFallback: 3
   deathAnimation: {fileID: 5986021336847466524, guid: 8eb05be48c742244886cde261c76b7cd, type: 3}
   curtain: {fileID: 3720356455308717409, guid: b87526c1805baa1488a1b3b26c4df1c3, type: 3}
   waypoints: []
+  keyVisual: {fileID: 0}
   interphase2Events:
     m_PersistentCalls:
       m_Calls:
@@ -610,7 +596,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6408956445411640059}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TrySpawnEnemy, Assembly-CSharp
         m_MethodName: TrySpawn
         m_Mode: 1
